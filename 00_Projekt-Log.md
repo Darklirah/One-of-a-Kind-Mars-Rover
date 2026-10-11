@@ -155,6 +155,30 @@ Gehäuseentwurfs oder der Doku, bis sie am echten Teil beantwortet ist.
     Erweiterungen dazukommen. **Antenne:** das Board so setzen, dass das
     Antennenende über die Platinenkante hinausragt, kein Kupfer und keine
     Bauteile darunter, weg von Motoren, Akku und Step-Up-Drossel.
+  - **Platzierung des Funkmoduls (für Version 2), nach Wirkung sortiert:**
+    1. Antennenende über die Platinenkante hinausragen lassen; darunter
+       und direkt daneben kein Kupfer, keine Bahn, keine Massefläche, kein
+       Bauteil.
+    2. Nichts Metallisches davor oder daneben: weg vom Akku (wirkt wie
+       eine Metallplatte), von den Motoren und von der Drossel des Step-Up.
+    3. So hoch wie möglich — der Rover fährt am Boden, das Handy ist etwa
+       einen Meter höher.
+    4. PETG stört kaum, solange es nicht massiv an der Antenne anliegt.
+    Für den Rover: **vorn in der Mitte, Antenne nach vorn über die
+    Vorderkante**, ein Stück seitlich neben dem Mast (CFK leitet und
+    schirmt). Die USB-Buchse liegt dann zur Platinenmitte und muss von oben
+    erreichbar bleiben. Die Reichweite ist kein enger Punkt (reduzierte
+    Sendeleistung, Bedienung aus wenigen Metern); Regel 1 und 2 dürften
+    reichen.
+  - **Idee: externe Antenne.** Braucht ein Board mit Antennenstecker
+    (U.FL/IPEX), z. B. das XIAO ESP32-C3; die Waveshare-Zero-Boards haben
+    nur die Keramikantenne. Bauformen, klein nach groß:
+    Folienantenne (FPC, ca. 30–45 × 7 mm, unter 1 g, zum Aufkleben) —
+    Drahtstück 31 mm (λ/4 bei 2,45 GHz) — Stabantenne mit
+    U.FL-auf-SMA-Kabel (3–10 g, 5–11 cm). Eine Stabantenne reicht
+    elektrisch mehr als aus, ist für dieses Fahrzeug aber unnötig schwer;
+    die Folienantenne am Mastkopf wäre die leichte Lösung. **Nicht direkt
+    am CFK-Stab entlangführen** — dann lieber einen GFK-Stab als Mast.
 
   | Board | Firmware-Aufwand | Größe | Spart Module | Preis |
   |---|---|---|---|---|
