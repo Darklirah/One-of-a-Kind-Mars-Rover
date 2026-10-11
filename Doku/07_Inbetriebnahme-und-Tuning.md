@@ -93,7 +93,16 @@ Ladestrom am besten einmal in Reihe messen: soll ≈ 255 mA sein, nicht 1 A.
 
 ### Schritt 3 — DevKit allein, ohne Motoren und Sensoren
 
-Firmware flashen. Serielle Konsole auf 115200 Baud, es muss erscheinen:
+Firmware flashen.
+
+> **BOOT-Taste gedrückt halten, bis der Flashvorgang wirklich losgeht.**
+> Der ESP32 startet nur dann im Programmiermodus. Zu früh losgelassen,
+> bricht es mit `Failed to connect to ESP32` ab — dann von vorn anfangen und
+> länger halten. Hilft das nicht: BOOT halten, **EN** (oder **RST**) kurz
+> drücken und loslassen, BOOT weiter halten. Boards mit automatischer
+> Umschaltung brauchen das nicht, nehmen es aber auch nicht übel.
+
+Serielle Konsole auf 115200 Baud, es muss erscheinen:
 
 ```
 One-of-a-Kind Mars Rover startet

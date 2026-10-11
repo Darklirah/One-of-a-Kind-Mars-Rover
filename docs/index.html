@@ -92,8 +92,25 @@ footer{color:var(--dim);font-size:13.5px;margin-top:40px;border-top:1px solid va
     <li>Oben auf <b>Mars Rover installieren</b> klicken</li>
     <li>Im Auswahlfenster den seriellen Anschluss des Geräts wählen
         (meist <code>CP210x</code> oder <code>CH340</code>)</li>
-    <li><b>Install One-of-a-Kind Mars Rover</b> bestätigen und warten &mdash; etwa eine Minute</li>
+    <li><b>BOOT-Taste am Board gedrückt halten</b> &mdash; und gedrückt lassen</li>
+    <li><b>Install One-of-a-Kind Mars Rover</b> bestätigen</li>
+    <li>Die BOOT-Taste erst loslassen, <b>wenn der Fortschrittsbalken läuft</b>.
+        Danach warten &mdash; etwa eine Minute</li>
   </ol>
+
+  <div class="note bad">
+    <b>Die BOOT-Taste muss gedrückt bleiben, bis der Flashvorgang beginnt.</b>
+    Nur dann startet der ESP32 in den Programmiermodus. Lässt man zu früh los,
+    bricht die Installation mit einer Meldung wie
+    <code>Failed to connect to ESP32</code> ab &mdash; dann einfach von vorn
+    anfangen und die Taste länger halten.
+    <br><br>
+    Viele DevKits haben neben BOOT noch eine Taste <b>EN</b> (oder
+    <b>RST</b>). Klappt es mit BOOT allein nicht: BOOT halten, EN kurz
+    drücken und loslassen, BOOT weiter halten, bis es losgeht.
+    Boards mit automatischer Umschaltung brauchen das alles nicht &mdash;
+    dort schadet es aber auch nichts.
+  </div>
 
   <div class="note">
     Erscheint kein Anschluss zur Auswahl, fehlt der <b>USB-Seriell-Treiber</b>.
