@@ -180,6 +180,20 @@ Gehäuseentwurfs oder der Doku, bis sie am echten Teil beantwortet ist.
     die Folienantenne am Mastkopf wäre die leichte Lösung. **Nicht direkt
     am CFK-Stab entlangführen** — dann lieber einen GFK-Stab als Mast.
 
+    | Bauform | Größe | Gewicht | Einordnung |
+    |---|---|---|---|
+    | Folienantenne (FPC) mit Kabel und Stecker | ca. 30–45 × 7 mm, flach | unter 1 g | zum Aufkleben, die leichte Lösung |
+    | Drahtstück | 31 mm | fast nichts | braucht eine Massefläche als Gegenpol, muss sauber angelötet sein |
+    | Stabantenne mit Adapterkabel | 5–11 cm | 3–10 g | beste Reichweite, für dieses Fahrzeug zu schwer |
+
+    Typische Werte, keine Daten eines bestimmten Produkts. **Empfehlung:**
+    Folienantenne oben am Mastkopf, quer zum Stab. Dem XIAO liegt nach
+    meinem Wissen eine solche Antenne bei (nicht geprüft). Zu beachten:
+    jedes Gramm am Mastkopf lässt den Mast stärker schwingen, und das
+    Antennenkabel braucht wie die Sensorlitzen eine Schlaufe am Mastfuß.
+    **Reihenfolge:** erst die eingebaute Antenne ausprobieren, richtig
+    platziert; die externe nur nachrüsten, wenn die Verbindung abreißt.
+
   | Board | Firmware-Aufwand | Größe | Spart Module | Preis |
   |---|---|---|---|---|
   | LOLIN32 | gering (gleicher Chip) | etwas kleiner als heute | Laderegler | 6–11 € |
