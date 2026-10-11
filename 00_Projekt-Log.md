@@ -142,6 +142,19 @@ Gehäuseentwurfs oder der Doku, bis sie am echten Teil beantwortet ist.
     (Boot-Pin) und 10 (RGB-LED); 18/19 gehören dem USB. Der Pinplan stammt
     aus dem Wiki und meinem Wissen über den Chip, nicht vom Schaltplan des
     Boards — vor einem Platinenentwurf dort gegenprüfen.
+  - **Waveshare ESP32-S3-Zero / „ESP32-S3 Mini"** (Eckstein WS25517,
+    7,95 €, lieferbar am 11.10.2026) — die Variante mit Reserve. Laut
+    Wiki 24 GPIO (davon 14/15/16 nur als Lötflächen), zwei Kerne, 4 MB
+    Flash + 2 MB PSRAM, Versorgung ebenfalls 3,7–6 V, RGB-LED an GPIO 21.
+    *Dafür:* genug Pins für Akkumessung, Betriebsart-Taster und
+    Erweiterungen; weniger Rücksicht auf Boot-Pins. *Dagegen:* 2,45 €
+    teurer, voraussichtlich höherer Stromverbrauch, Rechenleistung und RAM
+    braucht der Rover nicht. **Kein Probe-Build gemacht.**
+  - **Vormerkung für Version 2 (Nutzer, 11.10.2026):** C3-Zero, wenn der
+    Rover genau das können soll wie heute; S3-Zero, wenn Akkumessung oder
+    Erweiterungen dazukommen. **Antenne:** das Board so setzen, dass das
+    Antennenende über die Platinenkante hinausragt, kein Kupfer und keine
+    Bauteile darunter, weg von Motoren, Akku und Step-Up-Drossel.
 
   | Board | Firmware-Aufwand | Größe | Spart Module | Preis |
   |---|---|---|---|---|
@@ -150,6 +163,7 @@ Gehäuseentwurfs oder der Doku, bis sie am echten Teil beantwortet ist.
   | XIAO ESP32-C3 | mittel | sehr klein | Laderegler | 8,10 € |
   | ESP32-C3 SuperMini | mittel | sehr klein | nein | 5er-Pack |
   | Waveshare ESP32-C3-Zero | mittel, **Probe-Build bestanden** | sehr klein | evtl. den Step-Up | 5,50 € |
+  | Waveshare ESP32-S3-Zero | mittel, nicht gebaut | sehr klein | evtl. den Step-Up | 7,95 € |
   | ESP32-C6 Mini | am höchsten | sehr klein | nein | 3er-Pack |
 
   Angaben zu den Amazon-Boards stammen aus den Titeln der Angebote; Pinzahl,
