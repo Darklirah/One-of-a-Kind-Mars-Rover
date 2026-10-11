@@ -81,6 +81,22 @@ Gehäuseentwurfs oder der Doku, bis sie am echten Teil beantwortet ist.
       Tüllensitze und die Druckeinstellungen aus
       [Gehaeuse_CAD](Gehaeuse_CAD/README.md) stimmen.
 
+**Ideen, nicht entschieden**
+
+- **Revision 2: Module auf die Hauptplatine integrieren.** ESP32-WROOM
+  direkt (mit USB-Seriell-Chip, USB-C, zwei Tastern, 3,3-V-Regler),
+  Laderegler mit Schutz-IC (Variante 2a der Stückliste), MT3608 diskret.
+  Der VL53L0X bleibt ein Modul auf dem Mast; den MPU-6050 eher als flach
+  aufgelötetes Modul lassen (QFN ist nichts für den Lötkolben).
+  Erwartet: geschätzt 9–11 g leichter, Bauhöhe ca. 4 mm statt 39 mm, keine
+  wackelnden Module, die Anschlussprobleme an `U2`/`U5` entfallen.
+  Preis: Bauteile etwa gleich (ca. 11–13 € statt ca. 11 €), aber die
+  SMD-Seite muss bestückt werden lassen — bei 5 Stück grob 8–15 € je
+  Platine zusätzlich (geschätzt), ab etwa 10 Stück gleicht es sich an.
+  Aufwand: neuer Schaltplanteil mit 35–45 Bauteilen und neues Routing;
+  Firmware und Pinplan bleiben. **Erst sinnvoll, wenn die jetzige Platine
+  gelaufen ist** und sich zeigt, dass der Rover zu schwer ist.
+
 ---
 
 ## 2026-10-11 — Gehäuse und Fahrwerk: erster CAD-Entwurf (V2), Bauanleitung
