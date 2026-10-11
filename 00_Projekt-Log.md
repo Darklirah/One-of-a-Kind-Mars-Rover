@@ -96,6 +96,27 @@ Gehäuseentwurfs oder der Doku, bis sie am echten Teil beantwortet ist.
   Aufwand: neuer Schaltplanteil mit 35–45 Bauteilen und neues Routing;
   Firmware und Pinplan bleiben. **Erst sinnvoll, wenn die jetzige Platine
   gelaufen ist** und sich zeigt, dass der Rover zu schwer ist.
+- **Anderes Rechenboard mit Akkuladung an Bord** (statt DevKitC + TP4056).
+  Anforderung des Nutzers: günstig und in Deutschland gut erhältlich.
+  - **LOLIN32 / LOLIN32 Lite** — klassischer ESP32, also dieselbe Firmware
+    mit neuem Pinplan. Lader TP4054 bis 500 mA, Akkuanschluss JST-PH 2.0,
+    ca. 49 × 25 mm, 26 Pins, rund 6–11 € (BerryBase 6,40 €, AZ-Delivery
+    6,39–10,99 €, Amazon ca. 14 €). **Am 11.10.2026 bei BerryBase nicht
+    lieferbar, bei AZ-Delivery teils „ausverkauft"** — vor dem Bestellen
+    prüfen. Kein Akkuschutz erwähnt, Ladestrom fest 500 mA (= 1 C für die
+    500-mAh-Zelle, die Doku wollte 255 mA), kein Schalter.
+  - **Seeed XIAO ESP32-C3** — 21 × 17,8 mm, 8,10 € bei BerryBase, Laden
+    100/350 mA. Aber nur 11 Pins (der Rover braucht 10), anderer Chip
+    (ESP32-C3), drei Boot-Pins, externe Antenne. Entspricht Variante C in
+    [Doku/02](Doku/02_SMD-vs-THT-Wirtschaftlichkeit.md).
+  - Die **5-V-Schiene wird damit entbehrlich**: das Board läuft direkt aus
+    dem Akku, die Motoren können am Akku hängen (3,0–4,2 V). Der MT3608
+    lässt sich trotzdem zusätzlich anbauen und versorgt dann nur die
+    Motoren — konstante Motorkraft unabhängig vom Ladestand.
+  - In jedem Fall eine **neue Platine**; die jetzige passt nur zum DevKitC.
+    Pin- und Boot-Pin-Angaben zum XIAO stammen nicht vom Datenblatt und
+    sind vor einem Entwurf zu prüfen.
+
 
 ---
 
