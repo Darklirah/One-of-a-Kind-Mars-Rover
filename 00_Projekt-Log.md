@@ -125,6 +125,23 @@ Gehäuseentwurfs oder der Doku, bis sie am echten Teil beantwortet ist.
     Standard-Plattform von PlatformIO für den C6 nicht ohne Weiteres
     mitbringt; kein Lader. Von allen Kandidaten der höchste
     Firmware-Aufwand, ohne Vorteil für dieses Projekt.
+  - **Waveshare ESP32-C3-Zero / „ESP32-C3 Mini"** (Eckstein WS25532,
+    5,50 €, lieferbar am 11.10.2026) — der bisher beste Kandidat. Laut
+    Waveshare-Wiki 15 GPIO, 4 MB Flash, USB-C, RGB-LED an GPIO 10, und der
+    5-V-Anschluss nimmt **3,7–6 V** an: das Board ließe sich also direkt aus
+    dem LiPo versorgen, der MT3608 wäre nur noch für die Motoren nötig oder
+    entfiele ganz. Kein Lader an Bord.
+    **Probe-Build am 11.10.2026 bestanden:** Firmware unverändert bis auf
+    zehn Pinnummern, `espressif32@6.9.0`, Board `esp32-c3-devkitm-1`,
+    Schalter `ARDUINO_USB_MODE=1` und `ARDUINO_USB_CDC_ON_BOOT=1`.
+    0 Fehler, 0 Warnungen, RAM 14,3 %, Flash 71,8 %. Gebaut in einer Kopie
+    außerhalb des Repos; **nicht auf Hardware gelaufen**.
+    Verwendeter Pinplan: Motoren 6/7, Liniensensoren 0/1, I²C 8/9 (beides
+    Boot-Pins, die beim Start hoch liegen müssen — die Pull-ups der
+    Sensormodule sorgen dafür), LEDs 3/4/5/20. Frei bleiben 21, bedingt 2
+    (Boot-Pin) und 10 (RGB-LED); 18/19 gehören dem USB. Der Pinplan stammt
+    aus dem Wiki und meinem Wissen über den Chip, nicht vom Schaltplan des
+    Boards — vor einem Platinenentwurf dort gegenprüfen.
 
   | Board | Firmware-Aufwand | Größe | Spart Module | Preis |
   |---|---|---|---|---|
@@ -132,6 +149,7 @@ Gehäuseentwurfs oder der Doku, bis sie am echten Teil beantwortet ist.
   | ESP32 D1 Mini | gering (gleicher Chip) | kleiner | nein | 5er-Pack |
   | XIAO ESP32-C3 | mittel | sehr klein | Laderegler | 8,10 € |
   | ESP32-C3 SuperMini | mittel | sehr klein | nein | 5er-Pack |
+  | Waveshare ESP32-C3-Zero | mittel, **Probe-Build bestanden** | sehr klein | evtl. den Step-Up | 5,50 € |
   | ESP32-C6 Mini | am höchsten | sehr klein | nein | 3er-Pack |
 
   Angaben zu den Amazon-Boards stammen aus den Titeln der Angebote; Pinzahl,
