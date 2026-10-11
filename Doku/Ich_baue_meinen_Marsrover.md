@@ -270,35 +270,41 @@ Der Sensor VL53L0X braucht vier Leitungen: `VIN`, `GND`, `SCL` und `SDA`.
    | 3 | `SCL` |
    | 4 | `SDA` |
 
-## Schritt 16 — Akkukabel anstecken, Platine einrasten
+## Schritt 16 — Akku einsetzen, anstecken, Platine einrasten
+
+![Akku in der Tasche am Heck](bilder/bauanleitung/geh_06_akku.png)
 
 Ab jetzt wird nicht mehr gelötet. Den Schalter `S1` auf **Aus** stellen.
 
-1. **Kabel durchfädeln.** Den Stecker des Akkus von hinten durch das kleine
-   Fenster unten links an der Akkutasche in die Bodenschale fädeln. Den Akku
-   selbst noch nicht einschieben.
-2. **Polung prüfen.** Plus am Akkustecker muss zu Plus im Aufdruck bei `J2`
+> **Die Reihenfolge ist wichtig.** Der Akkustecker sitzt **unter** der
+> Platine. Ist die Platine erst eingerastet, kommst du nicht mehr heran.
+> Also: erst der Akku in die Tasche, dann das Kabel nach innen, dann
+> anstecken — und **ganz zum Schluss** die Platine einrasten.
+
+1. **Akku in die Tasche schieben.** Den Akku von oben in die schräge Tasche
+   am Heck schieben, das Kabel nach unten. Er steht etwa 5 mm über — daran
+   kannst du ihn wieder herausziehen.
+2. **Kabel nach innen fädeln.** Den Stecker durch das kleine Fenster unten
+   links an der Akkutasche in die Bodenschale führen. Geht es mit
+   eingeschobenem Akku zu eng, den Akku ein Stück anheben, den Stecker
+   durchfädeln und den Akku wieder ganz hineinschieben.
+3. **Polung prüfen.** Plus am Akkustecker muss zu Plus im Aufdruck bei `J2`
    passen. Die Stecker sind nicht genormt. **Falsch herum geht der
    Laderegler sofort kaputt.**
-3. **Anstecken.** Die Platine vorn anheben und den Stecker in `J2` auf der
-   Unterseite stecken.
-4. **Einrasten.** Die vordere Kante der Platine nach unten drücken, bis
-   beide Haken hörbar einrasten.
+4. **An die Platine stecken.** Die Platine vorn anheben und den Stecker in
+   `J2` auf der Unterseite stecken.
+5. **Erst jetzt einrasten.** Die vordere Kante der Platine nach unten
+   drücken, bis beide Haken hörbar einrasten.
 
 Die Platine liegt jetzt ringsum auf kleinen Auflagen. Kein Kabel darf
 darunter eingeklemmt sein.
 
-**Wieder herausnehmen:** beide Haken vorn leicht nach außen drücken und die
-Platine vorn anheben.
+Sitzt der Akku zu locker, ein kleines Stück Schaumklebeband in die Tasche
+kleben.
 
-## Schritt 17 — Akku einsetzen
-
-![Akku in der Tasche am Heck](bilder/bauanleitung/geh_06_akku.png)
-
-Den Akku von oben in die schräge Tasche am Heck schieben, das Kabel nach
-unten. Er steht etwa 5 mm über — daran kannst du ihn wieder herausziehen.
-
-Sitzt er zu locker, ein kleines Stück Schaumklebeband in die Tasche kleben.
+**Wieder herausnehmen:** beide Haken vorn leicht nach außen drücken, die
+Platine vorn anheben und den Akkustecker abziehen. Erst danach lässt sich
+der Akku ganz herausnehmen.
 
 ## Fertig!
 
