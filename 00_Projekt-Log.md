@@ -2,6 +2,45 @@
 
 Laufendes Protokoll. Neueste Einträge oben.
 
+---
+
+## Offene Punkte für den Projektabschluss
+
+Stehendes Verzeichnis, kein Tagebucheintrag. Hier landet, was bewusst
+aufgeschoben wurde, weil es jetzt keinen stört und am Ende in einem Zug
+erledigt werden kann.
+
+- [ ] **HowTo-Datei** mit allen benutzten Schnittstellen und Werkzeugen und
+      wie man sie einrichtet — PlatformIO samt der Umgebungsvariablen und
+      dem Zertifikatsbündel, der KiCAD-MCP-Server, KiCadRoutingTools mit
+      seinen zwei nicht-optionalen Schaltern, ESP Web Tools und
+      GitHub Pages, die Datenblattquellen aus
+      [Doku/10](Doku/10_Datenblaetter.md).
+- [ ] **Fertiger Prompt für Claude**, der all diese Schritte ermöglicht,
+      mit ausführlicher Erklärung jedes einzelnen — gedacht für jemanden
+      mit leerer Sitzung und leerem Rechner.
+- [ ] **Weboberfläche des Flashers eindeutschen.** ESP Web Tools kann das
+      nicht von sich aus: im Bundle gibt es kein i18n, die einzige
+      durchgereichte Anpassung ist `overrides.checkSameFirmware`, die
+      Dialogtexte (`Connect`, `Erasing flash…`, `Installation complete!`)
+      stehen fest im Code. Machbar ist es über eine **Übersetzungsschicht
+      zur Laufzeit**: der Shadow-Root des Dialogs ist `mode:"open"`, ein
+      `MutationObserver` kann die Texte ersetzen, sobald sie erscheinen —
+      rund 40 Zeilen in unserer eigenen `docs/index.html`. Die Alternative
+      wäre eine eigene gepatchte Kopie der 310 kB; dann gäbe es kein
+      Aufblitzen, aber wir würden auf Dauer fremden Code mitschleppen und
+      keine Korrekturen mehr von oben bekommen. **Empfehlung: die
+      Übersetzungsschicht.**
+- [ ] **`esp-web-tools` auf eine feste Version nageln.** `docs/index.html`
+      lädt heute `esp-web-tools@10`, und das heißt „die neueste 10.x" —
+      der Flasher kann sich jederzeit ändern, ohne dass jemand etwas
+      anfasst. Das trifft auch die Übersetzungsschicht darüber. Also eine
+      genaue Version eintragen und bewusst hochziehen; dann ist auch
+      reproduzierbar, was ein Nachbauer bekommt.
+- [ ] **Bilder in der Doku** auf den dann endgültigen Stand bringen.
+
+---
+
 ## 2026-10-11 — Befehlsdialog, und Schritte lassen sich endlich ändern (0.3.0)
 
 **Die Lücke:** ein gespeichertes Programm war nur zum Teil bearbeitbar.
@@ -55,6 +94,24 @@ Dialog), [Doku/08](Doku/08_Fahrprogramm.md) mit dem neuen Schritt 5
 „Werte nachträglich ändern".
 
 Firmware **0.3.0**: RAM 15,2 %, Flash 70,8 %.
+
+**Nachtrag: Boot-Taste und zwei vertagte Punkte**
+
+Die Installerseite und [Doku/07](Doku/07_Inbetriebnahme-und-Tuning.md) sagen
+jetzt beide, dass die **BOOT-Taste gedrückt bleiben muss, bis das Flashen
+beginnt** — zu früh losgelassen bricht es mit `Failed to connect to ESP32`
+ab, und das sah bisher nach einem Defekt aus.
+
+Beim Nachsehen, ob sich der Flasher auch auf Deutsch stellen lässt, kamen
+zwei Punkte heraus, die **bewusst auf den Projektabschluss vertagt** sind
+(siehe „Offene Punkte für den Projektabschluss" oben):
+
+- **ESP Web Tools kann keine Sprachumschaltung.** Im ausgelieferten Bundle
+  gibt es kein i18n; die einzige durchgereichte Anpassung ist
+  `overrides.checkSameFirmware`. Die Dialogtexte stehen fest im Code.
+- **`esp-web-tools@10` ist keine feste Version**, sondern „die neueste
+  10.x". Der Flasher kann sich also jederzeit ändern, ohne dass wir etwas
+  anfassen.
 
 ---
 
