@@ -109,6 +109,33 @@ Gehäuseentwurfs oder der Doku, bis sie am echten Teil beantwortet ist.
     100/350 mA. Aber nur 11 Pins (der Rover braucht 10), anderer Chip
     (ESP32-C3), drei Boot-Pins, externe Antenne. Entspricht Variante C in
     [Doku/02](Doku/02_SMD-vs-THT-Wirtschaftlichkeit.md).
+  - **ESP32-C3 „SuperMini"** (Amazon B0FKGZLZGH, 5er-Pack, 4 MB Flash) —
+    ca. 23 × 18 mm, wenige Gramm, sehr günstig. *Dafür:* üblicherweise 13
+    nutzbare Pins (Bedarf 10), fünf Analogeingänge, die mit WLAN arbeiten,
+    von PlatformIO mit dem bisherigen Arduino-Kern unterstützt. *Dagegen:*
+    kein Lader an Bord (TP4056 und MT3608 bleiben), Pinplan neu, drei
+    Boot-Pins (GPIO 2, 8, 9), WLAN-Reichweite streut wegen der winzigen
+    Antenne von Board zu Board.
+  - **ESP32 „D1 Mini"** (Amazon B0DP9WYJNY, 5er-Pack, USB-C, CH9102F) —
+    ca. 39 × 31 mm. *Dafür:* klassischer ESP32, Firmware bleibt bis auf den
+    Pinplan. *Dagegen:* kein Lader erkennbar, spart also kein Modul;
+    Doppelreihen-Stiftleisten.
+  - **ESP32-C6 Mini** (Amazon B0FKH2M99L, 3er-Pack) — klein wie der C3.
+    *Dagegen:* braucht den neueren Arduino-Kern (3.x), den die
+    Standard-Plattform von PlatformIO für den C6 nicht ohne Weiteres
+    mitbringt; kein Lader. Von allen Kandidaten der höchste
+    Firmware-Aufwand, ohne Vorteil für dieses Projekt.
+
+  | Board | Firmware-Aufwand | Größe | Spart Module | Preis |
+  |---|---|---|---|---|
+  | LOLIN32 | gering (gleicher Chip) | etwas kleiner als heute | Laderegler | 6–11 € |
+  | ESP32 D1 Mini | gering (gleicher Chip) | kleiner | nein | 5er-Pack |
+  | XIAO ESP32-C3 | mittel | sehr klein | Laderegler | 8,10 € |
+  | ESP32-C3 SuperMini | mittel | sehr klein | nein | 5er-Pack |
+  | ESP32-C6 Mini | am höchsten | sehr klein | nein | 3er-Pack |
+
+  Angaben zu den Amazon-Boards stammen aus den Titeln der Angebote; Pinzahl,
+  Maße und Preise standen im lesbaren Teil der Seiten nicht.
   - Die **5-V-Schiene wird damit entbehrlich**: das Board läuft direkt aus
     dem Akku, die Motoren können am Akku hängen (3,0–4,2 V). Der MT3608
     lässt sich trotzdem zusätzlich anbauen und versorgt dann nur die
