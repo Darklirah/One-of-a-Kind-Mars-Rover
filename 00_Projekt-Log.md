@@ -41,6 +41,48 @@ erledigt werden kann.
 
 ---
 
+## Offene Fragen für die nächste Sitzung (Gehäuse, Stand 11.10.2026)
+
+Stehendes Verzeichnis wie oben. Jede Frage blockiert einen Teil des
+Gehäuseentwurfs oder der Doku, bis sie am echten Teil beantwortet ist.
+
+**Am Teil nachsehen oder messen**
+
+- [ ] **Hat der Akku eine eigene Schutzplatine?** (meist unter dem gelben
+      Klebeband am Kabelende). Wenn nein: TP4056-Modul **mit**
+      Schutzschaltung und sechs Anschlüssen beschaffen. Wenn ja: an `U2`
+      Pin 3 und Pin 5 brücken, siehe [Doku/05](Doku/05_Pinbelegung.md).
+- [ ] **MT3608: Sitzen die vier Lötaugen wirklich an den Ecken?** Davon
+      hängt ab, wie das Modul auf die vierpolige Leiste `U5` kommt.
+- [ ] **Wie sitzen MPU-6050, TP4056 und MT3608 tatsächlich** (stehend,
+      liegend, in welche Richtung)? Im Modell angenommen; zwischen
+      RTG-Tasche und MPU-6050 bleiben nur 0,4 mm.
+- [ ] **ESP32 auf Buchsenleisten oder direkt eingelötet?** Und wie weit
+      stehen die Stifte unter der Platine über? (im STEP-Modell 4,9 mm)
+- [ ] **Motor wiegen und Strom bei 3 V messen.** Danach Massebudget und
+      Laufzeit in [Doku/02](Doku/02_SMD-vs-THT-Wirtschaftlichkeit.md)
+      nachziehen — beide rechnen noch mit dem Münzmotor.
+- [ ] **Bürstenkopf: Plattendicke und Borstenlänge einzeln messen.**
+      Angenommen sind 6 mm und 12 mm (zusammen die gemessenen 18 mm).
+- [ ] **Maße nachmessen**, die bisher Katalogwerte sind: Motorkörper
+      (Ø 12 × 15,5 mm), GY-521 (21 × 16 mm), TP4056 (25 × 19 mm).
+
+**Entscheiden**
+
+- [ ] **Gewicht abspecken?** Gerechnet 76–92 g gesamt, die Bodenschale
+      allein bis 34 g. Kandidaten: Boden öffnen oder ausdünnen, Wangen und
+      Ausleger schlanker.
+- [ ] **Akkutasche verriegeln?** Bisher hält der Akku nur durch Neigung und
+      Reibung.
+- [ ] **Rover-Optik ausbauen** anhand der beiden Vorlagen (jakkra/Mars-Rover,
+      NASA-Modell von Curiosity) — beide noch nicht ausgewertet. Denkbar:
+      Roboterarm, höhere Schwingen, Deckdetails.
+- [ ] **Probedruck.** Erst danach lässt sich sagen, ob Rasthaken, Nut,
+      Tüllensitze und die Druckeinstellungen aus
+      [Gehaeuse_CAD](Gehaeuse_CAD/README.md) stimmen.
+
+---
+
 ## 2026-10-11 — Gehäuse und Fahrwerk: erster CAD-Entwurf (V2), Bauanleitung
 
 **Gemacht**
