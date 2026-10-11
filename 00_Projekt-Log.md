@@ -41,6 +41,51 @@ erledigt werden kann.
 
 ---
 
+## 2026-10-11 — Die Seite kommt von selbst: mDNS und eine Weiche im Anmeldefenster (0.4.0)
+
+**Die Frage war,** ob sich die Bedienseite beim Öffnen des Browsers von
+selbst laden lässt. Teilweise ging das schon: der DNS zeigt jeden Namen auf
+den Roboter, also landet **jede `http://`-Adresse** bei ihm. Zwei Dinge
+standen im Weg:
+
+- **Startseiten sind heute `https://`.** Dafür bräuchte der Roboter ein
+  gültiges Zertifikat für eine fremde Domain — das wäre ein Angriff, und
+  der Browser würde es zu Recht melden. Nicht lösbar.
+- **Das Anmeldefenster ist nicht der richtige Browser.** iOS öffnet dafür
+  eine eingeschränkte WebView, in der **WebSockets oft nicht laufen**. Der
+  Roboter lieferte dort bisher die volle Oberfläche aus — sie erschien, der
+  Joystick tat nichts, und es sah nach einem Defekt aus.
+
+**Drei Änderungen**
+
+1. **mDNS.** Der Roboter ist jetzt unter einem Namen erreichbar, abgeleitet
+   aus dem Netznamen: klein geschrieben, Unterstrich zu Bindestrich.
+   `MarsRover_Petra` → `http://marsrover-petra.local`. Immer aus dem WLAN
+   ableitbar, in das man gerade gegangen ist, und zwei Rover stoßen nicht
+   zusammen.
+2. **Weiche statt Bedienung im Anmeldefenster.** Eine knapp 1 kB große
+   Seite mit einem Knopf *Bedienung öffnen* — läuft auch in der
+   eingeschränkten Ansicht — und mit dem Hinweis, was zu tun ist, falls der
+   Joystick dort nicht reagiert.
+3. **Erkennung am Host statt an URL-Listen.** Gilt die Anfrage
+   `192.168.4.1` oder `<name>.local`, kommt die Bedienung; bei jedem
+   fremden Namen die Weiche. Das sind genau die Prüfadressen, mit denen
+   Android, iOS und Windows testen, ob ein Netz ins Internet kommt — und
+   die ändern sich je nach Hersteller und Version, eine fest eingetragene
+   Liste veraltet.
+
+**Kosten:** RAM 15,2 → 16,2 %, Flash 70,8 → 73,1 %. Das ist die
+mDNS-Bibliothek; dafür muss niemand mehr eine IP abtippen.
+
+**Nachgemessen statt geschätzt:** die Weichenseite ist mit kurzem Netznamen
+977 Byte, mit einem ausgereizten rund 1030. Der Puffer stand auf 1100 —
+`snprintf` hätte bei einem langen Namen stillschweigend abgeschnitten und
+eine halbe Seite ausgeliefert. Jetzt 1400.
+
+Sauberer Durchlauf von Null: **0 Fehler, 0 Warnungen.**
+
+---
+
 ## 2026-10-11 — Befehlsdialog, und Schritte lassen sich endlich ändern (0.3.0)
 
 **Die Lücke:** ein gespeichertes Programm war nur zum Teil bearbeitbar.

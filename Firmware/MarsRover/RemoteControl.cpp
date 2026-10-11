@@ -1,5 +1,6 @@
 #include "RemoteControl.h"
 #include "WebUI.h"
+#include <ESPmDNS.h>
 
 // Empfangspuffer. Statisch, weil ein komplettes Fahrprogramm hineinpasst
 // und das auf dem Stack der WebSocket-Rueckrufe zu viel waere. Die
@@ -26,6 +27,83 @@ void RemoteControl::buildSsid() {
     snprintf(_ssid, sizeof(_ssid), "%s_%02X%02X", AP_PREFIX, mac[4], mac[5]);
     _apName[0] = '\0';                 // leer = automatische Kennung
   }
+  buildHost();
+}
+
+// Der mDNS-Name wird aus dem Netznamen abgeleitet: klein geschrieben und
+// mit Bindestrich statt Unterstrich, weil in einem Rechnernamen kein
+// Unterstrich stehen darf.
+//
+//   WLAN  MarsRover_Petra  ->  http://marsrover-petra.local
+//   WLAN  MarsRover_A3F2   ->  http://marsrover-a3f2.local
+//
+// Dadurch ist der Name immer aus dem WLAN ableitbar, in das man gerade
+// gegangen ist, und zwei Rover stossen nicht zusammen.
+void RemoteControl::buildHost() {
+  uint8_t o = 0;
+  for (const char* p = _ssid; *p && o < sizeof(_host) - 1; p++) {
+    const char c = *p;
+    if (c == '_' || c == ' ') _host[o++] = '-';
+    else if (isalnum((unsigned char)c)) _host[o++] = (char)tolower((unsigned char)c);
+    else if (c == '-') _host[o++] = '-';
+  }
+  _host[o] = '\0';
+}
+
+// Gilt die Anfrage uns selbst -- oder ist es eine der Pruefadressen, mit
+// denen das Handy testet, ob das Netz ins Internet kommt?
+bool RemoteControl::eigenerHost() {
+  String h = _http.hostHeader();
+  const int k = h.indexOf(':');            // Portangabe abschneiden
+  if (k >= 0) h = h.substring(0, k);
+  if (h.length() == 0) return true;        // kein Host-Kopf: uns gemeint
+  if (h == WiFi.softAPIP().toString()) return true;
+  if (h.equalsIgnoreCase(_host)) return true;
+  if (h.equalsIgnoreCase(String(_host) + ".local")) return true;
+  return false;
+}
+
+void RemoteControl::sendApp() {
+  _http.sendHeader("Cache-Control", "no-store");
+  _http.send_P(200, "text/html; charset=utf-8", WEBUI_HTML);
+}
+
+// Die Weiche fuers Anmeldefenster.
+//
+// Frueher lieferte der Roboter auch hier die volle Bedienoberflaeche aus.
+// Das sah gut aus und war trotzdem falsch: iOS oeffnet dafuer eine
+// eingeschraenkte WebView, in der **WebSockets oft nicht funktionieren**.
+// Die Seite erschien, der Joystick tat nichts, und es sah nach einem
+// Fehler aus. Jetzt kommt dort eine kleine Seite mit einem Knopf, die
+// auch in der eingeschraenkten Ansicht zuverlaessig laeuft.
+void RemoteControl::sendPortal() {
+  const String ip = WiFi.softAPIP().toString();
+  // 977 Byte bei kurzem Netznamen, rund 1030 bei einem ausgereizten.
+  // 1400 lassen Luft, falls der Text noch waechst -- snprintf wuerde sonst
+  // stillschweigend abschneiden und eine halbe Seite ausliefern.
+  static char buf[1400];
+  snprintf(buf, sizeof(buf),
+    "<!DOCTYPE html><html lang=\"de\"><head><meta charset=\"utf-8\">"
+    "<meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">"
+    "<title>%s</title><style>"
+    "body{margin:0;background:#11141a;color:#e8edf5;"
+    "font:16px/1.5 system-ui,-apple-system,sans-serif;padding:26px 20px}"
+    "h1{font-size:19px;margin:0 0 6px}p{color:#8c97a8;margin:0 0 18px}"
+    "a.b{display:block;text-align:center;background:#39d98a;color:#06121f;"
+    "text-decoration:none;font-weight:700;font-size:17px;padding:16px;"
+    "border-radius:13px}code{background:#232a35;padding:2px 6px;border-radius:5px}"
+    "</style></head><body>"
+    "<h1>%s ist verbunden</h1>"
+    "<p>Zum Fahren die Bedienung &ouml;ffnen.</p>"
+    "<a class=\"b\" href=\"http://%s/\">Bedienung &ouml;ffnen</a>"
+    "<p style=\"margin-top:18px\">Reagiert der Joystick hier nicht, "
+    "dieses Fenster schlie&szlig;en und im Browser "
+    "<code>%s.local</code> oder <code>%s</code> aufrufen &mdash; "
+    "dieses Anmeldefenster kann keine Dauerverbindung.</p>"
+    "</body></html>",
+    _ssid, _ssid, ip.c_str(), _host, ip.c_str());
+  _http.sendHeader("Cache-Control", "no-store");
+  _http.send(200, "text/html; charset=utf-8", buf);
 }
 
 bool RemoteControl::setApName(const char* name) {
@@ -89,17 +167,25 @@ void RemoteControl::begin() {
   _dns.setErrorReplyCode(DNSReplyCode::NoError);
   _dns.start(53, "*", ip);
 
-  // Die eigentliche App
+  // Unter einem Namen erreichbar machen: http://marsrover-petra.local
+  // Das erspart das Abtippen der IP. iPhone und Mac koennen das von Haus
+  // aus, Android ab Version 12 meistens.
+  if (MDNS.begin(_host)) MDNS.addService("http", "tcp", 80);
+
+  // Zwei verschiedene Antworten, je nachdem wer fragt:
+  //
+  //   Anfrage an uns (192.168.4.1 oder <name>.local)  -> die Bedienung
+  //   Anfrage an irgendeinen fremden Namen            -> die Weiche
+  //
+  // Die fremden Namen sind die Pruefadressen, mit denen Android, iOS und
+  // Windows testen, ob ein Netz ins Internet kommt. Sie am Host zu
+  // erkennen ist zuverlaessiger, als ihre URLs einzeln aufzulisten -- die
+  // aendern sich je nach Hersteller und Version.
   _http.on("/", HTTP_GET, [this]() {
-    _http.sendHeader("Cache-Control", "no-store");
-    _http.send_P(200, "text/html; charset=utf-8", WEBUI_HTML);
+    if (eigenerHost()) sendApp(); else sendPortal();
   });
-  // Alles andere ebenfalls mit der App beantworten. Damit schlaegt die
-  // Captive-Portal-Erkennung von iOS (captive.apple.com) und Android
-  // (/generate_204) an und das Bedienfenster klappt von selbst auf.
   _http.onNotFound([this]() {
-    _http.sendHeader("Cache-Control", "no-store");
-    _http.send_P(200, "text/html; charset=utf-8", WEBUI_HTML);
+    if (eigenerHost()) sendApp(); else sendPortal();
   });
   _http.begin();
 

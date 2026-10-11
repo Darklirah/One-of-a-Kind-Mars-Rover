@@ -76,6 +76,7 @@ public:
   // Netzname: AP_PREFIX + "_" + eigener Name oder MAC-Kennung
   const char* ssid()   const { return _ssid; }
   const char* apName() const { return _apName; }   // leer = automatisch
+  const char* host()   const { return _host; }     // mDNS, ohne ".local"
   bool setApName(const char* name);                 // wirkt nach Neustart
 
   const RemoteInput& input() const { return _in; }
@@ -90,6 +91,10 @@ public:
 
 private:
   void buildSsid();
+  void buildHost();                  // mDNS-Name aus dem Netznamen
+  bool eigenerHost();                // Anfrage an uns oder an eine Pruefadresse?
+  void sendApp();                    // die Bedienoberflaeche
+  void sendPortal();                 // die kleine Weiche im Anmeldefenster
   void handleText(uint8_t num, const char* line);
   void sendCfg(uint8_t num);
   void sendSlots(int16_t num);                // num < 0 = an alle
@@ -108,4 +113,5 @@ private:
   uint8_t     _clients = 0;
   char        _ssid[33]   = {0};
   char        _apName[AP_NAME_MAX + 1] = {0};
+  char        _host[34]   = {0};     // mDNS, ohne ".local"
 };

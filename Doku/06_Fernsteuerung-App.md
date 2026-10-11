@@ -40,14 +40,46 @@ Serverlogik in [`RemoteControl.cpp`](../Firmware/MarsRover/RemoteControl.cpp).
 
 1. Roboter einschalten.
 2. Am Handy ins WLAN **`MarsRover_…`** verbinden, Passwort **`marsrover`**.
-3. Die Bedienseite klappt meist von selbst auf (Captive-Portal-Erkennung).
-   Falls nicht: Browser öffnen, **`http://192.168.4.1`** eingeben.
+3. Es klappt ein Anmeldefenster auf mit dem Knopf **Bedienung öffnen**.
+   Falls nicht: Browser öffnen und **`marsrover-petra.local`** eingeben —
+   oder **`http://192.168.4.1`**.
 
-> Auf dem iPhone meldet iOS „Kein Internet" — das ist korrekt, der Roboter hat
-> keine Internetverbindung. Die Meldung bestätigen und im Netz bleiben.
-> Reagiert der Joystick im automatisch aufklappenden Fenster nicht, dieses
-> Fenster schließen und die Seite in Safari direkt über die IP aufrufen. Das
-> Portal-Fenster von iOS ist eine eingeschränkte WebView.
+![Das Anmeldefenster beim Verbinden](bilder/app_portal.jpg)
+
+### Warum im Anmeldefenster nicht gleich die Bedienung steht
+
+Früher lieferte der Roboter auch dort die volle Oberfläche aus. Das sah gut
+aus und war trotzdem falsch: **iOS öffnet dafür eine eingeschränkte
+WebView, in der WebSockets oft nicht funktionieren.** Die Seite erschien,
+der Joystick tat nichts, und es sah nach einem Fehler aus.
+
+Jetzt kommt dort eine kleine Seite, die auch in der eingeschränkten Ansicht
+zuverlässig läuft, mit einem Knopf in die richtige Bedienung — und mit dem
+Hinweis, was zu tun ist, falls sie doch im Anmeldefenster hängenbleibt.
+
+### Der Name statt der IP
+
+Der Roboter meldet sich zusätzlich per **mDNS**, abgeleitet aus dem
+Netznamen: klein geschrieben, Unterstrich zu Bindestrich.
+
+| WLAN | Adresse im Browser |
+|---|---|
+| `MarsRover_Petra` | `http://marsrover-petra.local` |
+| `MarsRover_A3F2` | `http://marsrover-a3f2.local` |
+
+So ist der Name immer aus dem WLAN ableitbar, in das man gerade gegangen
+ist, und zwei Rover stoßen nicht zusammen. iPhone und Mac können das von
+Haus aus, Android ab Version 12 meistens; klappt es nicht, bleibt die IP.
+
+> Auf dem iPhone meldet iOS „Kein Internet" — das ist korrekt, der Roboter
+> hat keine Internetverbindung. Die Meldung bestätigen und im Netz bleiben.
+
+> **Was nicht geht:** dem Handy vorschreiben, welche Seite sein Browser beim
+> Öffnen anzeigt. Tippt man eine **`http://`**-Adresse ein, landet man beim
+> Roboter — jeder DNS-Name zeigt auf ihn. Startseiten sind heute aber
+> **`https://`**, und dafür bräuchte er ein gültiges Zertifikat für eine
+> fremde Domain. Das wäre ein Angriff, und der Browser würde es zu Recht
+> melden. Das Anmeldefenster ist der einzige Hebel.
 
 ### So sieht sie aus
 

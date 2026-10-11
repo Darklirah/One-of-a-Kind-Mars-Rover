@@ -555,7 +555,8 @@ void setup() {
 
 #if FEATURE_SERIAL_DEBUG
   Serial.printf("AP   : %s / %s\n", rc.ssid(), AP_PASSWORD);
-  Serial.printf("URL  : http://%s/\n", WiFi.softAPIP().toString().c_str());
+  Serial.printf("URL  : http://%s/  oder  http://%s.local/\n",
+                WiFi.softAPIP().toString().c_str(), rc.host());
   Serial.printf("Duty : max %u von %u (%.1f V Motor an %.1f V Schiene)\n",
                 Motors::dutyMax(), PWM_FULL, MOTOR_RATED_V, MOTOR_SUPPLY_V);
   Serial.printf("Kal. : %s\n", line.calibrated() ? "geladen" : "FEHLT");

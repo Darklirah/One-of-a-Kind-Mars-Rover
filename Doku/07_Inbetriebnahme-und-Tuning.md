@@ -107,7 +107,7 @@ Serielle Konsole auf 115200 Baud, es muss erscheinen:
 ```
 One-of-a-Kind Mars Rover startet
 AP   : MarsRover_A3F2 / marsrover
-URL  : http://192.168.4.1/
+URL  : http://192.168.4.1/  oder  http://marsrover-a3f2.local/
 Duty : max 613 von 1023 (3.0 V Motor an 5.0 V Schiene)
 Kal. : FEHLT
 Prog : Platz 1 "", 0 Schritte
