@@ -77,3 +77,10 @@ Fertigung/pastenschablone/
 # Windows-Verknuepfung, die einen lokalen Pfad in ein oeffentliches Repo
 # traegt. Die Dateien bleiben liegen, nur eben nicht im Repo.
 pcb/pcbway_production/
+
+# FreeCAD: die Arbeitsdateien enthalten die bestueckte Platine mit
+# Fremdmodellen (wie local_Step Files/). Ins Repo kommt nur die Fassung
+# mit nackter Platine, dazu Sicherungskopien gar nicht.
+Gehaeuse_CAD/**/*.FCStd
+!Gehaeuse_CAD/MarsRover_Gehaeuse_V2_ohne_Bauteile.FCStd
+*.FCBak

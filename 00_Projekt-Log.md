@@ -41,6 +41,47 @@ erledigt werden kann.
 
 ---
 
+## 2026-10-11 — Gehäuse und Fahrwerk: erster CAD-Entwurf (V2), Bauanleitung
+
+**Gemacht**
+
+- Neuer Ordner [Gehaeuse_CAD/](Gehaeuse_CAD/README.md): parametrische
+  FreeCAD-Skripte, Druckteile als STL/STEP, einfache Modelle der Zukaufteile.
+- [Doku/11](Doku/11_Gehaeuse-und-Fahrwerk.md) mit fünf Ansichten aus dem Modell.
+- [Ich baue meinen Marsrover](Doku/Ich_baue_meinen_Marsrover.md):
+  Bauanleitung in 17 Schritten mit Bildern.
+
+**Entscheidungen**
+
+- **Offenes Gehäuse**, die Platine bleibt sichtbar. Befestigung: Nut an der
+  hinteren Längsseite, zwei Rasthaken vorn mit 3° geschrägter Unterseite,
+  damit die Platine wieder herausgeht.
+- **Antriebe seitlich neben der Platine**, nicht darunter. Ein ungekürzter
+  Bürstenkopf ist 18 mm hoch, die Platinenunterseite liegt wegen der
+  TCRT5000 aber nur 10,2 mm über dem Boden.
+- **Entkopplung über vier TPU-Tüllen.** Der Bürstenträger hängt nur an zwei
+  Zapfen, starren Kontakt zum Gehäuse gibt es nicht.
+- **Akku in der RTG-Tasche am Heck** statt unter der Platine — dort lag er
+  0,5 mm unter den Lötstiften. Der Stand mit Akku unter der Platine ist als
+  `Gehaeuse_CAD/V1/` eingefroren.
+- **Unwucht über der Bürstenmitte**, beide Motoren gleich herum, bei einem
+  die Litzen vertauscht (gegenläufig, gegen Seitendrift).
+
+**Offen**
+
+- **Nichts davon ist gedruckt oder gebaut.** Geprüft ist nur am Modell:
+  gültige Körper, keine Überschneidungen, Überhänge höchstens 45°.
+- **Masse:** gerechnet 76–92 g gesamt, die Druckteile allein bis 46 g.
+  [Doku/02](Doku/02_SMD-vs-THT-Wirtschaftlichkeit.md) nennt 40 g als Risiko.
+- **Gekaufte Teile weichen von der Stückliste ab:** Zylindermotor
+  12 × 22,5 mm statt Münzmotor; TP4056 mit Mini-USB und **ohne
+  Schutzschaltung**; MT3608 mit 36 × 17 mm. Stückliste und Pinbelegung sind
+  noch nicht angepasst.
+- Einbaulage von MPU-6050, TP4056 und MT3608 ist angenommen, mehrere
+  Modulmaße sind Katalogwerte.
+
+---
+
 ## 2026-10-11 — Die Seite kommt von selbst: mDNS und eine Weiche im Anmeldefenster (0.4.0)
 
 **Die Frage war,** ob sich die Bedienseite beim Öffnen des Browsers von

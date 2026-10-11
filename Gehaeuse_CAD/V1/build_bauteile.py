@@ -1,0 +1,107 @@
+# Zukaufteile als einfache 3D-Modelle: jedes Teil wird als STEP in Bauteile/
+# abgelegt und im Dokument "MarsRover_Gehaeuse" an seinem Einbauort platziert.
+# Nach build_gehaeuse.py ausfuehren.
+#
+# ACHTUNG: Masse mit (*) sind Katalog-/Erfahrungswerte, nicht am Teil gemessen.
+import os
+import FreeCAD as App
+import Part
+
+V = App.Vector
+HERE = os.path.dirname(App.getDocument("MarsRover_Gehaeuse").FileName)   # Ordner der FreeCAD-Datei
+OUT = os.path.join(HERE, "Bauteile")
+os.makedirs(OUT, exist_ok=True)
+doc = App.getDocument("MarsRover_Gehaeuse")
+for n in ("Akku_Ref", "Mast_CFK_Ref", "Buerstenkopf_Ref_L", "Buerstenkopf_Ref_R"):
+    if doc.getObject(n):
+        doc.removeObject(n)
+
+
+def B(x0, x1, y0, y1, z0, z1):
+    return Part.makeBox(x1 - x0, y1 - y0, z1 - z0, V(x0, y0, z0))
+
+
+def CZ(x, y, r, z0, z1):
+    return Part.makeCylinder(r, z1 - z0, V(x, y, z0), V(0, 0, 1))
+
+
+def CY(x, z, r, y0, y1):
+    return Part.makeCylinder(r, y1 - y0, V(x, y0, z), V(0, 1, 0))
+
+
+def export(name, shape):
+    shape.exportStep(os.path.join(OUT, name + ".step"))
+
+
+def place(name, shape, pos, rot=None, color=(0.5, 0.5, 0.5)):
+    o = doc.addObject("Part::Feature", name)
+    o.Shape = shape
+    o.Placement = App.Placement(V(*pos), rot or App.Rotation())
+    o.ViewObject.ShapeColor = color
+    return o
+
+
+# ---- 1  Vibrationsmotor (sourcing map, 22,5 x 12 mm, 1,5-3 V, 140 mA) ----
+# Achse = +Y, Koerper y 0..15,5 (*), Unwucht D7 x 5 am Wellenende
+mot = CY(0, 0, 6.0, 0, 15.5).fuse(CY(0, 0, 0.75, 15.5, 22.5))
+ecc = CY(0, 0, 3.5, 17.5, 22.5).cut(B(-4, 4, 17, 23, -4, 0))
+mot = mot.fuse(ecc).fuse(B(-3, -2, -1.5, 0, 3, 5)).fuse(B(2, 3, -1.5, 0, 3, 5))   # Loetfahnen
+export("Vibrationsmotor_12x22.5", mot)
+
+# ---- 2  MPU-6050 Modul (GY-521, 21 x 16 mm (*)) ----
+mpu = B(0, 21, 0, 16, 0, 1.6).fuse(B(8.5, 12.5, 6, 10, 1.6, 2.5))
+for i in range(8):
+    mpu = mpu.cut(CZ(1.6 + 2.54 * i, 1.3, 0.5, -1, 3))
+for x in (3.0, 18.0):
+    mpu = mpu.cut(CZ(x, 13.0, 1.5, -1, 3))
+export("MPU-6050_GY-521", mpu)
+
+# ---- 3  VL53L0X Modul (25 x 10,67 mm, Lochabstand 19,304 mm) ----
+tof = B(-12.5, 12.5, 0, 10.67, 0, 1.6).fuse(B(-2.2, 2.2, 5.0, 7.4, 1.6, 2.6))
+for x in (-9.652, 9.652):
+    tof = tof.cut(CZ(x, 7.5, 1.5, -1, 3))
+for i in range(6):
+    tof = tof.cut(CZ(-6.35 + 2.54 * i, 1.3, 0.5, -1, 3))
+export("VL53L0X_Modul", tof)
+
+# ---- 4  TP4056 Lademodul Mini-USB, ohne Schutzschaltung (25 x 19 mm (*)) ----
+tp = B(0, 25, 0, 19, 0, 1.6).fuse(B(-1.0, 8.2, 5.65, 13.35, 1.6, 5.5))      # Mini-USB-Buchse
+tp = tp.fuse(B(12, 17, 7.5, 11.5, 1.6, 3.1))                                # TP4056 SOP-8
+export("TP4056_MiniUSB", tp)
+
+# ---- 5  MT3608 Step-Up-Modul (36 x 17 mm, Poti bereits entfernt) ----
+mt = B(0, 36, 0, 17, 0, 1.6).fuse(B(13, 19, 5.5, 11.5, 1.6, 4.6))           # Drossel
+mt = mt.fuse(B(22, 25, 7, 10, 1.6, 2.8)).fuse(B(5, 9, 6, 11, 1.6, 3.6))
+for x in (1.5, 34.5):
+    for y in (1.5, 15.5):
+        mt = mt.cut(CZ(x, y, 0.6, -1, 3))
+export("MT3608_StepUp", mt)
+
+# ---- 6  LiPo 503035, 500 mAh ----
+ak = B(-15, 15, 0, 35, 0, 5)
+ak = ak.makeFillet(1.5, [e for e in ak.Edges if abs(e.Length - 35) < 0.01])
+export("LiPo_503035", ak)
+
+# ---- 7  Zahnbuerstenkopf (12 x 28 mm, Platte 4, Borsten 10,5 (*)) ----
+bk = B(-6, 6, -14, 14, 10.5, 14.5)
+bk = bk.makeFillet(5.0, [e for e in bk.Edges if abs(e.Length - 4) < 0.01])
+bk = bk.fuse(B(-5, 5, -13, 13, 0, 10.5))
+export("Zahnbuerstenkopf", bk)
+
+# ---- 8  CFK-Rundstab D3 x 70 ----
+cfk = CZ(0, 0, 1.5, 0, 70)
+export("CFK_Stab_3x70", cfk)
+
+# ---------------- Einbau ----------------
+RZ, RX, RY = V(0, 0, 1), V(1, 0, 0), V(0, 1, 0)
+for tag, xc in (("L", -12.0), ("R", 82.0)):
+    place("Motor_" + tag, mot, (xc, 17.0, 13.3), color=(0.75, 0.75, 0.78))
+    place("Buerstenkopf_" + tag, bk, (xc, 26.0, -10.2), color=(0.3, 0.6, 0.9))
+place("Akku_503035", ak, (35, 2.6, -7.5), color=(0.2, 0.3, 0.8))
+place("Mast_CFK", cfk, (35, 58.2, -7.2), color=(0.15, 0.15, 0.15))
+place("VL53L0X", tof, (35, 58.2 + 2.2, 52 + 2.2 + 10.67), App.Rotation(RX, -90), (0.5, 0.1, 0.6))
+place("MPU6050", mpu, (40.41, 10.3, 3.55), App.Rotation(RZ, 180), (0.1, 0.25, 0.7))
+place("TP4056", tp, (2.7, 14.5, 3.55), App.Rotation(RZ, 90).multiply(App.Rotation(RX, 90)), (0.1, 0.25, 0.7))
+place("MT3608", mt, (66.0, 19.7, 3.55), App.Rotation(RZ, 180).multiply(App.Rotation(RY, -90)), (0.1, 0.25, 0.7))
+doc.recompute()
+print("Bauteile:", sorted(os.listdir(OUT)))

@@ -79,6 +79,9 @@ lässt die Motoren laufen.
 | [05 Pinbelegung](Doku/05_Pinbelegung.md) | Pinplan mit Begründungen, freie Pins, Vorzeichenkonventionen |
 | [06 Fernsteuerung](Doku/06_Fernsteuerung-App.md) | Warum WLAN und nicht Bluetooth, Protokoll, fertige Apps als Rückfallebene |
 | [07 Inbetriebnahme](Doku/07_Inbetriebnahme-und-Tuning.md) | Schrittweiser Aufbau, Kalibrierung, Reglerabstimmung, Fehlersuche |
+| [11 Gehäuse und Fahrwerk](Doku/11_Gehaeuse-und-Fahrwerk.md) | Das offene Gehäuse im Curiosity-Stil in fünf Ansichten, Vibrationsentkopplung, Schwerpunkt |
+| [Ich baue meinen Marsrover](Doku/Ich_baue_meinen_Marsrover.md) | **Bauanleitung Schritt für Schritt mit Bildern:** Platine bestücken, Gehäuse zusammensetzen, verkabeln |
+| [Gehäuse-CAD](Gehaeuse_CAD/README.md) | Druckteile als STL/STEP, Liste mit Drucklage und Gewicht, FreeCAD-Skripte |
 | [Netzliste](Hardware/Netzliste.md) | Verbindungsliste als Vorlage für KiCad |
 | [Projekt-Log](00_Projekt-Log.md) | Entscheidungen und offene Punkte |
 
