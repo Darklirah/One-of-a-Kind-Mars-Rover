@@ -4,7 +4,7 @@ Für **Variante A**: ESP32 DevKitC V4 (38-Pin) gesteckt, 2× TCRT5000,
 WLAN-Fernsteuerung. Preise sind Richtwerte in Euro für Einzelstück,
 europäische Distributoren, Stand Oktober 2026, ohne Versand.
 
-> Stand 06.10.2026. Maßgeblich ist der Schaltplan `pcb/MarsRover.kicad_sch`;
+> Stand 11.10.2026 (gekaufte Teile nachgetragen). Maßgeblich ist der Schaltplan `pcb/MarsRover.kicad_sch`;
 > im Zweifel gilt dessen Netzliste, nicht diese Tabelle.
 
 Bauteilkürzel (`U1`, `R5` …) entsprechen der
@@ -45,6 +45,24 @@ Bauteilkürzel (`U1`, `R5` …) entsprechen der
 |---|---|---|---|---|
 | U2–U4 | **TP4056-Ladeplatine mit USB-C und Schutzschaltung** | 1 | 1,50 | Enthält TP4056, DW01A, FS8205A, USB-C-Buchse und die CC-Widerstände |
 
+> ### Tatsächlich gekauft: TP4056 mit Mini-USB, **ohne** Schutzschaltung
+>
+> Das beschaffte Modul (roboter-bausatz.de, RBS10084) hat nur **vier**
+> Anschlüsse — `IN+`, `IN−`, `BAT+`, `BAT−` — und laut Händler keine
+> Schutzfunktionen. Die Platine erwartet an `U2` sechs Anschlüsse, darunter
+> einen eigenen Schutzausgang `OUT+`.
+>
+> **So passt es trotzdem:** `BAT+` des Moduls an Pin 3 von `U2`, `BAT−` an
+> Masse (Pin 4), und **Pin 3 mit Pin 5 brücken** — sonst bekommt der
+> Schalter keinen Strom. Die vollständige Belegung steht in der
+> [Pinbelegung](05_Pinbelegung.md#modulanschlüsse-auf-der-platine).
+>
+> **Was dann fehlt:** der Schutz gegen Tiefentladung, Überstrom und
+> Kurzschluss. Das ist nur vertretbar, wenn der **Akku selbst** eine
+> Schutzplatine hat (bei Zellen mit angelötetem Kabel meist unter dem gelben
+> Klebeband am Kabelende — nachsehen). Hat er keine, ein Modul **mit**
+> Schutzschaltung und sechs Anschlüssen nehmen.
+
 > Beim Fertigmodul musst du trotzdem **R_prog tauschen**: die Module laden mit
 > 1 A (1,2 kΩ, oft als `R3` bedruckt). Den 1,2-kΩ-Widerstand ablöten und 4,7 kΩ
 > einsetzen. Sonst lädst du eine 500-mAh-Zelle mit 2 C.
@@ -53,7 +71,7 @@ Bauteilkürzel (`U1`, `R5` …) entsprechen der
 
 | Pos | Bauteil | Menge | Bauform | € | Bemerkung |
 |---|---|---|---|---|---|
-| U5 | **MT3608 Step-Up-Modul**, einstellbar | 1 | THT-Modul | 1,20 | **Wird umgebaut:** Poti raus, Festteiler rein — siehe Zeile darunter und [Inbetriebnahme Schritt 1a](07_Inbetriebnahme-und-Tuning.md) |
+| U5 | **MT3608 Step-Up-Modul**, einstellbar, 36 × 17 × 14 mm | 1 | THT-Modul | 1,20 | Gekauft: roboter-bausatz.de „MT3608 DC-DC Step-Up 2A". Vier Lötaugen an den Ecken (`VIN+`, `VIN−`, `VOUT+`, `VOUT−`). **Wird umgebaut:** Poti raus, Festteiler rein — siehe Zeile darunter und [Inbetriebnahme Schritt 1a](07_Inbetriebnahme-und-Tuning.md) |
 | — | Metallschicht **110 kΩ** und **15 kΩ**, 1 % | je 1 | 0805 oder 0207 | 0,04 | **Modulumbau U5.** Ersetzen das Trimmpoti: 110 kΩ von VOUT nach FB, 15 kΩ von FB nach GND → $0{,}6 \times (1+110/15) = 5{,}00$ V. Gehören aufs Modul, nicht auf die Platine — deshalb ohne Referenz |
 | S1 | Schiebeschalter SPDT, THT | 1 | THT | 0,45 | Zwischen Akku-Schutzausgang und Eingang von U5 — nicht direkt an die Zelle |
 | C1 | 100 µF / **10 V** Elektrolyt | 1 | THT, Ø 6,3 mm | 0,18 | Am Ausgang von U5. 10 V reichen bei 5 V Schiene, zweifache Reserve ist bei Alu-Elkos üblich |
@@ -69,7 +87,7 @@ Bauteilkürzel (`U1`, `R5` …) entsprechen der
 
 | Pos | Bauteil | Menge | Bauform | € | Bemerkung |
 |---|---|---|---|---|---|
-| M1, M2 | Vibrationsmotor 3 V, Ø 10 mm Münze | 2 | **abgesetzt** | 2,40 | ≈ 80 mA bei 3 V. Alternative: Zylinder 6 × 14 mm, kräftiger, aber je 2 g schwerer |
+| M1, M2 | **Vibrationsmotor Zylinder, Ø 12 × 22,5 mm**, 1,5–3 V (sourcing map) | 2 | **abgesetzt** | — | Gekauft im 5er-Pack. Nennstrom laut Händler **140 mA** — bei welcher Spannung, ist nicht angegeben; am Motor nachmessen. Unwucht Ø 7 × 5 mm. Ersetzt den ursprünglich geplanten Münzmotor Ø 10 mm (≈ 80 mA): kräftiger, aber schwerer. **Masse nicht gewogen**, im Gehäuseentwurf mit 6 g je Stück angesetzt |
 | — | **Lötaugen für M1/M2** | 2× 2 | THT, Ø 1,0 mm | — | Fußabdruck `PinHeader_1x02_P2.54mm_Vertical`. Die Motoren sitzen **nicht** auf der Platine; Litze direkt in die durchkontaktierten Löcher löten |
 | Q1, Q2 | **AO3400A** Logik-MOSFET | 2 | SOT-23 | 0,20 | Low-Side-Schalter, 28 mΩ bei 4,5 V Gate, 5,7 A. **Muss ein Logic-Level-Typ sein** — 2N7000, BS170 und IRF540 sind bei 3,3 V Gate praktisch zu |
 | R1, R2 | 100 Ω | 2 | 0805 | 0,02 | Gate-Widerstand, dämpft die Schaltflanke |
@@ -149,9 +167,10 @@ Bauteilkürzel (`U1`, `R5` …) entsprechen der
 
 | Pos | Bauteil | Menge | € | Bemerkung |
 |---|---|---|---|---|
-| PCB1 | Leiterplatte 2-lagig, 50 × 38 mm, **1,0 mm FR4** | 1 | 1,40 | JLCPCB 5er-Charge ≈ 7 € gesamt. 1,0 mm statt 1,6 mm spart 2,2 g bei gleichem Preis |
-| — | Zahnbürstenkopf / Borstenfeld | 2 | 3,00 | **Zwei getrennte Felder, je eines unter einem Motor** — Begründung in [02 §4](02_SMD-vs-THT-Wirtschaftlichkeit.md) |
-| — | Doppelseitiges Schaumklebeband | 1 | 0,50 | Akku und Bürstenköpfe befestigen; entkoppelt auch die Vibration |
+| PCB1 | Leiterplatte 2-lagig, **70 × 52 mm**, **1,0 mm FR4** | 1 | 1,40 | JLCPCB 5er-Charge ≈ 7 € gesamt. 1,0 mm statt 1,6 mm spart 2,2 g bei gleichem Preis |
+| — | Zahnbürstenkopf, **50 × 15 × 18 mm** (gemessen) | 2 | 3,00 | **Zwei getrennte Felder.** Sitzen im Gehäuseentwurf **seitlich neben** der Platine, weil 18 mm nicht darunter passen — siehe [11](11_Gehaeuse-und-Fahrwerk.md). Begründung für zwei Felder in [02 §4](02_SMD-vs-THT-Wirtschaftlichkeit.md) |
+| — | **Druckteile Gehäuse**: Bodenschale, 2 Bürstenträger, Mastkopf (PETG), 4 Tüllen (TPU) | 1 Satz | — | Daten und Druckeinstellungen in [Gehaeuse_CAD](../Gehaeuse_CAD/README.md). Massiv gerechnet bis 46 g |
+| — | Doppelseitiges Schaumklebeband | 1 | 0,50 | Bürstenköpfe unter die Bürstenträger kleben, Akku in der Tasche gegen Klappern sichern |
 
 ---
 
@@ -215,9 +234,9 @@ nicht: MPU-6050 auf `0x68`, VL53L0X auf `0x29`.
 | Pos | Bauteil | Menge | € | Bemerkung |
 |---|---|---|---|---|
 | U6 | **GY-521** (MPU-6050) Breakout | 1 | 2,50 | Lagesensor. Pull-ups sind auf dem Modul. **Flach aufs Chassis**, nahe der Drehachse, möglichst weit weg von den Motoren |
-| U7 | **GY-530 / VL53L0X** Breakout | 1 | 3,50 | Abstandssensor, Laufzeitmessung. Kommt auf den Mast |
-| — | Mast: CFK-Rundstab Ø 3 mm, ca. 60 mm | 1 | 0,80 | Steif und leicht. Messing- oder Alurohr geht auch, wiegt aber mehr |
-| — | Litze 0,14 mm², vieradrig, ca. 120 mm | 1 | 0,30 | Zum Sensor hinauf. **Verdrillt** und mit Schlaufe am Fuß, siehe unten |
+| U7 | **VL53L0X-Modul**, 25 × 10,67 mm, Lochabstand 19,3 mm | 1 | 3,50 | Gekauft: roboter-bausatz.de RBS17700. Abstandssensor, Laufzeitmessung. Kommt in den Mastkopf |
+| — | Mast: CFK-Rundstab Ø 3 mm, **70 mm** | 1 | 0,80 | 60 mm über der Platine plus 10 mm im Mastfuß. Steif und leicht. Messing- oder Alurohr geht auch, wiegt aber mehr |
+| — | Litze **AWG 28–30** (0,05–0,08 mm², Silikon), 4 Stück je ca. 90 mm | 1 | 0,30 | Dünner als ursprünglich geplant, damit sie am schwingenden Mast nicht bricht und in die Kabelöse passt. Zum Sensor hinauf. **Verdrillt** und mit Schlaufe am Fuß, siehe unten |
 | — | Schaumklebeband für U6 | 1 | — | aus dem Restbestand der Akkubefestigung |
 
 **Zusammen ≈ 7,10 €**, Materialpreis steigt damit von 26,50 € auf **≈ 33,60 €**.

@@ -75,8 +75,10 @@ erledigt werden kann.
   [Doku/02](Doku/02_SMD-vs-THT-Wirtschaftlichkeit.md) nennt 40 g als Risiko.
 - **Gekaufte Teile weichen von der Stückliste ab:** Zylindermotor
   12 × 22,5 mm statt Münzmotor; TP4056 mit Mini-USB und **ohne
-  Schutzschaltung**; MT3608 mit 36 × 17 mm. Stückliste und Pinbelegung sind
-  noch nicht angepasst.
+  Schutzschaltung**; MT3608 mit 36 × 17 mm. In [Stückliste](Doku/03_Stueckliste-BOM.md) und
+  [Pinbelegung](Doku/05_Pinbelegung.md) nachgetragen, samt der aus der Platine gelesenen
+  Belegung von U2/U5/U6/U7. **Nicht** nachgezogen: Massebudget und Laufzeit in Doku/02 (rechnen
+  noch mit dem Münzmotor) und der Nennstrom des neuen Motors bei 3 V (nicht gemessen).
 - Einbaulage von MPU-6050, TP4056 und MT3608 ist angenommen, mehrere
   Modulmaße sind Katalogwerte.
 

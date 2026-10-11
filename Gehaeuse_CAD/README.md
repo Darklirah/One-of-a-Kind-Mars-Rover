@@ -16,18 +16,61 @@ den Abstandssensor. Bilder und Erklärung stehen in
 
 ## Druckteile
 
-| Druckteil | Stück | Lage auf der Druckplatte | Größe (mm) | Gewicht je Stück | Material |
-|---|---|---|---|---|---|
-| `Bodenschale` | 1 | Boden nach unten, so wie sie später steht | 129 × 85 × 28 | 34 g | PETG |
-| `Buerstentraeger_L` | 1 | Trägerplatte flach nach unten, Motorschellen nach oben | 17 × 68 × 15 | 3,0 g | PETG |
-| `Buerstentraeger_R` | 1 | wie links | 17 × 68 × 15 | 3,0 g | PETG |
-| `Mastkopf` | 1 | aufrecht, Mastbohrung nach unten, Schlitz nach oben offen | 30 × 12 × 14 | 4,5 g | PETG |
-| `Tuelle_TPU_L1` | **4** | stehend, Bohrung senkrecht | Ø 10,4 × 5,4 | 0,3 g | TPU, weich (85A–95A) |
+| Druckteil | Stück | Lage auf der Druckplatte | Material | Schicht | Wandlinien | Infill | Gewicht massiv |
+|---|---|---|---|---|---|---|---|
+| `Bodenschale` | 1 | Boden nach unten, so wie sie später steht | PETG | 0,2 mm | 3 | 15 % | 34 g |
+| `Buerstentraeger_L` | 1 | Trägerplatte flach nach unten, Motorschellen nach oben | PETG | 0,2 mm | 4 | 100 % | 3,0 g |
+| `Buerstentraeger_R` | 1 | wie links | PETG | 0,2 mm | 4 | 100 % | 3,0 g |
+| `Mastkopf` | 1 | aufrecht, Mastbohrung nach unten, Schlitz nach oben offen | PETG | 0,2 mm | 2 | 10 % | 4,5 g |
+| `Tuelle_TPU_L1` | **4** | stehend, Bohrung senkrecht | TPU, weich (85A–95A) | 0,2 mm | 2 | 15 % | 0,3 g |
 
-**Zusammen etwa 46 g.** Die Gewichte sind aus dem Volumen **massiv**
-gerechnet (PETG 1,27 g/cm³, TPU 1,21 g/cm³) und damit die Obergrenze. Mit
-üblicher Füllung wird es leichter; den echten Wert zeigt der Slicer.
+Größen: Bodenschale 129 × 85 × 28 mm, Bürstenträger 17 × 68 × 15 mm,
+Mastkopf 30 × 12 × 14 mm, Tülle Ø 10,4 × 5,4 mm.
 
+**Zusammen massiv etwa 46 g.** Das Gewicht ist aus dem Volumen gerechnet
+(PETG 1,27 g/cm³, TPU 1,21 g/cm³) und damit die **Obergrenze**. Mit den
+Einstellungen aus der Tabelle wird es leichter; den echten Wert zeigt der
+Slicer.
+
+### Wird mit Infill gedruckt?
+
+Ja, aber es spielt eine kleinere Rolle, als man denkt. Die meisten Wände
+sind 1,2 bis 3 mm dick — bei 3 Wandlinien mit einer 0,4-mm-Düse sind sie
+damit **ohnehin voll**. Infill entsteht nur an den wenigen dicken Stellen:
+im Übergang zur Akkutasche, im Mastfuß und im Inneren des Mastkopfs.
+
+- **Bodenschale: 15 %.** Mehr bringt keine Festigkeit an den Stellen, auf
+  die es ankommt (Haken, Nut, Gabeln sind reine Wand), kostet aber Gewicht.
+- **Bürstenträger: 100 %.** Sie sind klein, und die Zapfen (Ø 4 mm) und
+  Motorschellen müssen halten. Mit 4 Wandlinien sind sie praktisch massiv.
+- **Mastkopf: 10 %.** Er sitzt ganz oben am Mast; jedes Gramm dort lässt
+  den Mast stärker schwingen.
+- **Tüllen: 2 Wandlinien, 15 %.** Hier ist weich besser als fest — sie
+  sollen die Vibration schlucken.
+
+### Einstellungen für PETG
+
+| | |
+|---|---|
+| Düse | 0,4 mm |
+| Schichthöhe | 0,2 mm (erste Schicht 0,2–0,25 mm) |
+| Linienbreite | 0,4–0,45 mm |
+| Boden- und Deckschichten | 4 (= 0,8 mm) |
+| Infill-Muster | Gyroid |
+| Düsentemperatur | 235–245 °C |
+| Betttemperatur | 75–85 °C |
+| Bauteillüfter | 30–50 %, erste Schicht aus |
+| Geschwindigkeit Außenwand | 30–50 mm/s |
+| Stützmaterial | keines |
+| Haftung | Rand (Brim) nur, wenn sich die Ecken der Bodenschale heben |
+| Naht | „hinten" bzw. ausgerichtet, nicht zufällig — sonst sitzen Pickel auf Haken und Tüllensitzen |
+
+Für die **TPU-Tüllen**: 220–235 °C, Bett 40–60 °C, langsam (20–30 mm/s),
+Rückzug klein oder aus.
+
+> Das sind **Startwerte**, keine erprobten Profile: mit diesen Teilen ist
+> noch nichts gedruckt worden. Filament und Drucker gehen vor — im Zweifel
+> gelten die Angaben auf der Spule.
 Kurz zu jedem Teil:
 
 - **Bodenschale** — das Hauptteil. Trägt die Platine (Nut hinten, zwei

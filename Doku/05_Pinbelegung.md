@@ -1,4 +1,4 @@
-# Pinbelegung — ESP32 DevKit V1, 30-Pin
+# Pinbelegung — ESP32 DevKitC V4, 38-Pin
 
 Maßgeblich ist `Firmware/MarsRover/Config.h`. Diese Tabelle muss damit
 übereinstimmen; im Zweifel gilt die Header-Datei.
@@ -30,6 +30,66 @@ Maßgeblich ist `Firmware/MarsRover/Config.h`. Diese Tabelle muss damit
 | **3V3** | Ausgang des bordeigenen AMS1117. Versorgt die IR-LEDs von OS1/OS2 (über R5/R6) und die Kollektoren der Fototransistoren |
 | **GND** | gemeinsame Masse, mindestens zwei Pins anbinden |
 | EN | nicht belegt |
+
+---
+
+## Modulanschlüsse auf der Platine
+
+Ausgelesen aus `pcb/MarsRover.kicad_pcb` (Stand 11.10.2026). **Pin 1 ist
+immer das eckige Lötauge**, die anderen sind rund.
+
+### U2 · Laderegler TP4056 (6-polig)
+
+| Pin | Netz | Anschluss am Modul **mit** Schutz (6 Pads) | Anschluss am gekauften Modul **ohne** Schutz (4 Pads) |
+|---|---|---|---|
+| 1 | nicht verbunden | `IN+` | bleibt frei |
+| 2 | GND | `IN−` | bleibt frei |
+| 3 | Akku-Plus (zu `J2` Pin 1) | `B+` | `BAT+` |
+| 4 | GND | `B−` | `BAT−` |
+| 5 | zum Schalter `S1` | `OUT+` | **mit Pin 3 brücken** |
+| 6 | GND | `OUT−` | bleibt frei |
+
+Geladen wird über die USB-Buchse des Moduls; deshalb ist Pin 1 auf der
+Platine nicht angeschlossen.
+
+> **Ohne die Brücke von Pin 3 nach Pin 5 bleibt der Rover mit dem gekauften
+> Modul stromlos.** Und ohne Schutzschaltung im Modul muss der Akku eine
+> eigene haben — siehe [Stückliste §2b](03_Stueckliste-BOM.md).
+
+### U5 · Step-Up-Wandler MT3608 (4-polig)
+
+| Pin | Netz | Anschluss am Modul |
+|---|---|---|
+| 1 | vom Schalter `S1` | `VIN+` |
+| 2 | GND | `VIN−` |
+| 3 | +5 V | `VOUT+` |
+| 4 | GND | `VOUT−` |
+
+Das gekaufte Modul (36 × 17 mm) hat seine vier Lötaugen an den **Ecken**,
+nicht in einer Reihe. Es lässt sich also nicht einfach auf die Stiftleiste
+stecken; zwei der vier Anschlüsse brauchen ein kurzes Drahtstück.
+
+### U6 · Lagesensor MPU-6050 und U7 · Abstandssensor VL53L0X (je 4-polig)
+
+| Pin | Netz | Anschluss am Modul |
+|---|---|---|
+| 1 | +3,3 V | `VCC` (MPU-6050) bzw. `VIN` (VL53L0X) |
+| 2 | GND | `GND` |
+| 3 | GPIO 22 | `SCL` |
+| 4 | GPIO 21 | `SDA` |
+
+Beide Leisten sind gleich belegt. Die übrigen Lötaugen der Module (`XDA`,
+`XCL`, `AD0`, `INT` am MPU-6050; `XSHUT`, `GPIO1` am VL53L0X) bleiben frei.
+
+### M1, M2 · Motoren und J2 · Akku
+
+| Anschluss | Pin 1 | Pin 2 |
+|---|---|---|
+| `M1` (links), `M2` (rechts) | +5 V | zum MOSFET (geschaltete Masse) |
+| `J2` (Akkustecker) | Akku-Plus | GND |
+
+Die Motoren sollen **gegenläufig** drehen: bei einem der beiden die zwei
+Litzen an Pin 1 und Pin 2 vertauschen.
 
 ---
 

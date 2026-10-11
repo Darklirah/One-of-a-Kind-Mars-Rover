@@ -131,9 +131,17 @@ werden. Das geht nur, solange sie noch lose auf dem Tisch liegen.
 
 > **Achtung beim Laderegler:** Es gibt ihn mit und ohne Schutzschaltung. Die
 > Platine ist für ein Modul **mit** Schutzschaltung und sechs Anschlüssen
-> gedacht. Ein Modul ohne Schutz kann den Akku tiefentladen. Welche
-> Anschlüsse wohin gehören, steht in der [Pinbelegung](05_Pinbelegung.md) —
-> bitte vor dem Löten vergleichen.
+> gedacht. Hat dein Modul nur vier Anschlüsse (`IN+`, `IN−`, `BAT+`,
+> `BAT−`), dann gilt:
+>
+> - `BAT+` kommt an Pin 3 von `U2`, `BAT−` an Pin 4.
+> - **Pin 3 und Pin 5 von `U2` mit einem Drahtstück verbinden.** Ohne diese
+>   Brücke bekommt der Rover keinen Strom.
+> - Der Akku muss dann eine **eigene Schutzplatine** haben (meist unter dem
+>   gelben Klebeband am Kabelende). Sonst kann er tiefentladen werden.
+>
+> Die ganze Belegung steht in der
+> [Pinbelegung](05_Pinbelegung.md#modulanschlüsse-auf-der-platine).
 
 ## Schritt 8 — ESP32 einstecken
 
@@ -150,7 +158,7 @@ zur anderen. Gleichmäßig drücken, nicht verkanten.
 | Modul | Platz | So sitzt es |
 |---|---|---|
 | TP4056 | `U2` | steht senkrecht am Rand |
-| MT3608 | `U5` | steht senkrecht am Rand, **darf den USB-Anschluss des ESP32 nicht verdecken** |
+| MT3608 | `U5` | steht senkrecht am Rand, **darf den USB-Anschluss des ESP32 nicht verdecken**. Seine vier Lötaugen sitzen an den Ecken — zwei davon mit kurzen Drahtstücken zur Leiste führen |
 | MPU-6050 | `U6` | liegt flach, ragt nach hinten über den Platinenrand |
 
 Die Module werden auf die Stiftleisten gesetzt und verlötet. Der Lagesensor
@@ -252,9 +260,15 @@ Der Sensor VL53L0X braucht vier Leitungen: `VIN`, `GND`, `SCL` und `SDA`.
 5. **Schlaufe lassen.** Zwischen Öse und Platine einen kleinen Bogen lassen.
    Der Mast schwingt beim Fahren; ohne Schlaufe bricht das Kabel an der
    Lötstelle.
-6. **An `U7` anschließen.** Die vier Litzen an die Stiftleiste `U7` löten —
-   `VIN` an `VIN`, `GND` an `GND`, `SCL` an `SCL`, `SDA` an `SDA`. Die
-   Reihenfolge steht im Aufdruck der Platine.
+6. **An `U7` anschließen.** Die vier Litzen an die Stiftleiste `U7` löten.
+   Pin 1 ist das **eckige** Lötauge:
+
+   | Pin an `U7` | Litze vom Sensor |
+   |---|---|
+   | 1 | `VIN` |
+   | 2 | `GND` |
+   | 3 | `SCL` |
+   | 4 | `SDA` |
 
 ## Schritt 16 — Akkukabel anstecken, Platine einrasten
 
