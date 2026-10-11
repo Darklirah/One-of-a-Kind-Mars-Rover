@@ -80,31 +80,39 @@ Platz in den Editor.
 
 **3. Namen vergeben.** Ins Namensfeld tippen, z. B. „Rechteck".
 
-**4. Befehle einfügen.** Im Kasten *Befehl hinzufügen*:
+**4. Befehle einfügen.** Im Kasten *Fahrbefehl hinzufügen*:
 
-- Befehl aus der Liste wählen — sie ist nach **Fahren / Zeit / Licht /
-  Ablauf** gruppiert
-- darunter erscheinen genau die passenden Schieberegler, immer mit Klartext
-  daneben: *„Stufe 4 – mittel"*, *„2,0 mal pro Sekunde"*, *„endlos"*
-- **+ Einfügen** antippen
+- Befehl aus der Liste antippen — sie ist nach **Fahren / Zeit / Licht /
+  Ablauf** gruppiert, und die Gruppen lassen sich zuklappen
+- es geht ein Fenster auf: Name des Befehls, ein Satz dazu, was er tut, und
+  genau die passenden Schieberegler, immer mit Klartext daneben:
+  *„Stufe 4 – mittel"*, *„2,0 mal pro Sekunde"*, *„endlos"*
+- **Einfügen** antippen — oder **Abbrechen**, wenn es doch ein anderer
+  Befehl sein soll
 
 Der Schritt landet unten in der Liste. Der Zähler darüber wandert mit:
 *„5 von 48 belegt · 43 frei"*.
 
-**5. Reihenfolge korrigieren.** Jede Zeile hat **↑ ↓ ✕** zum Verschieben
+**5. Werte nachträglich ändern.** Auf den **Text** eines Schritts tippen —
+erkennbar am **✎** dahinter. Es geht dasselbe Fenster auf, diesmal mit den
+Werten dieses Schritts und dem Knopf *Änderung speichern*. Aus
+*„geradeaus mit 60 %"* wird so in zwei Handgriffen *„geradeaus mit 25 %"*,
+ohne den Schritt zu löschen und neu anzulegen.
+
+**6. Reihenfolge korrigieren.** Jede Zeile hat **↑ ↓ ✕** zum Verschieben
 und Löschen. Die Farbe am linken Rand zeigt die Art: blau = Fahren,
 grau = Warten, gelb = Licht, violett = Wiederholen.
 
-**6. Speichern.** Der Roboter prüft das Programm, legt es im gewählten
+**7. Speichern.** Der Roboter prüft das Programm, legt es im gewählten
 Platz ab und meldet *„Gespeichert: 17 Schritte"*. Ist etwas faul, kommt
 stattdessen eine konkrete Meldung wie *„Schritt 4: Radius muss 1..10 sein"*
 und **nichts wird geschrieben** — ein kaputtes Programm landet nie im Flash.
 
-**7. Freigeben und starten.** Oben **Freigeben**, dann unten
+**8. Freigeben und starten.** Oben **Freigeben**, dann unten
 **▶ Programm starten**. Der laufende Schritt wird in der Liste **grün
 hervorgehoben**, darunter steht *„Schritt 7 von 17 · Durchlauf 2"*.
 
-**8. Stoppen.** Derselbe Knopf, jetzt rot: **■ Programm stoppen**. Oder der
+**9. Stoppen.** Derselbe Knopf, jetzt rot: **■ Programm stoppen**. Oder der
 **NOTHALT** ganz unten — der stoppt das Programm und sperrt zusätzlich die
 Motoren.
 

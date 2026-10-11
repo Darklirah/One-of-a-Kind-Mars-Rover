@@ -83,20 +83,46 @@ nicht die Orientierung verliert: **blau** die Wahl des Speicherplatzes,
 zeigt ein Farbstreifen links die Art jedes Befehls — blau Fahren, grau
 Warten, gelb Licht, violett Ablaufsteuerung. Unten der Schrittzähler.
 
+Das kleine **✎** hinter jedem Schritt heißt: antippen und die Werte ändern.
+
 #### Befehl aussuchen
 
 ![Befehlsliste mit Gruppen](bilder/app_befehle.jpg)
 
 Die Befehle sind nach **Fahren, Zeit, Licht, Ablauf** gruppiert; die
-Gruppenüberschriften stehen hellgelb und fett über ihren Einträgen. Der
-gewählte Befehl ist blau hervorgehoben, und darunter erscheinen genau die
-Einstellungen, die er braucht — beim Drehbefehl also Drehwinkel **und**
-Geschwindigkeit.
+Gruppenüberschriften stehen hellgelb und fett über ihren Einträgen und
+**lassen sich zuklappen**. *Fahren* steht offen, weil man die Befehle
+fast immer braucht; die drei übrigen Gruppen sind zugeklappt und sparen
+rund ein Drittel Scrollweg.
 
 > **Warum keine Auswahlliste:** die Gruppenüberschriften eines `<select>`
 > zeichnet das Betriebssystem. Android und iOS öffnen einen eigenen Dialog,
 > der jede Formatierung der Seite ignoriert — hervorheben ließe sich dort
 > nichts. Die Liste ist deshalb selbst gebaut.
+
+#### Einstellen, einfügen, später ändern
+
+![Befehlsdialog mit den Einstellungen](bilder/app_dialog.jpg)
+
+**Ein Fenster für beides.** Tippt man in der Liste auf einen Befehl, geht
+es mit *Einfügen* auf; tippt man im Ablauf auf einen vorhandenen Schritt,
+mit dessen Werten und *Änderung speichern*. Darin stehen der Name des
+Befehls, ein Satz dazu, was er tut, und genau die Einstellungen, die er
+braucht — beim Drehbefehl also Drehwinkel **und** Geschwindigkeit, beim
+Anhalten gar keine.
+
+Zwei Dinge, die vorher fehlten:
+
+* **Abbrechen.** Früher war ein Antippen endgültig — die Auswahl ließ sich
+  nur durch eine andere ersetzen.
+* **Werte nachträglich ändern.** Schritte ließen sich löschen und
+  verschieben, aber eine 60 auf 25 Prozent zu korrigieren ging nur über
+  Löschen und neu Einfügen.
+
+> **Warum die Einstellungen ins Fenster gewandert sind:** 13 der 14 Befehle
+> brauchen eine. Standen die Schieberegler unter der Liste, war beim
+> Einstellen längst weggescrollt, *wozu* sie gehören. Im Fenster steht der
+> Befehlsname darüber.
 
 ### Was die Oberfläche kann
 

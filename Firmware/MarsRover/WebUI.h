@@ -62,7 +62,8 @@ h1{font-size:17px;margin:0;font-weight:600;letter-spacing:.2px;flex:1;
     justify-content:center;padding:18px;z-index:50}
 .ov[hidden]{display:none}
 .dlg{background:var(--panel);border:1px solid var(--line);border-radius:16px;
-     padding:18px;width:100%;max-width:420px;box-shadow:0 20px 60px #000a}
+     padding:18px;width:100%;max-width:420px;box-shadow:0 20px 60px #000a;
+     max-height:86vh;overflow:auto}
 .dlg h3{margin:0 0 8px;font-size:17px;font-weight:600}
 .dlg input[type=text]{margin-bottom:6px}
 .dlgrow{display:flex;gap:9px;margin-top:14px}
@@ -145,7 +146,13 @@ select,input[type=text]{width:100%;background:var(--panel2);color:var(--fg);font
 #steps li.now{background:#243a2e;box-shadow:inset 0 0 0 1px var(--ok)}
 #steps li var{font-style:normal;color:var(--dim);font-size:11.5px;width:22px;
   text-align:right;font-variant-numeric:tabular-nums;flex:0 0 auto}
-#steps li p{margin:0;flex:1;font-size:14px}
+/* Der Schritttext ist antippbar (oeffnet den Befehlsdialog), sieht aber
+   nicht wie ein Knopf aus -- er soll Text bleiben. Der Stift am Ende ist
+   der einzige Hinweis darauf, dass sich da etwas aendern laesst. */
+#steps li .stx{margin:0;flex:1;font-size:14px;text-align:left;
+  background:none;border:0;color:var(--fg);font-family:inherit;padding:0}
+#steps li .stx:after{content:" \270e";color:var(--dim);font-size:12px}
+#steps li .stx:active{color:var(--accent)}
 #steps li .acts{display:flex;gap:3px;flex:0 0 auto}
 #steps li .acts button{border:0;background:var(--panel3);color:var(--dim);
   width:30px;height:30px;border-radius:8px;font-size:14px;font-weight:700;line-height:1;padding:0}
@@ -174,9 +181,14 @@ select,input[type=text]{width:100%;background:var(--panel2);color:var(--fg);font
    sichtbare Liste darueber ist deshalb selbst gebaut. Sie wird aus eben
    diesem <select> erzeugt, damit die Befehle nur an einer Stelle stehen. */
 #aOp{display:none}
-#opList{display:flex;flex-direction:column;gap:4px;margin:0 0 12px}
-.opg{font-size:15px;font-weight:700;color:#ffe08a;margin:13px 0 5px;padding:0 2px}
+#opList{display:flex;flex-direction:column;margin:0}
+.opg{display:block;width:100%;text-align:left;background:none;border:0;
+     font:inherit;font-size:15px;font-weight:700;color:#ffe08a;
+     margin:13px 0 5px;padding:2px}
 .opg:first-child{margin-top:0}
+.opg .arr{display:inline-block;width:16px;color:var(--dim);font-weight:400}
+.opgrp{display:flex;flex-direction:column;gap:4px}
+.opgrp.zu{display:none}
 .opb{border:1px solid var(--line);background:var(--panel);color:var(--fg);
      font:inherit;font-size:13.5px;text-align:left;padding:9px 12px;border-radius:10px}
 .opb.sel{background:var(--accent);border-color:var(--accent);color:#06121f;font-weight:700}
@@ -277,8 +289,8 @@ details .inner{padding:0 var(--pad) 6px}
 
     <div class="sec s3">
       <h2>Fahrbefehl hinzuf&uuml;gen</h2>
-      <p class="sub">Befehl ausw&auml;hlen, die Einstellung darunter setzen,
-         dann einf&uuml;gen. Er landet am Ende des Ablaufs.</p>
+      <p class="sub">Auf einen Befehl tippen &mdash; die Einstellungen und
+         das Einf&uuml;gen kommen dann im Fenster.</p>
       <select id="aOp">
         <optgroup label="Fahren">
           <option value="ge">geradeaus fahren</option>
@@ -305,54 +317,6 @@ details .inner{padding:0 var(--pad) 6px}
       </select>
       <div id="opList"></div>
 
-      <div id="pRad" class="hide">
-        <label>Kurvenradius Stufe <b id="vRad">3</b> &ndash; <span id="tRad">eng</span></label>
-        <input type="range" id="aRad" min="1" max="10" value="3">
-      </div>
-      <div id="pDeg" class="hide">
-        <label>Drehwinkel <b id="vDeg">90</b>&deg;</label>
-        <input type="range" id="aDeg" min="5" max="360" step="5" value="90">
-      </div>
-      <div id="pObs" class="hide">
-        <label>anhalten bei <b id="vObs">150</b> mm Abstand</label>
-        <input type="range" id="aObs" min="40" max="1200" step="10" value="150">
-      </div>
-      <div id="pSpd" class="hide">
-        <label>Geschwindigkeit <b id="vSpd">60</b> %</label>
-        <input type="range" id="aSpd" min="1" max="100" value="60">
-      </div>
-      <div id="pWa" class="hide">
-        <label>Wartezeit <b id="vWa">2,0</b> Sekunden</label>
-        <input type="range" id="aWa" min="1" max="200" value="20">
-      </div>
-      <div id="pLd" class="hide">
-        <div class="two">
-          <select id="aLdT">
-            <option value="0">LED vorne links</option>
-            <option value="1">LED vorne rechts</option>
-            <option value="2">LED hinten links</option>
-            <option value="3">LED hinten rechts</option>
-            <option value="4">beide vorne</option>
-            <option value="5">beide hinten</option>
-            <option value="6">alle vier</option>
-          </select>
-          <select id="aLdS">
-            <option value="1">einschalten</option>
-            <option value="0">ausschalten</option>
-            <option value="2">blinken</option>
-          </select>
-        </div>
-      </div>
-      <div id="pBf" class="hide">
-        <label>Blinken Stufe <b id="vBf">4</b> &ndash; <span id="tBf">2,0</span> mal pro Sekunde</label>
-        <input type="range" id="aBf" min="1" max="10" value="4">
-      </div>
-      <div id="pLo" class="hide">
-        <label>Wiederholungen <b id="vLo">0</b> &ndash; <span id="tLo">endlos</span></label>
-        <input type="range" id="aLo" min="0" max="10" value="0">
-      </div>
-
-      <button class="btn pri" id="bAdd" style="width:100%">+ Einf&uuml;gen</button>
     </div>
 
     <div class="row">
@@ -431,6 +395,67 @@ details .inner{padding:0 var(--pad) 6px}
      Einer fuer beides: die Abfrage beim ersten Start und das spaetere
      Umbenennen. Unterschiedlich sind nur Ueberschrift, Einleitung und die
      Beschriftung des Abbruchknopfes.                                    -->
+<!-- ============ Befehlsdialog ============
+     Einer fuer beides: einen neuen Befehl einfuegen und einen schon
+     vorhandenen Schritt aendern. Unterschiedlich sind nur Ueberschrift
+     und die Beschriftung des rechten Knopfes.                        -->
+<div class="ov" id="opOv" hidden>
+  <div class="dlg">
+    <h3 id="opTitle">Befehl</h3>
+    <p class="sub" id="opHint" style="margin-top:0"></p>
+    <div id="pRad" class="hide">
+      <label>Kurvenradius Stufe <b id="vRad">3</b> &ndash; <span id="tRad">eng</span></label>
+      <input type="range" id="aRad" min="1" max="10" value="3">
+    </div>
+    <div id="pDeg" class="hide">
+      <label>Drehwinkel <b id="vDeg">90</b>&deg;</label>
+      <input type="range" id="aDeg" min="5" max="360" step="5" value="90">
+    </div>
+    <div id="pObs" class="hide">
+      <label>anhalten bei <b id="vObs">150</b> mm Abstand</label>
+      <input type="range" id="aObs" min="40" max="1200" step="10" value="150">
+    </div>
+    <div id="pSpd" class="hide">
+      <label>Geschwindigkeit <b id="vSpd">60</b> %</label>
+      <input type="range" id="aSpd" min="1" max="100" value="60">
+    </div>
+    <div id="pWa" class="hide">
+      <label>Wartezeit <b id="vWa">2,0</b> Sekunden</label>
+      <input type="range" id="aWa" min="1" max="200" value="20">
+    </div>
+    <div id="pLd" class="hide">
+      <div class="two">
+        <select id="aLdT">
+          <option value="0">LED vorne links</option>
+          <option value="1">LED vorne rechts</option>
+          <option value="2">LED hinten links</option>
+          <option value="3">LED hinten rechts</option>
+          <option value="4">beide vorne</option>
+          <option value="5">beide hinten</option>
+          <option value="6">alle vier</option>
+        </select>
+        <select id="aLdS">
+          <option value="1">einschalten</option>
+          <option value="0">ausschalten</option>
+          <option value="2">blinken</option>
+        </select>
+      </div>
+    </div>
+    <div id="pBf" class="hide">
+      <label>Blinken Stufe <b id="vBf">4</b> &ndash; <span id="tBf">2,0</span> mal pro Sekunde</label>
+      <input type="range" id="aBf" min="1" max="10" value="4">
+    </div>
+    <div id="pLo" class="hide">
+      <label>Wiederholungen <b id="vLo">0</b> &ndash; <span id="tLo">endlos</span></label>
+      <input type="range" id="aLo" min="0" max="10" value="0">
+    </div>
+    <div class="dlgrow">
+      <button class="btn sm" id="opCancel">Abbrechen</button>
+      <button class="big" id="opOk">Einf&uuml;gen</button>
+    </div>
+  </div>
+</div>
+
 <div class="ov" id="nameOv" hidden>
   <div class="dlg">
     <h3 id="nameTitle">Wie soll dein Rover hei&szlig;en?</h3>
@@ -480,6 +505,29 @@ var OPS={
   lo:{c:"loop", txt:function(s){ return s.a===0 ? "von vorn wiederholen, endlos"
                                                 : "von vorn wiederholen, "+s.a+" mal" }}
 };
+/* Klartextname je Befehl -- wird in buildOpList() aus den Eintraegen des
+   <select> gefuellt, damit die Namen nur an einer Stelle stehen. */
+var OPNAME={};
+
+/* Ein Satz je Befehl fuer den Dialog. Beim Fahrprogramm steht man sonst
+   vor einem Schieberegler und weiss nicht, was er bewirkt. */
+var OPHINT={
+  ge:"Fährt geradeaus, bis der nächste Befehl kommt.",
+  li:"Fährt eine Linkskurve. Stufe 1 ist die engste.",
+  re:"Fährt eine Rechtskurve. Stufe 1 ist die engste.",
+  dl:"Dreht auf der Stelle nach links. Braucht den Lagesensor.",
+  dr:"Dreht auf der Stelle nach rechts. Braucht den Lagesensor.",
+  fh:"Fährt geradeaus und hält vor dem ersten Hindernis.",
+  tl:"Dreht nach links, bis der Weg frei ist.",
+  tr:"Dreht nach rechts, bis der Weg frei ist.",
+  wf:"Bleibt stehen und wartet, bis der Weg frei wird.",
+  st:"Hält beide Motoren an. Keine Einstellung nötig.",
+  wa:"Bleibt die eingestellte Zeit stehen.",
+  ld:"Schaltet eine oder mehrere LEDs ein, aus oder auf Blinken.",
+  bf:"Legt fest, wie schnell blinkende LEDs blinken.",
+  lo:"Fängt wieder von vorn an. Steht immer als letzte Zeile."
+};
+
 function wire(s){
   switch(s.op){
     case "ge": return "ge,"+s.a;
@@ -688,7 +736,12 @@ function paintSteps(){
     var li=document.createElement("li");
     li.className=OPS[s.op].c;
     var v=document.createElement("var"); v.textContent=(i+1)+".";
-    var p=document.createElement("p");   p.textContent=OPS[s.op].txt(s);
+    /* Der Text ist ein Knopf: antippen oeffnet denselben Dialog wie beim
+       Einfuegen, nur mit den Werten dieses Schritts. Vorher liessen sich
+       Schritte nur loeschen oder verschieben, aber nicht aendern. */
+    var p=document.createElement("button"); p.type="button"; p.className="stx";
+    p.textContent=OPS[s.op].txt(s);
+    p.onclick=(function(k){ return function(){ openOp(prog[k].op,k) } })(i);
     var a=document.createElement("div"); a.className="acts";
     a.appendChild(mk("↑",function(){ swap(i,i-1) }));
     a.appendChild(mk("↓",function(){ swap(i,i+1) }));
@@ -745,22 +798,41 @@ function buildOpList(){
   var sel=E("aOp"), box=E("opList"), gr=sel.getElementsByTagName("optgroup");
   box.innerHTML="";
   for(var i=0;i<gr.length;i++){
-    var h=document.createElement("div");
-    h.className="opg"; h.textContent=gr[i].label;
+    /* Gruppenkopf ist ein Knopf: die Gruppen lassen sich zuklappen, sonst
+       waere die Liste aus 14 Befehlen ueber 700 px lang. "Fahren" steht
+       offen, das sind die Befehle, die man fast immer braucht. */
+    var h=document.createElement("button");
+    h.type="button"; h.className="opg";
+    h.setAttribute("data-grp",String(i));
+    h.innerHTML='<span class="arr">▾</span>'+gr[i].label;
+    h.onclick=function(){ toggleGrp(this.getAttribute("data-grp")) };
     box.appendChild(h);
+
+    var wrap=document.createElement("div");
+    wrap.className="opgrp"; wrap.setAttribute("data-grp",String(i));
+    if(i>0) wrap.classList.add("zu");
     var op=gr[i].getElementsByTagName("option");
     for(var j=0;j<op.length;j++){
+      OPNAME[op[j].value]=op[j].textContent;
       var b=document.createElement("button");
       b.type="button"; b.className="opb";
       b.textContent=op[j].textContent;
       b.setAttribute("data-op",op[j].value);
-      b.onclick=function(){
-        E("aOp").value=this.getAttribute("data-op");
-        paintOpList(); paintAddForm();
-      };
-      box.appendChild(b);
+      b.onclick=function(){ openOp(this.getAttribute("data-op"),-1) };
+      wrap.appendChild(b);
     }
+    box.appendChild(wrap);
+    paintGrp(String(i));
   }
+}
+function toggleGrp(n){
+  var w=E("opList").querySelector('.opgrp[data-grp="'+n+'"]');
+  w.classList.toggle("zu"); paintGrp(n);
+}
+function paintGrp(n){
+  var w=E("opList").querySelector('.opgrp[data-grp="'+n+'"]');
+  var h=E("opList").querySelector('.opg[data-grp="'+n+'"] .arr');
+  h.textContent = w.classList.contains("zu") ? "▸" : "▾";
 }
 function paintOpList(){
   var v=E("aOp").value, b=E("opList").getElementsByClassName("opb");
@@ -776,27 +848,73 @@ live("aWa","vWa", function(v,o){ o.textContent=(v/10).toFixed(1).replace(".",","
 live("aBf","vBf", function(v,o){ o.textContent=v; E("tBf").textContent=(v*0.5).toFixed(1).replace(".",",") });
 live("aLo","vLo", function(v,o){ o.textContent=v; E("tLo").textContent = v==="0" ? "endlos" : v+" mal" });
 
-E("bAdd").onclick=function(){
-  if(prog.length>=maxSteps){ toast("Kein Platz mehr: "+maxSteps+" Schritte sind das Maximum.",false); return }
-  var op=E("aOp").value, s={op:op,a:0,b:0,c:0};
+/* --- Formular lesen und schreiben ---
+   Beides an einer Stelle, weil der Dialog in zwei Richtungen arbeitet:
+   beim Einfuegen liest er die Felder, beim Bearbeiten fuellt er sie
+   zuerst aus dem vorhandenen Schritt. */
+function readForm(op){
+  var s={op:op,a:0,b:0,c:0};
   if(op==="ge") s.a=+E("aSpd").value;
   if(op==="li"||op==="re"){ s.a=+E("aRad").value; s.b=+E("aSpd").value }
   if(op==="dl"||op==="dr"){ s.c=+E("aDeg").value; s.a=+E("aSpd").value }
   if(op==="fh"||op==="tl"||op==="tr"){ s.c=+E("aObs").value; s.a=+E("aSpd").value }
-  if(op==="wf"){ s.c=+E("aObs").value }
+  if(op==="wf") s.c=+E("aObs").value;
   if(op==="wa") s.c=Math.round(E("aWa").value*100);
   if(op==="ld"){ s.a=+E("aLdT").value; s.b=+E("aLdS").value }
   if(op==="bf") s.a=+E("aBf").value;
+  if(op==="lo") s.a=+E("aLo").value;
+  return s;
+}
+/* Setzt ein Feld und laesst die Beschriftung darueber nachziehen --
+   die haengt an "input", und ein Zuweisen allein loest das nicht aus. */
+function setF(id,v){ var e=E(id); e.value=v; e.dispatchEvent(new Event("input")) }
+function fillForm(s){
+  var op=s.op;
+  if(op==="ge") setF("aSpd",s.a);
+  if(op==="li"||op==="re"){ setF("aRad",s.a); setF("aSpd",s.b) }
+  if(op==="dl"||op==="dr"){ setF("aDeg",s.c); setF("aSpd",s.a) }
+  if(op==="fh"||op==="tl"||op==="tr"){ setF("aObs",s.c); setF("aSpd",s.a) }
+  if(op==="wf") setF("aObs",s.c);
+  if(op==="wa") setF("aWa",Math.round(s.c/100));
+  if(op==="ld"){ setF("aLdT",s.a); setF("aLdS",s.b) }
+  if(op==="bf") setF("aBf",s.a);
+  if(op==="lo") setF("aLo",s.a);
+}
+
+/* --- Der Befehlsdialog ---
+   opIndex < 0 heisst "neuer Befehl", sonst die Nummer des Schritts, der
+   gerade bearbeitet wird. */
+var opIndex=-1;
+function openOp(op,index){
+  opIndex=index;
+  E("aOp").value=op; paintOpList(); paintAddForm();
+  E("opTitle").textContent=OPNAME[op]||"Befehl";
+  E("opHint").textContent=OPHINT[op]||"";
+  if(index>=0) fillForm(prog[index]);
+  E("opOk").textContent = index<0 ? "Einfügen" : "Änderung speichern";
+  E("opOv").hidden=false;
+}
+function closeOp(){ E("opOv").hidden=true; opIndex=-1 }
+E("opCancel").onclick=closeOp;
+E("opOk").onclick=function(){
+  var op=E("aOp").value, s=readForm(op);
+  if(opIndex>=0){                      /* vorhandenen Schritt aendern */
+    prog[opIndex]=s; closeOp(); paintSteps(); return;
+  }
+  if(prog.length>=maxSteps){
+    toast("Kein Platz mehr: "+maxSteps+" Schritte sind das Maximum.",false);
+    closeOp(); return;
+  }
   if(op==="lo"){
-    s.a=+E("aLo").value;
     /* "wiederhole" gibt es nur einmal und immer als letzte Zeile */
     prog=prog.filter(function(x){ return x.op!=="lo" });
-    prog.push(s); paintSteps(); return;
+    prog.push(s);
+  } else {
+    /* alles andere vor ein vorhandenes "wiederhole" einsortieren */
+    var at=prog.findIndex(function(x){ return x.op==="lo" });
+    if(at<0) prog.push(s); else prog.splice(at,0,s);
   }
-  /* alles andere vor ein vorhandenes "wiederhole" einsortieren */
-  var at=prog.findIndex(function(x){ return x.op==="lo" });
-  if(at<0) prog.push(s); else prog.splice(at,0,s);
-  paintSteps();
+  closeOp(); paintSteps();
 };
 
 E("bSave").onclick=function(){

@@ -2,6 +2,62 @@
 
 Laufendes Protokoll. Neueste Einträge oben.
 
+## 2026-10-11 — Befehlsdialog, und Schritte lassen sich endlich ändern (0.3.0)
+
+**Die Lücke:** ein gespeichertes Programm war nur zum Teil bearbeitbar.
+Schritte ließen sich verschieben und löschen, aber **ihre Werte nicht
+ändern** — aus „geradeaus mit 60 %" wurden 25 % nur über Löschen und neu
+Einfügen.
+
+**Ein Fenster für beides.** Die acht Einstellblöcke sind aus dem
+Befehlsbaukasten in einen Dialog gewandert. Der geht auf zwei Wegen auf:
+
+| Antippen von … | Überschrift | rechter Knopf |
+|---|---|---|
+| einem Befehl in der Liste | Name des Befehls | **Einfügen** |
+| dem Text eines Schritts im Ablauf (✎) | Name des Befehls | **Änderung speichern** |
+
+Dazu je ein Satz, was der Befehl tut — beim Fahrprogramm steht man sonst
+vor einem Schieberegler und weiß nicht, was er bewirkt.
+
+**Warum ein Fenster und kein Scrollbereich mit festem Einfügeknopf:**
+
+- **13 der 14 Befehle brauchen eine Einstellung** (nur „anhalten" nicht).
+  Es gibt also nie „antippen und fertig"; ein dauerhaft sichtbarer
+  Einfügeknopf hätte so getan, als wäre es ein Schritt.
+- Im Scrollbereich scrollt der gewählte Befehl weg, während man unten den
+  Drehwinkel einstellt — man sieht den Regler, aber nicht mehr, wozu er
+  gehört.
+- Verschachteltes Scrollen ist auf dem Handy heikel: liegt der Finger über
+  dem inneren Bereich, scrollt die Seite nicht.
+- **Abbrechen** gab es vorher gar nicht; ein Antippen war endgültig.
+- Es passt zur schon vorhandenen Namensabfrage — ein Muster statt zwei.
+
+**Gruppen klappen zu.** *Fahren* steht offen, die drei übrigen zugeklappt.
+Die Liste schrumpft damit von 755 auf **584 px**, der ganze Block von 935
+auf 584 px.
+
+**Billig umzusetzen war das, weil `bAdd` die Werte erst beim Drücken über
+`E("aSpd").value` las** — es ist ihm egal, wo die Felder stehen. Neu sind
+nur `readForm()` und sein Gegenstück `fillForm()`, das die Regler aus einem
+vorhandenen Schritt füllt und dabei `input` auslöst, damit die
+Beschriftungen nachziehen.
+
+**Geprüft** in der Vorschau, nicht nur angesehen: fünf Befehle eingefügt,
+dann Schritt 1 von 60 auf 25 % geändert, Schritt 3 erst mit *Abbrechen*
+(bleibt 2,0 s) und dann mit *Speichern* (wird 5,0 s), und der LED-Schritt
+mit seinen zwei Auswahlfeldern auf „alle vier LEDs blinken". Schrittzahl
+bleibt dabei konstant, keine Skriptfehler.
+
+**Doku nachgezogen:** [Doku/06](Doku/06_Fernsteuerung-App.md) mit drei
+neuen Bildschirmfotos (Editor, Befehlsliste mit zugeklappten Gruppen,
+Dialog), [Doku/08](Doku/08_Fahrprogramm.md) mit dem neuen Schritt 5
+„Werte nachträglich ändern".
+
+Firmware **0.3.0**: RAM 15,2 %, Flash 70,8 %.
+
+---
+
 ## 2026-10-08 — Befehlsauswahl mit eigener Liste (Firmware 0.2.1)
 
 Die Gruppen *Fahren / Zeit / Licht / Ablauf* steckten in einem nativen
