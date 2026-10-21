@@ -93,9 +93,13 @@ h1{font-size:17px;margin:0;font-weight:600;letter-spacing:.2px;flex:1;
 .sec.s3{background:#2a2419;border-left-color:var(--warn)}
 
 /* --- Betriebsart: drei grosse Flaechen --- */
-.modes{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+/* Vier Flaechen statt drei: der Funktionstest ist jetzt eine Betriebsart
+   wie die anderen und nicht mehr eine Karte weiter unten. Dafuer muss die
+   Schrift etwas kleiner werden -- vier Spalten auf 390 px sind rund 86 px
+   je Knopf. */
+.modes{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
 .modes button{border:1px solid var(--line);background:var(--panel2);color:var(--dim);
-  font:inherit;font-weight:600;font-size:13px;padding:14px 4px;border-radius:12px;line-height:1.25}
+  font:inherit;font-weight:600;font-size:11.5px;padding:12px 2px;border-radius:12px;line-height:1.25}
 .modes button.sel{background:var(--accent);border-color:var(--accent);color:#06121f}
 .modes button i{display:block;font-style:normal;font-size:20px;margin-bottom:4px;line-height:1}
 
@@ -118,6 +122,31 @@ h1{font-size:17px;margin:0;font-weight:600;letter-spacing:.2px;flex:1;
       background:var(--accent);opacity:.92;box-shadow:0 6px 18px #0008;
       transition:transform .08s ease-out}
 #padhint{position:absolute;left:0;right:0;bottom:9px;text-align:center;font-size:11px;color:var(--dim)}
+
+/* --- Startleiste des Fahrprogramms ---
+   Klebt am oberen Rand des Programmbereichs. Der Hintergrund muss deckend
+   sein, sonst scheinen die Schritte beim Scrollen durch; der negative
+   Rand gleicht die Polsterung der Karte aus, damit nichts seitlich
+   darunter durchrutscht. */
+#runbar{position:sticky;top:0;z-index:20;background:var(--panel);
+        margin:calc(-1 * var(--pad)) calc(-1 * var(--pad)) 12px;
+        padding:var(--pad) var(--pad) 10px;
+        border-bottom:1px solid var(--line)}
+#prun{font-size:12.5px;color:var(--dim);margin-top:6px;text-align:center}
+
+/* --- Kompassrose im Funktionstest --- */
+#rose{margin:14px 0 4px;text-align:center}
+#rose svg{width:190px;max-width:62%;height:auto;display:block;margin:0 auto}
+#rose .rg{fill:none;stroke:var(--line);stroke-width:1.5}
+#rose .rt line{stroke:var(--line);stroke-width:1.5}
+#rose .rt line.maj{stroke:var(--dim)}
+#rose .rl{fill:var(--dim);font-size:11px;font-family:inherit}
+#rose .rn{fill:var(--accent)}            /* Nase */
+#rose .rs{fill:var(--panel3)}            /* Heck */
+#rose .rc{fill:var(--fg)}
+#roseNeedle{transition:transform .12s linear;transform-origin:0 0}
+#roseTxt{font-size:15px;font-weight:700;color:var(--fg);
+         font-variant-numeric:tabular-nums;margin-top:4px}
 
 label{display:block;font-size:12px;color:var(--dim);margin:0 0 6px}
 label b{color:var(--fg);font-variant-numeric:tabular-nums;font-weight:600}
@@ -236,9 +265,10 @@ details .inner{padding:0 var(--pad) 6px}
   <div class="card">
     <h2>Was soll er machen?</h2>
     <div class="modes">
-      <button id="m1"><i>&#9473;</i>Linie<br>folgen</button>
+      <button id="mT"><i>&#9881;</i>Funktions-<br>test</button>
+      <button id="m1"><i>&#9473;</i>Linien-<br>folger</button>
       <button id="m0" class="sel"><i>&#9679;</i>Selbst<br>fahren</button>
-      <button id="m2"><i>&#9654;</i>Fahr-<br>programm</button>
+      <button id="m2"><i>&#9654;</i>Pro-<br>gramm</button>
     </div>
   </div>
 
@@ -263,6 +293,14 @@ details .inner{padding:0 var(--pad) 6px}
 
   <!-- ============ Fahrprogramm ============ -->
   <div class="card hide" id="panProg">
+    <!-- Startleiste: bleibt beim Scrollen oben stehen. Ein laufendes
+         Programm muss sich jederzeit anhalten lassen, ohne erst ans
+         Ende einer langen Schrittliste scrollen zu muessen. -->
+    <div id="runbar">
+      <button class="big" id="bRun">&#9654;&ensp;Programm starten</button>
+      <div id="prun"></div>
+    </div>
+
     <div class="sec s1">
       <h2>Speicherplatz</h2>
       <p class="sub">Vier Pl&auml;tze im Flash. Hier aussuchen, welchen du
@@ -326,8 +364,6 @@ details .inner{padding:0 var(--pad) 6px}
     </div>
     <div id="toast"></div>
 
-    <button class="big" id="bRun" style="margin-top:12px">&#9654;&ensp;Programm starten</button>
-    <div id="prun"></div>
     <p class="note">Der Roboter hat keine Wegmessung. Ein Programm l&auml;uft rein
        nach der Zeit &ndash; dieselben 2 Sekunden sind je nach Akkustand und
        Untergrund eine unterschiedliche Strecke.</p>
@@ -348,10 +384,34 @@ details .inner{padding:0 var(--pad) 6px}
   </div>
 
   <!-- ============ Funktionstest ============ -->
-  <div class="card">
+  <div class="card hide" id="panTest">
     <h2>Funktionstest</h2>
     <button class="big" id="bTest" style="background:var(--warn)">Funktionstest starten</button>
     <div id="tphase"></div>
+
+    <!-- Kompassrose: 0 Grad oben, im Uhrzeigersinn. Eine Gradzahl allein
+         sagt beim Drehtest wenig -- man sieht nicht, ob sich der Rover in
+         die richtige Richtung dreht und wie weit er schon ist. -->
+    <div id="rose">
+      <svg viewBox="-60 -60 120 120" aria-label="Kompassrose">
+        <circle class="rg" cx="0" cy="0" r="52"></circle>
+        <circle class="rg" cx="0" cy="0" r="26"></circle>
+        <g class="rt" id="roseTicks"></g>
+        <!-- Die Zahlen sitzen INNEN zwischen den beiden Ringen. Aussen
+             lagen sie auf den Teilstrichen und waren durchgestrichen. -->
+        <text class="rl" x="0"   y="-30" text-anchor="middle">0&#176;</text>
+        <text class="rl" x="34"  y="4"   text-anchor="middle">90</text>
+        <text class="rl" x="0"   y="38"  text-anchor="middle">180</text>
+        <text class="rl" x="-34" y="4"   text-anchor="middle">270</text>
+        <g id="roseNeedle">
+          <polygon class="rn" points="0,-50 7,0 0,9 -7,0"></polygon>
+          <polygon class="rs" points="0,50 7,0 0,-9 -7,0"></polygon>
+        </g>
+        <circle class="rc" cx="0" cy="0" r="4.5"></circle>
+      </svg>
+      <div id="roseTxt">&mdash;</div>
+    </div>
+
     <div id="tres"></div>
     <p class="note">Pr&uuml;ft alles der Reihe nach: die vier LEDs einzeln, dann alle
        gemeinsam blinkend, dann Motor links von langsam auf schnell, dann Motor
@@ -476,6 +536,8 @@ details .inner{padding:0 var(--pad) 6px}
 <script>
 "use strict";
 var ws=null, armed=false, mode=0, jx=0, jy=0;
+/* view: was die Seite zeigt. 2 = "Selbst fahren", passend zu mode 0. */
+var view=2;
 var curApName="", nameAsked=false, renameRestart=false;
 var tune={kp:0.55,kd:0.08,base:0.55,min:0.35};
 var slots=[], slotSteps=[], activeSlot=0, maxSteps=48;
@@ -622,7 +684,19 @@ function paint(d){
   E("bMR").style.width=(d.dR/mx*100).toFixed(0)+"%";
 
   if(d.a!==undefined && d.a!==(armed?1:0)){ armed=!!d.a; paintArm() }
-  if(d.m!==undefined && d.m!==mode){ mode=d.m; paintMode() }
+  /* Betriebsart vom Roboter uebernehmen -- aber nicht, solange der Nutzer
+     den Funktionstest ansieht, sonst wuerde ihn die naechste
+     Telemetriezeile sofort wieder herauswerfen. */
+  if(d.m!==undefined && d.m!==mode){
+    mode=d.m;
+    if(view!==0){
+      var w={0:2,1:1,2:3}[mode];
+      if(w!==undefined && w!==view){ view=w; paintView() } else paintView();
+    }
+  }
+  /* Laeuft der Test, gehoert der Blick auch dorthin. */
+  if(d.ts && view!==0){ view=0; paintView() }
+  paintRose(d.hd);
 
   /* Programmlauf: aktuellen Schritt hervorheben */
   var nowPc = d.pr ? (d.pc>0 ? d.pc-1 : 0) : -1;
@@ -935,18 +1009,53 @@ function paintArm(){
   b.textContent = armed ? "Motoren sperren" : "Freigeben";
   b.classList.toggle("armed",armed);
 }
-function paintMode(){
-  E("m0").classList.toggle("sel",mode===0);
-  E("m1").classList.toggle("sel",mode===1);
-  E("m2").classList.toggle("sel",mode===2);
-  E("panManual").classList.toggle("hide",mode!==0);
-  E("panAuto").classList.toggle("hide",mode!==1);
-  E("panProg").classList.toggle("hide",mode!==2);
+/* --- Betriebsart und Ansicht ---
+   Der Funktionstest ist in der Firmware keine Betriebsart, sondern laeuft
+   quer dazu ("Diagnose geht vor Betriebsart" in der Hauptschleife). In der
+   Bedienung ist er trotzdem eine Flaeche wie die anderen drei, weil man
+   ihn dort sucht. Deshalb zwei Begriffe:
+     view  0=Funktionstest  1=Linienfolger  2=Selbst fahren  3=Programm
+     mode  das, was der Roboter wirklich faehrt (0=manuell,1=Linie,2=Prog)
+   Beim Wechsel auf den Funktionstest bleibt die Betriebsart, wie sie war. */
+var VIEW2MODE={1:1, 2:0, 3:2};
+function paintView(){
+  ["mT","m1","m0","m2"].forEach(function(id,i){
+    E(id).classList.toggle("sel", view===i);
+  });
+  E("panTest").classList.toggle("hide",  view!==0);
+  E("panAuto").classList.toggle("hide",  view!==1);
+  E("panManual").classList.toggle("hide",view!==2);
+  E("panProg").classList.toggle("hide",  view!==3);
+}
+function setView(v){
+  view=v; paintView();
+  if(VIEW2MODE[v]!==undefined){ mode=VIEW2MODE[v]; send("M,"+mode) }
 }
 E("arm").onclick =function(){ armed=!armed; paintArm(); send("A,"+(armed?1:0)) };
-E("m0").onclick  =function(){ mode=0; paintMode(); send("M,0") };
-E("m1").onclick  =function(){ mode=1; paintMode(); send("M,1") };
-E("m2").onclick  =function(){ mode=2; paintMode(); send("M,2") };
+E("mT").onclick  =function(){ setView(0) };
+E("m1").onclick  =function(){ setView(1) };
+E("m0").onclick  =function(){ setView(2) };
+E("m2").onclick  =function(){ setView(3) };
+
+/* --- Kompassrose ---
+   0 Grad oben, im Uhrzeigersinn -- wie bei einem Kompass und wie der
+   Drehwinkel in den Fahrbefehlen gezaehlt wird. */
+function buildRose(){
+  var g=E("roseTicks"), s="";
+  for(var a=0;a<360;a+=15){
+    var r=(a%45===0)?44:48, b=a*Math.PI/180;
+    s+='<line class="'+(a%45===0?"maj":"")+'" '
+      +'x1="'+(Math.sin(b)*r).toFixed(1)+'" y1="'+(-Math.cos(b)*r).toFixed(1)+'" '
+      +'x2="'+(Math.sin(b)*52).toFixed(1)+'" y2="'+(-Math.cos(b)*52).toFixed(1)+'"/>';
+  }
+  g.innerHTML=s;
+}
+function paintRose(hd){
+  if(hd===undefined||hd===null){ E("roseTxt").textContent="—"; return }
+  var a=((hd%360)+360)%360;                 /* auf 0..360 bringen */
+  E("roseNeedle").setAttribute("transform","rotate("+a.toFixed(1)+")");
+  E("roseTxt").textContent=a.toFixed(0)+"°";
+}
 E("bStop").onclick=function(){ armed=false; jx=0; jy=0; knob(0,0); paintArm(); send("X") };
 E("bCal").onclick =function(){ send("C") };
 E("bTest").onclick=function(){
@@ -1075,8 +1184,8 @@ setInterval(function(){
   else         send("P");
 },100);
 
-buildOpList(); paintOpList();
-paintArm(); paintMode(); paintAddForm(); paintSteps(); connect();
+buildOpList(); paintOpList(); buildRose(); paintRose(undefined);
+paintArm(); paintView(); paintAddForm(); paintSteps(); connect();
 </script>
 </body>
 </html>

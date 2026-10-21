@@ -152,8 +152,9 @@ gleichmäßig anlaufen.
 ### Schritt 7 — Funktionstest laufen lassen
 
 Zum Abschluss der Montage und bei jeder späteren Fehlersuche: in der
-Weboberfläche ganz unten **Funktionstest starten** (die Freigabe muss
-gesetzt sein, weil Motoren anlaufen).
+Weboberfläche oben bei *Was soll er machen?* auf **Funktionstest**, dann
+**Funktionstest starten** (die Freigabe muss gesetzt sein, weil Motoren
+anlaufen).
 
 Der Test läuft in Schleife, bis du ihn stoppst, und zeigt den aktuellen
 Abschnitt im Klartext an:
@@ -168,10 +169,17 @@ Abschnitt im Klartext an:
 | Motor links | 3 s | **nur** der linke Motor, langsam anlaufend bis Vollgas; dabei leuchtet die vordere **linke** LED |
 | Motor rechts | 3 s | dasselbe rechts, mit der vorderen **rechten** LED |
 | Lagesensor: Drehung rechts | 1,8 s | Roboter dreht sich nach rechts, angezeigt wird die gemessene Kursänderung |
-| Lagesensor: Drehung links | 1,8 s | dasselbe nach links 2013 damit wird auch die **Drehrichtung** geprüft |
+| Lagesensor: Drehung links | 1,8 s | dasselbe nach links — damit wird auch die **Drehrichtung** geprüft |
 | Abstandssensor | 4 s | Motoren aus, vordere LEDs an, der Messwert läuft live mit |
 
 Dazwischen liegen kurze Pausen, damit die Abschnitte auseinanderzuhalten sind.
+
+> **Die Kompassrose ist bei den beiden Drehabschnitten das Wichtigste.**
+> **0° steht oben, gezählt wird im Uhrzeigersinn.** Dreht der Roboter nach
+> rechts und die Nadel läuft nach links, ist der Lagesensor verkehrt herum
+> eingebaut oder die Achse vertauscht — das sieht man an einer bloßen
+> Gradzahl nicht. Bleibt die Nadel stehen, antwortet der Sensor nicht;
+> dann steht oben in der Konsole auch `IMU : nicht gefunden`.
 
 **Warum die LED beim Motortest mitleuchtet:** Sie zeigt, welche Seite gerade
 *angesteuert* wird. Vibriert der rechte Motor, während die linke LED

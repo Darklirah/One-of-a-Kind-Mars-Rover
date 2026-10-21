@@ -156,13 +156,53 @@ Zwei Dinge, die vorher fehlten:
 > Einstellen längst weggescrollt, *wozu* sie gehören. Im Fenster steht der
 > Befehlsname darüber.
 
+### Vier Betriebsarten statt drei
+
+Der **Funktionstest** ist jetzt eine eigene Fläche in der Betriebsartenwahl
+und steckt nicht mehr als Karte weiter unten in der Seite — dort hat ihn
+niemand gesucht. Die Reihenfolge entspricht dem, was man der Reihe nach
+macht: erst prüfen, dann die Linie, dann selbst fahren, dann programmieren.
+
+| | |
+|---|---|
+| **Funktionstest** | Alles der Reihe nach durchprüfen |
+| **Linienfolger** | Autonom der Linie folgen |
+| **Selbst fahren** | Joystick |
+| **Programm** | Gespeicherten Ablauf abspielen |
+
+> **Technisch ist der Funktionstest keine Betriebsart.** In der Hauptschleife
+> gilt „Diagnose geht vor Betriebsart" — der Test läuft quer zu allem
+> anderen. Beim Umschalten auf diese Fläche bleibt die gefahrene
+> Betriebsart deshalb, wie sie war; es wird kein `M,…` geschickt. Läuft der
+> Test, springt die Ansicht von selbst dorthin.
+
+#### Kompassrose im Funktionstest
+
+Beim Drehtest reicht eine Gradzahl nicht: man sieht ihr nicht an, ob sich
+der Rover überhaupt in die **richtige Richtung** dreht und wie weit er
+schon ist. Deshalb zeigt der Funktionstest jetzt eine **Kompassrose** —
+**0° oben, im Uhrzeigersinn**, genau so, wie auch der Drehwinkel in den
+Fahrbefehlen gezählt wird. Die blaue Nase ist die Fahrtrichtung, die
+Gradzahl steht darunter.
+
+Der Wert kommt aus dem Feld `hd` der Telemetrie, das es ohnehin schon gab —
+dafür musste an der Firmware nichts geändert werden.
+
+#### Start und Stop bleiben oben stehen
+
+Im Programmbereich klebt die Leiste mit **Programm starten / stoppen** am
+oberen Rand und bleibt beim Scrollen sichtbar. Vorher saß sie unter der
+Schrittliste: bei 48 Schritten muss man dann erst über 2000 px nach unten
+scrollen, um ein laufendes Programm anzuhalten. Das ist bei einem Roboter,
+der gerade vom Tisch fährt, der falsche Moment zum Scrollen.
+
 ### Was die Oberfläche kann
 
 | Element | Funktion |
 |---|---|
 | Statuspunkt oben | grün = WebSocket verbunden |
 | **Freigeben / Motoren sperren** | Nach dem Einschalten ist der Roboter **gesperrt**. Ohne Freigabe läuft kein Motor — verhindert, dass er beim Einschalten vom Tisch fährt |
-| Linie folgen / Selbst fahren / Fahrprogramm | Betriebsart. Beim Wechsel stoppen die Motoren immer erst, ein laufendes Programm wird beendet |
+| Funktionstest / Linienfolger / Selbst fahren / Programm | Betriebsart, **vier Flächen**. Beim Wechsel stoppen die Motoren immer erst, ein laufendes Programm wird beendet. Der Funktionstest ist in der Firmware keine Betriebsart, sondern läuft quer dazu — beim Umschalten dorthin bleibt die gefahrene Betriebsart deshalb, wie sie war |
 | Joystick | hoch = schneller, seitlich = lenken. Loslassen = Stillstand. Bei Stillstand und vollem Seitenausschlag: Drehen auf der Stelle |
 | Grundgeschwindigkeit | Basisvibration im Linienfolger-Modus |
 | Linie kalibrieren | 5-Sekunden-Kalibrierfahrt, Werte landen im NVS-Flash |

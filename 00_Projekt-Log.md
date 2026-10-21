@@ -41,6 +41,49 @@ erledigt werden kann.
 
 ---
 
+## Nächste Platinenrevision — Befundliste (Nutzer, 21.10.2026)
+
+Stehendes Verzeichnis. **Das sind keine Ideen, sondern am Muster gefundene
+Fehler und beschlossene Änderungen.** Alles kommt in eine **neue,
+nummerierte Revision; die alten Daten bleiben erhalten.**
+
+### Verpolt oder falsch herum
+
+- [ ] **Akkuanschluss J2 ist verpolt** → Footprint **180° drehen**
+- [ ] **Stiftleiste MPU-6050 (U6)** → **180° drehen**
+- [ ] **Stiftleiste U7 (VL53L0X)** → **180° drehen** *und* **SCK/SDA
+      tauschen**
+
+> Drei Teile falsch herum ist kein Zufall. Für die neue Revision gilt:
+> **Pin 1 gegen den Aufdruck des echten Moduls prüfen, nicht gegen das
+> Datenblatt** — bei den China-Modulen weicht die Reihenfolge oft ab. Der
+> 1:1-Ausdruck unten ist genau dafür die richtige Gegenprobe.
+
+### An die tatsächlich gekauften Module anpassen
+
+- [ ] **U2 — neues Lademodul**: Pinbelegung anpassen, dazu **zwei Lötpads
+      für OUT+ / OUT− als Befestigungspunkte** anlegen
+- [ ] **U5 — DC/DC-Wandler**: Anschlussleiste an das Modul anpassen
+- [ ] **S1 — Schalter neu entwerfen**, anderes Footprint
+
+### Bibliotheks- und Entwurfsarbeit
+
+- [ ] **Alle Module als 3D-Modelle erzeugen**, soweit möglich auch
+      **Schaltpläne für die Module** anlegen
+- [ ] **Prüfen, wie sich die Module ins KiCad-Design aufnehmen lassen** —
+      eventuell je Modul ein eigener Plan (hierarchische Blätter?)
+- [ ] **Prüfen, wie sich die Leiterplatte verkleinern lässt.** Ein
+      **ESP32-Modul mit USB-C** wäre gut, und der **USB-Anschluss muss
+      auch im eingebauten Zustand erreichbar** sein — dafür gegebenenfalls
+      das 3D-Modell des Gehäuses anpassen.
+
+### Hinweis des Nutzers an sich selbst
+
+> **Alle Anschlüsse prüfen. Layout 1:1 ausdrucken und mit den echten
+> Modulen gegenprüfen.**
+
+---
+
 ## Offene Fragen für die nächste Sitzung (Gehäuse, Stand 11.10.2026)
 
 Stehendes Verzeichnis wie oben. Jede Frage blockiert einen Teil des
@@ -214,6 +257,47 @@ Gehäuseentwurfs oder der Doku, bis sie am echten Teil beantwortet ist.
     Pin- und Boot-Pin-Angaben zum XIAO stammen nicht vom Datenblatt und
     sind vor einem Entwurf zu prüfen.
 
+
+---
+
+## 2026-10-21 — Vier Betriebsarten, Kompassrose, Startleiste oben (0.5.0)
+
+**Funktionstest ist jetzt eine Betriebsart.** Er steckte als Karte weit
+unten in der Seite, wo ihn niemand sucht. Die Wahl hat jetzt vier Flächen
+in der Reihenfolge, in der man die Dinge tut: **Funktionstest ·
+Linienfolger · Selbst fahren · Programm**.
+
+Technisch ist er weiterhin keine Betriebsart — in der Hauptschleife gilt
+„Diagnose geht vor Betriebsart", der Test läuft quer zu allem anderen.
+Deshalb trennt die Bedienung jetzt zwei Begriffe: `view` (was die Seite
+zeigt) und `mode` (was der Roboter fährt). Beim Umschalten auf den
+Funktionstest bleibt die Betriebsart, wie sie war, und es geht kein `M,…`
+hinaus. Läuft der Test, springt die Ansicht von selbst dorthin — und die
+Telemetrie wirft einen nicht mehr heraus, während man hinsieht.
+
+**Kompassrose statt nur einer Gradzahl.** Beim Drehtest sagt eine Zahl
+nicht, ob sich der Rover in die *richtige* Richtung dreht. Jetzt eine Rose
+mit **0° oben, im Uhrzeigersinn** — so, wie auch der Drehwinkel in den
+Fahrbefehlen gezählt wird. 24 Teilstriche, Beschriftung innen zwischen den
+Ringen (außen lag sie auf den Strichen und war durchgestrichen).
+
+Dafür war **keine Firmware-Änderung nötig**: das Feld `hd` steckt längst in
+jeder Telemetriezeile.
+
+**Start und Stop bleiben oben.** Die Leiste mit *Programm starten/stoppen*
+klebt jetzt am Kopf des Programmbereichs. Vorher saß sie unter der
+Schrittliste — bei 48 Schritten über 2000 px tiefer. Einen Roboter, der
+gerade vom Tisch fährt, scrollt man nicht erst zum Stoppknopf.
+
+**Geprüft** in der Vorschau: keine Skriptfehler, Rose auf 138° bei `hd:138`,
+24 Striche, Leiste bei 900 px Scrollweg weiterhin oben (`top: 0`), Knopf
+schaltet bei `pr:1` auf rot und „■ Programm stoppen" mit „Schritt 3 von 6".
+
+Firmware **0.5.0**: RAM 16,2 %, Flash 73,5 %.
+
+**Nebenbei:** in Doku/07 noch ein zerschossenes Unicode-Escape gefunden
+(`2013` statt eines Gedankenstrichs) und die Stelle korrigiert, die den
+Funktionstest noch „ganz unten" verortete.
 
 ---
 
