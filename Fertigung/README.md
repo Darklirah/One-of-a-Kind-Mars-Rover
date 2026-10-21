@@ -1,5 +1,32 @@
 # Fertigungsdaten
 
+> [!CAUTION]
+> ## Diese Daten sind **nicht voll funktionsfähig** — bitte nicht bestellen
+>
+> Die erste Platine ist gebaut und **enthält Fehler**. Am Muster gefunden:
+>
+> * der **Akkuanschluss J2 ist verpolt**
+> * die Stiftleisten für **MPU-6050 (U6)** und **VL53L0X (U7)** sitzen
+>   **180° verdreht**; bei U7 sind zusätzlich **SCK und SDA vertauscht**
+> * **U2** und **U5** passen nicht zur Pinbelegung der tatsächlich
+>   gekauften Module
+> * der Schalter **S1** braucht ein anderes Footprint
+>
+> Die vollständige Liste steht im
+> [Projekt-Log](../00_Projekt-Log.md#nächste-platinenrevision--befundliste-nutzer-21102026).
+>
+> **Diese Fehler sind in den Gerbern dieses Ordners noch enthalten.**
+> Sie werden in einer neuen, nummerierten Revision behoben; bis dahin
+> taugen die Daten zum Ansehen und Nachvollziehen, nicht zum Fertigen.
+>
+> Dass das DRC sauber durchläuft, heißt nur, dass das Layout **in sich**
+> stimmig ist — nicht, dass die Anschlüsse zu den Modulen passen. Genau
+> deshalb steht in der Befundliste: Layout 1:1 ausdrucken und mit den
+> echten Modulen gegenprüfen.
+>
+> **Die Firmware ist davon nicht betroffen** und läuft auf einem nackten
+> ESP32-DevKit.
+
 **Alles in diesem Ordner ist erzeugt.** Die Quelle ist `pcb/MarsRover.kicad_pcb`.
 Nach jeder Änderung an der Platine neu erzeugen:
 
@@ -10,7 +37,9 @@ bash Fertigung/erzeuge_fertigungsdaten.sh
 Sonst liegen hier Gerber, die nicht mehr zur Platine passen — das ist der
 klassische Weg, eine falsche Platine zu bestellen.
 
-Stand: 07.10.2026, DRC 0 Fehler, 0 unverbundene Elemente.
+**Stand: 21.10.2026 — in Bearbeitung.** Das Layout läuft mit 0 DRC-Fehlern
+und 0 unverbundenen Elementen durch, hat aber die oben genannten
+Anschlussfehler. Eine korrigierte Revision ist in Arbeit.
 
 ---
 

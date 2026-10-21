@@ -260,6 +260,45 @@ Gehäuseentwurfs oder der Doku, bis sie am echten Teil beantwortet ist.
 
 ---
 
+## 2026-10-21 — Leiterplattendaten als „in Bearbeitung" gekennzeichnet
+
+Die Befundliste von heute Vormittag stand bisher nur im Log. Wer von außen
+in den Ordner `Fertigung/` schaut, hätte dort einwandfreie Gerber gefunden,
+ein DRC mit 0 Fehlern — und hätte sie bestellt. Das ist genau der Fall, den
+man nicht dem Zufall überlassen darf: die Fehler stecken nicht im Layout,
+sondern in der Zuordnung zu den echten Modulen, und davon sieht man in den
+Daten nichts.
+
+Die Warnung steht jetzt an jeder Stelle, an der jemand einsteigen könnte:
+
+| Ort | Form |
+|---|---|
+| [`Fertigung/README.md`](Fertigung/README.md) | `> [!CAUTION]`-Block ganz oben, Stand-Zeile auf „in Bearbeitung" |
+| [`pcb/README.md`](pcb/README.md) | neu angelegt; Befundtabelle, Dateiübersicht, Arbeitsregel zur Sperrdatei |
+| [`Fertigung/WARNUNG-NICHT-BESTELLEN.txt`](Fertigung/WARNUNG-NICHT-BESTELLEN.txt) | reiner Text, ohne Umlaute, für Leser ohne Markdown |
+| [`Doku/03`](Doku/03_Stueckliste-BOM.md), [`Doku/04`](Doku/04_PCB-Layout-Empfehlung.md) | derselbe Block, weil beide die Platine beschreiben |
+| [Bauanleitung](Doku/Ich_baue_meinen_Marsrover.md) | derselbe Block — hier würde jemand anfangen zu löten |
+
+Der wichtigste Teil ist die Textdatei: `erzeuge_fertigungsdaten.sh` legt sie
+jetzt **in beide ZIP-Archive** mit hinein. Ein Archiv wandert weiter, die
+README bleibt zurück — wer nur das ZIP bekommt, hätte die Warnung sonst nie
+gesehen. Nachgeprüft: Gerber-Archiv 15 Dateien, Schablonen-Archiv 6, die
+Warnung in beiden.
+
+In allen vier Markdown-Fassungen steht derselbe Satz, weil er der
+eigentliche Grund für die ganze Übung ist: **dass das DRC sauber durchläuft,
+sagt über diese Fehler nichts aus.** Es prüft, ob das Layout *in sich*
+stimmig ist — Abstände, Netze, Kurzschlüsse. Ob Pin 1 einer Stiftleiste dort
+liegt, wo das echte Modul ihn hat, kann es nicht wissen. Die Gegenprobe
+steht in der Befundliste und heißt: Layout 1:1 ausdrucken und mit den
+Modulen vergleichen.
+
+Die **Firmware ist davon nicht betroffen**, und das ist überall mit
+vermerkt. Sie läuft auf einem nackten DevKit, 0.5.2 liegt im Web-Installer,
+und daran ändert das Platinenlayout nichts.
+
+---
+
 ## 2026-10-21 — Bilder und Beschreibung auf den Stand 0.5.2 gebracht
 
 **Nichts neu zu übersetzen.** Seit 0.5.2 hat sich am Quelltext nichts

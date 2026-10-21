@@ -2,6 +2,15 @@
 
 Für Variante A: DevKit gesteckt, 2-lagig, **1,0 mm FR4**, Außenmaß **50 × 38 mm**.
 
+> [!CAUTION]
+> **Leiterplatte Revision 1 ist nicht voll funktionsfähig und wird
+> überarbeitet.** Am gebauten Muster sind Anschlussfehler aufgefallen —
+> verpolter Akkuanschluss, zwei verdrehte Stiftleisten, vertauschte
+> I²C-Leitungen, nicht passende Modulanschlüsse. Nichts davon bestellen
+> oder nachbauen, bis die korrigierte Revision vorliegt. Befundliste:
+> [Projekt-Log](../00_Projekt-Log.md#nächste-platinenrevision--befundliste-nutzer-21102026).
+> Die **Firmware ist nicht betroffen.**
+
 > **Dies ist der Entwurfstext von vorher.** Die Platine ist inzwischen gebaut
 > und an einigen Stellen anders ausgefallen als hier empfohlen — vor allem
 > ist sie mit **70 × 52 mm** größer geworden, weil die Fertigmodule als

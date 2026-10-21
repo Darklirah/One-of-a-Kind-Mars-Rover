@@ -9,6 +9,17 @@ zusammensetzen, zum Schluss alles verkabeln.
 > Die Bilder kommen direkt aus dem Modell. **Orange** ist immer das, was in
 > diesem Schritt neu dazukommt.
 
+> [!CAUTION]
+> **Die Leiterplatte der Revision 1 ist nicht voll funktionsfähig.** Am
+> gebauten Muster sind Anschlussfehler aufgefallen: der Akkuanschluss ist
+> verpolt, zwei Stiftleisten sitzen 180° verdreht, bei einer sind zusätzlich
+> SCK und SDA vertauscht, und die Leisten für Lademodul und DC/DC-Wandler
+> passen nicht zu den gekauften Modulen. **Nach dieser Platine bitte noch
+> nichts bestellen und nichts verlöten** — eine korrigierte Revision ist in
+> Arbeit. Befundliste:
+> [Projekt-Log](../00_Projekt-Log.md#nächste-platinenrevision--befundliste-nutzer-21102026),
+> Einzelheiten in [`pcb/README.md`](../pcb/README.md).
+
 ---
 
 ## Was du brauchst

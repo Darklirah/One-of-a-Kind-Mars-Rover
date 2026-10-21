@@ -1,0 +1,43 @@
+===========================================================================
+  ONE-OF-A-KIND MARS ROVER  --  LEITERPLATTE REVISION 1
+  NICHT VOLL FUNKTIONSFAEHIG  --  IN BEARBEITUNG  --  NICHT BESTELLEN
+===========================================================================
+
+Stand: 21.10.2026
+
+Die erste Platine ist gebaut. Am Muster sind Fehler aufgefallen, und die
+Gerber in diesem Archiv enthalten sie noch.
+
+GEFUNDENE FEHLER
+----------------
+  J2  Akkuanschluss ....... VERPOLT, muss 180 Grad gedreht werden
+  U6  MPU-6050 ............ Stiftleiste 180 Grad verdreht
+  U7  VL53L0X ............. Stiftleiste 180 Grad verdreht,
+                            zusaetzlich SCK und SDA vertauscht
+  U2  Lademodul ........... Pinbelegung passt nicht zum gekauften Modul,
+                            zwei Loetpads fuer OUT+ / OUT- fehlen
+  U5  DC/DC-Wandler ....... Anschlussleiste passt nicht zum Modul
+  S1  Schalter ............ falsches Footprint
+
+WARUM DAS DRC TROTZDEM SAUBER IST
+---------------------------------
+Das DRC prueft, ob das Layout IN SICH stimmig ist: Abstaende, Netze,
+Kurzschluesse. Ob Pin 1 einer Stiftleiste dort liegt, wo ihn das echte
+Modul hat, kann es nicht wissen. "0 Fehler" heisst also nicht "passt".
+
+Gegenprobe vor der naechsten Bestellung:
+  Layout 1:1 ausdrucken und mit den echten Modulen vergleichen.
+
+WAS GILT
+--------
+Eine korrigierte, neu nummerierte Revision ist in Arbeit. Bis dahin taugen
+diese Daten zum Ansehen und Nachvollziehen, nicht zum Fertigen.
+
+Die FIRMWARE ist davon nicht betroffen. Sie laeuft auf einem nackten
+ESP32-DevKit und kann ueber den Web-Installer aufgespielt werden:
+  https://darklirah.github.io/One-of-a-Kind-Mars-Rover/
+
+Vollstaendige Befundliste und geplante Arbeiten:
+  00_Projekt-Log.md, Abschnitt "Naechste Platinenrevision"
+  https://github.com/Darklirah/One-of-a-Kind-Mars-Rover
+===========================================================================

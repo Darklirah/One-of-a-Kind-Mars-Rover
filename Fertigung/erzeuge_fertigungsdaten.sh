@@ -92,7 +92,13 @@ for ordner, name in (("gerber", "MarsRover-gerber.zip"),
     with zipfile.ZipFile(ziel, "w", zipfile.ZIP_DEFLATED) as z:
         for f in sorted(os.listdir(q)):
             z.write(os.path.join(q, f), f)
-    print("  %s (%d Dateien)" % (name, len(os.listdir(q))))
+        # Die Warnung muss MIT ins Archiv. Wer nur das ZIP weitergibt,
+        # sieht die README dieses Ordners sonst nie -- und bestellt eine
+        # Platine, von der wir wissen, dass sie Fehler hat.
+        w = os.path.join(aus, "WARNUNG-NICHT-BESTELLEN.txt")
+        if os.path.exists(w):
+            z.write(w, "WARNUNG-NICHT-BESTELLEN.txt")
+    print("  %s (%d Dateien + Warnhinweis)" % (name, len(os.listdir(q))))
 ZIPEOF
 
 echo

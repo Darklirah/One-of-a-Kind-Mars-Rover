@@ -7,6 +7,15 @@ europäische Distributoren, Stand Oktober 2026, ohne Versand.
 > Stand 11.10.2026 (gekaufte Teile nachgetragen). Maßgeblich ist der Schaltplan `pcb/MarsRover.kicad_sch`;
 > im Zweifel gilt dessen Netzliste, nicht diese Tabelle.
 
+> [!CAUTION]
+> **Leiterplatte Revision 1 ist nicht voll funktionsfähig und wird
+> überarbeitet.** Am gebauten Muster sind Anschlussfehler aufgefallen —
+> verpolter Akkuanschluss, zwei verdrehte Stiftleisten, vertauschte
+> I²C-Leitungen, nicht passende Modulanschlüsse. Nichts davon bestellen
+> oder nachbauen, bis die korrigierte Revision vorliegt. Befundliste:
+> [Projekt-Log](../00_Projekt-Log.md#nächste-platinenrevision--befundliste-nutzer-21102026).
+> Die **Firmware ist nicht betroffen.**
+
 Bauteilkürzel (`U1`, `R5` …) entsprechen der
 [Netzliste](../Hardware/Netzliste.md) und der [Pinbelegung](05_Pinbelegung.md).
 
