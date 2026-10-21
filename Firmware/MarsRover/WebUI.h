@@ -114,7 +114,15 @@ h1{font-size:17px;margin:0;font-weight:600;letter-spacing:.2px;flex:1;
    gefuellten roten Flaeche "Motoren sperren" unterscheidet -- sonst sind
    bei freigegebenen Motoren zwei gleich aussehende rote Knoepfe
    nebeneinander. */
-.toprow{display:grid;grid-template-columns:1.35fr 1fr;gap:9px}
+/* Klebt am oberen Rand. Der Nothalt nuetzt nur, wenn er da ist, wenn man
+   ihn braucht -- und das ist nie der Moment, in dem man erst scrollen
+   will. Deckender Hintergrund, damit nichts durchscheint; die negativen
+   Seitenraender ziehen die Leiste ueber die Polsterung von .wrap, sonst
+   rutscht der Inhalt seitlich daran vorbei. */
+.toprow{display:grid;grid-template-columns:1.35fr 1fr;gap:9px;
+        position:sticky;top:0;z-index:30;background:var(--bg);
+        margin:0 calc(-1 * var(--pad));
+        padding:var(--pad) var(--pad) 10px}
 #bStop{background:transparent;color:var(--bad);
        box-shadow:inset 0 0 0 2px var(--bad);letter-spacing:.04em}
 #bStop:active{background:var(--bad);color:#fff}
@@ -140,7 +148,10 @@ h1{font-size:17px;margin:0;font-weight:600;letter-spacing:.2px;flex:1;
    sein, sonst scheinen die Schritte beim Scrollen durch; der negative
    Rand gleicht die Polsterung der Karte aus, damit nichts seitlich
    darunter durchrutscht. */
-#runbar{position:sticky;top:0;z-index:20;background:var(--panel);
+/* Klebt direkt UNTER der oberen Leiste, nicht am Fensterrand -- sonst
+   verschwindet der Startknopf dahinter. --topH wird beim Start gemessen
+   und bei jeder Groessenaenderung nachgezogen. */
+#runbar{position:sticky;top:var(--topH,86px);z-index:20;background:var(--panel);
         margin:calc(-1 * var(--pad)) calc(-1 * var(--pad)) 12px;
         padding:var(--pad) var(--pad) 10px;
         border-bottom:1px solid var(--line)}
@@ -1031,6 +1042,18 @@ function paintArm(){
   b.textContent = armed ? "Motoren sperren" : "Freigeben";
   b.classList.toggle("armed",armed);
 }
+
+/* Hoehe der oberen Leiste messen und als --topH hinterlegen. Die
+   Startleiste des Fahrprogramms klebt daran statt am Fensterrand, sonst
+   schoebe sie sich darunter und der Startknopf waere verdeckt. Fest
+   eintragen laesst sich der Wert nicht: er haengt an Schriftgroesse und
+   Geraet. */
+function messeTopH(){
+  var h=document.querySelector(".toprow").getBoundingClientRect().height;
+  document.documentElement.style.setProperty("--topH", Math.round(h)+"px");
+}
+window.addEventListener("resize",messeTopH);
+window.addEventListener("orientationchange",messeTopH);
 /* --- Betriebsart und Ansicht ---
    Der Funktionstest ist in der Firmware keine Betriebsart, sondern laeuft
    quer dazu ("Diagnose geht vor Betriebsart" in der Hauptschleife). In der
@@ -1206,7 +1229,7 @@ setInterval(function(){
   else         send("P");
 },100);
 
-buildOpList(); paintOpList(); buildRose(); paintRose(undefined);
+buildOpList(); paintOpList(); buildRose(); paintRose(undefined); messeTopH();
 paintArm(); paintView(); paintAddForm(); paintSteps(); connect();
 </script>
 </body>

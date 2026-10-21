@@ -188,13 +188,29 @@ Gradzahl steht darunter.
 Der Wert kommt aus dem Feld `hd` der Telemetrie, das es ohnehin schon gab —
 dafür musste an der Firmware nichts geändert werden.
 
-#### Start und Stop bleiben oben stehen
+#### Was beim Scrollen stehen bleibt
 
-Im Programmbereich klebt die Leiste mit **Programm starten / stoppen** am
-oberen Rand und bleibt beim Scrollen sichtbar. Vorher saß sie unter der
-Schrittliste: bei 48 Schritten muss man dann erst über 2000 px nach unten
-scrollen, um ein laufendes Programm anzuhalten. Das ist bei einem Roboter,
-der gerade vom Tisch fährt, der falsche Moment zum Scrollen.
+Zwei Leisten kleben am oberen Rand, und zwar gestapelt:
+
+| | |
+|---|---|
+| **Freigeben / Motoren sperren** und **NOTHALT** | immer, in jeder Betriebsart |
+| **Programm starten / stoppen** | zusätzlich, solange der Programmbereich offen ist — direkt unter der oberen Leiste |
+
+Alles drei muss erreichbar sein, ohne vorher zu scrollen. Bei 48 Schritten
+liegt das Ende der Liste über 2000 px tiefer; das ist bei einem Roboter, der
+gerade vom Tisch fährt, der falsche Moment zum Wischen.
+
+Die Startleiste klebt deshalb nicht am Fensterrand, sondern **an der
+Unterkante der oberen Leiste** — sonst schöbe sie sich darunter und der
+Startknopf wäre verdeckt. Deren Höhe wird beim Start gemessen und in
+`--topH` hinterlegt, weil sie von Schriftgröße und Gerät abhängt und sich
+nicht fest eintragen lässt.
+
+Der **NOTHALT** ist nur umrandet, nicht gefüllt. Bei freigegebenen Motoren
+heißt der Knopf daneben *Motoren sperren* und ist gefüllt rot — zwei gleich
+aussehende rote Flächen nebeneinander wären im Ernstfall die falsche
+Wahlhilfe.
 
 ### Was die Oberfläche kann
 

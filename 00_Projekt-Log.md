@@ -260,6 +260,26 @@ Gehäuseentwurfs oder der Doku, bis sie am echten Teil beantwortet ist.
 
 ---
 
+## 2026-10-21 — Beide Leisten kleben jetzt (0.5.2)
+
+Der Nothalt scrollte noch mit weg. Jetzt klebt die obere Zeile
+(**Freigeben · NOTHALT**) am Fensterrand, und die Startleiste des
+Fahrprogramms klebt **an deren Unterkante** statt am Fensterrand — sonst
+schöbe sie sich darunter und der Startknopf wäre verdeckt. Genau das war
+gemeint mit „der Programmstartknopf fehlt noch in der Ansicht".
+
+Die Höhe der oberen Leiste lässt sich nicht fest eintragen, sie hängt an
+Schriftgröße und Gerät. Sie wird beim Start gemessen und als `--topH`
+hinterlegt, bei Größen- und Lagewechsel neu.
+
+**Nachgemessen bei 1200 px Scrollweg:** obere Leiste 0 bis 78 px,
+Startleiste klebt bei 78 px, Überlappung **0 px**, beide vollständig im
+Bild, keine Skriptfehler. `--topH` steht auf 78 px.
+
+Firmware **0.5.2**: RAM 16,2 %, Flash 73,6 %.
+
+---
+
 ## 2026-10-21 — Nothalt nach oben, Programmknopf entkoppelt (0.5.1)
 
 **Nothalt steht jetzt oben neben der Freigabe**, beide in einer Zeile. Er
