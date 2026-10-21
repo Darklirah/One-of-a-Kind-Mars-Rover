@@ -1,7 +1,14 @@
 # One-of-a-Kind Mars Rover
 
- # Erste Leiterplatte enthält Fehler, bitte noch nicht nachbauen, sobald die Fehler alle gefixt sind, gibt es ein Update
- 
+> [!WARNING]
+> **Erste Leiterplatte enthält Fehler, bitte noch nicht nachbauen** — sobald
+> die Fehler alle gefixt sind, gibt es ein Update.
+>
+> Die Befundliste steht im
+> [Projekt-Log](00_Projekt-Log.md#nächste-platinenrevision--befundliste-nutzer-21102026).
+> Die **Firmware ist davon nicht betroffen** und läuft auf einem nackten
+> ESP32-DevKit.
+
 > Dieses Projekt wurde mit Unterstützung von [Claude Code](https://claude.com/claude-code) entwickelt.
 
 Linienfolgender, programmierbarer Zahnbürsten-Roboter auf ESP32, aufgebaut
