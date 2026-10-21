@@ -1,5 +1,7 @@
 # One-of-a-Kind Mars Rover
 
+ # Erste Leiterplatte enthält Fehler, bitte noch nicht nachbauen, sobald die Fehler alle gefixt sind, gibt es ein Update
+ 
 > Dieses Projekt wurde mit Unterstützung von [Claude Code](https://claude.com/claude-code) entwickelt.
 
 Linienfolgender, programmierbarer Zahnbürsten-Roboter auf ESP32, aufgebaut
