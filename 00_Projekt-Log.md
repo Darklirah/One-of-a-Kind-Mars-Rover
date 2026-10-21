@@ -260,6 +260,41 @@ Gehäuseentwurfs oder der Doku, bis sie am echten Teil beantwortet ist.
 
 ---
 
+## 2026-10-21 — Bilder und Beschreibung auf den Stand 0.5.2 gebracht
+
+**Nichts neu zu übersetzen.** Seit 0.5.2 hat sich am Quelltext nichts
+geändert; ein Neubau ergab ein **bitgleiches** Abbild
+(SHA-256 `e09462c2…`, 1 037 216 Byte). Statt eine Version hochzuzählen,
+hinter der nichts steckt, ist das nachgeprüft und so geblieben.
+
+**Die Bilder in der Doku zeigten noch den alten Aufbau** — drei
+Betriebsarten, Nothalt am Seitenende, Programmeditor ohne Startleiste.
+Alle sechs neu aufgenommen, dazu ein siebtes:
+
+| Bild | zeigt |
+|---|---|
+| `app_test.jpg` | **neu** — Funktionstest mit der Kompassrose |
+| `app_fahren.jpg` | Startansicht mit der Zeile Freigeben + NOTHALT und vier Betriebsarten |
+| `app_programm.jpg` | Programmeditor mit der Startleiste oben |
+| `app_befehle.jpg` | Befehlsliste mit zugeklappten Gruppen — und darüber beide klebenden Leisten im Scrollzustand |
+| `app_dialog.jpg` | Befehlsdialog beim Ändern eines Schritts |
+| `app_name.jpg` | Namensabfrage |
+
+[Doku/06](Doku/06_Fernsteuerung-App.md) hat jetzt einen eigenen Abschnitt
+*Funktionstest mit Kompassrose*, samt dem Hinweis, was eine falsch
+laufende Nadel bedeutet.
+
+**Dazu die Arbeitsstände aus den Zwischensitzungen aufgenommen:** die vier
+Bestückungspläne als PDF, die beiden Druckdateien `Platte1_PETG.3mf` und
+`Platte1_TPU.3mf`, die Stückliste `pcb/MarsRover.csv` und die geänderten
+Spalteneinstellungen des Stücklisten-Dialogs in `MarsRover.kicad_pro`.
+
+> Vor dem Aufnehmen geprüft, weil das Repo öffentlich ist: **keine der
+> Dateien enthält einen lokalen Pfad** — weder die PDFs noch die
+> 3MF-Dateien.
+
+---
+
 ## 2026-10-21 — Beide Leisten kleben jetzt (0.5.2)
 
 Der Nothalt scrollte noch mit weg. Jetzt klebt die obere Zeile

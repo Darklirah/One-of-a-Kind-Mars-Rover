@@ -83,19 +83,39 @@ Haus aus, Android ab Version 12 meistens; klappt es nicht, bleibt die IP.
 
 ### So sieht sie aus
 
-Vier Bildschirmfotos sagen mehr als die Tabelle darunter. Sie stammen aus
-der Vorschaufassung mit eingespeisten Beispieldaten — der Aufbau ist
-derselbe, den die Firmware ausliefert.
+Bilder sagen mehr als die Tabelle darunter. Sie stammen aus der
+Vorschaufassung mit eingespeisten Beispieldaten — der Aufbau ist derselbe,
+den die Firmware ausliefert; der Rover heißt dort *Petra* und hat ein
+Beispielprogramm aus sieben Schritten.
 
 #### Selbst fahren
 
 ![Hauptansicht mit Joystick](bilder/app_fahren.jpg)
 
-Die Startansicht. Oben der Netzname des Roboters und der Statuspunkt, dann
-der große Freigabeknopf — der ist **rot, solange die Motoren freigegeben
-sind**, und beschriftet mit *Motoren sperren*. Darunter die Wahl der
-Betriebsart, darunter das Joystickfeld: hoch ist schneller, seitlich lenkt.
-Der Knopf folgt dem Finger bis an den Rand.
+Die Startansicht. Oben der Netzname und der Statuspunkt, darunter die
+Zeile mit **Freigeben** und **NOTHALT**, dann die vier Betriebsarten, dann
+das Joystickfeld: hoch ist schneller, seitlich lenkt. Der Knopf folgt dem
+Finger bis an den Rand.
+
+Der Freigabeknopf ist **grün, solange die Motoren gesperrt sind**, und wird
+rot mit der Beschriftung *Motoren sperren*, sobald sie laufen dürfen.
+
+#### Funktionstest mit Kompassrose
+
+![Funktionstest mit Kompassrose](bilder/app_test.jpg)
+
+Die erste der vier Betriebsarten — hier wird geprüft, bevor gefahren wird.
+Der Test läuft in Schleife durch LEDs, Motoren und Sensoren.
+
+Die **Kompassrose** darunter ist bei den beiden Drehabschnitten das
+Wichtigste: **0° steht oben, gezählt wird im Uhrzeigersinn**, genau wie der
+Drehwinkel in den Fahrbefehlen. Die blaue Nase ist die Fahrtrichtung, die
+Gradzahl steht darunter.
+
+> Dreht der Roboter nach rechts und die Nadel läuft nach links, ist der
+> Lagesensor verkehrt herum eingebaut oder die Achse vertauscht — das sieht
+> man einer bloßen Gradzahl nicht an. Bleibt die Nadel stehen, antwortet
+> der Sensor gar nicht.
 
 #### Dem Roboter einen Namen geben
 
@@ -107,7 +127,7 @@ mitgerechnet**, wie das WLAN danach heißt — hier `MarsRover_Petra`.
 
 #### Fahrprogramm zusammenstellen
 
-![Programmeditor mit den drei Bereichen](bilder/app_programm.jpg)
+![Programmeditor mit Startleiste und den drei Bereichen](bilder/app_programm.jpg)
 
 Der Editor ist in drei farbige Bereiche geteilt, damit man auf dem Handy
 nicht die Orientierung verliert: **blau** die Wahl des Speicherplatzes,
@@ -119,7 +139,7 @@ Das kleine **✎** hinter jedem Schritt heißt: antippen und die Werte ändern.
 
 #### Befehl aussuchen
 
-![Befehlsliste mit Gruppen](bilder/app_befehle.jpg)
+![Befehlsliste mit zugeklappten Gruppen, darüber die beiden klebenden Leisten](bilder/app_befehle.jpg)
 
 Die Befehle sind nach **Fahren, Zeit, Licht, Ablauf** gruppiert; die
 Gruppenüberschriften stehen hellgelb und fett über ihren Einträgen und
