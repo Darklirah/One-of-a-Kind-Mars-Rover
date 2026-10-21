@@ -201,7 +201,7 @@ der gerade vom Tisch fährt, der falsche Moment zum Scrollen.
 | Element | Funktion |
 |---|---|
 | Statuspunkt oben | grün = WebSocket verbunden |
-| **Freigeben / Motoren sperren** | Nach dem Einschalten ist der Roboter **gesperrt**. Ohne Freigabe läuft kein Motor — verhindert, dass er beim Einschalten vom Tisch fährt |
+| **Freigeben / Motoren sperren** | Ganz oben links. Nach dem Einschalten ist der Roboter **gesperrt**. Ohne Freigabe läuft kein Motor — verhindert, dass er beim Einschalten vom Tisch fährt |
 | Funktionstest / Linienfolger / Selbst fahren / Programm | Betriebsart, **vier Flächen**. Beim Wechsel stoppen die Motoren immer erst, ein laufendes Programm wird beendet. Der Funktionstest ist in der Firmware keine Betriebsart, sondern läuft quer dazu — beim Umschalten dorthin bleibt die gefahrene Betriebsart deshalb, wie sie war |
 | Joystick | hoch = schneller, seitlich = lenken. Loslassen = Stillstand. Bei Stillstand und vollem Seitenausschlag: Drehen auf der Stelle |
 | Grundgeschwindigkeit | Basisvibration im Linienfolger-Modus |
@@ -211,7 +211,7 @@ der gerade vom Tisch fährt, der falsche Moment zum Scrollen.
 | Motorbalken L/R | tatsächlich ausgegebener PWM-Duty |
 | Statuszeile | Phase, Kalibrierzustand, Schleifenfrequenz, ggf. Akkuspannung |
 | **Experten** (zugeklappt) | Kp, Kd, Anlaufschwelle, Kalibrierung löschen — bewusst versteckt, damit beim Ausprobieren nichts versehentlich verstellt wird |
-| **NOTHALT** | sperrt sofort, stoppt ein laufendes Programm und hebt die Freigabe auf |
+| **NOTHALT** | Ganz oben rechts, in derselben Zeile wie die Freigabe. Sperrt sofort, stoppt ein laufendes Programm und hebt die Freigabe auf. Nur umrandet statt gefüllt, damit er nicht mit dem roten *Motoren sperren* daneben verwechselt wird |
 
 ### Gestaltungsvorgabe
 

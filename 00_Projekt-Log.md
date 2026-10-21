@@ -260,6 +260,41 @@ Gehäuseentwurfs oder der Doku, bis sie am echten Teil beantwortet ist.
 
 ---
 
+## 2026-10-21 — Nothalt nach oben, Programmknopf entkoppelt (0.5.1)
+
+**Nothalt steht jetzt oben neben der Freigabe**, beide in einer Zeile. Er
+saß am Seitenende — genau dort, wo man ihn nicht findet, wenn es eilt.
+
+Dabei ein Darstellungsproblem gelöst, das sonst entstanden wäre: bei
+freigegebenen Motoren heißt der linke Knopf *Motoren sperren* und ist
+**gefüllt rot**. Zwei gleich aussehende rote Flächen nebeneinander wären
+im Ernstfall genau die falsche Wahlhilfe. Der Nothalt ist deshalb nur
+**umrandet** und füllt sich erst beim Drücken. Aufteilung 1,35 zu 1 — die
+Freigabe ist der Knopf des Normalbetriebs.
+
+**Der Programmknopf war schon einer.** `bRun` schaltet seit jeher
+Beschriftung, Farbe *und* Funktion um; da war nichts zu trennen oder
+zusammenzuführen.
+
+Eine Schwachstelle steckte aber darin: der Knopf las seinen Zustand aus der
+**eigenen Beschriftung** zurück —
+
+```js
+var running = E("bRun").textContent.indexOf("stoppen") > 0;
+```
+
+Wer den Text ändert, bricht damit stillschweigend die Funktion: der Knopf
+schickt dann `B,1` statt `B,0`. Jetzt kommt der Zustand aus der Telemetrie
+(`progRunning` aus dem Feld `pr`).
+
+**Geprüft:** beide Zustände durchgeschaltet und mitgehört, was hinausgeht —
+gestoppt → `B,1` mit grünem *„▶ Programm starten"*, laufend → `B,0` mit
+rotem *„■ Programm stoppen"*. Keine Skriptfehler.
+
+Firmware **0.5.1**: RAM 16,2 %, Flash 73,5 %.
+
+---
+
 ## 2026-10-21 — Vier Betriebsarten, Kompassrose, Startleiste oben (0.5.0)
 
 **Funktionstest ist jetzt eine Betriebsart.** Er steckte als Karte weit

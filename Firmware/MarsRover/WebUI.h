@@ -106,6 +106,18 @@ h1{font-size:17px;margin:0;font-weight:600;letter-spacing:.2px;flex:1;
 .big{width:100%;border:0;border-radius:13px;font:inherit;font-weight:700;font-size:16px;
      padding:16px;color:#06121f;background:var(--ok)}
 .big.armed{background:var(--bad);color:#fff}
+
+/* --- Freigabe und Nothalt in einer Zeile ---
+   Der Nothalt bekommt etwas weniger Breite als die Freigabe: er ist der
+   kuerzere Text, und so bleibt die Freigabe die Flaeche, die man im
+   Normalbetrieb trifft. Umrandet statt gefuellt, damit er sich von der
+   gefuellten roten Flaeche "Motoren sperren" unterscheidet -- sonst sind
+   bei freigegebenen Motoren zwei gleich aussehende rote Knoepfe
+   nebeneinander. */
+.toprow{display:grid;grid-template-columns:1.35fr 1fr;gap:9px}
+#bStop{background:transparent;color:var(--bad);
+       box-shadow:inset 0 0 0 2px var(--bad);letter-spacing:.04em}
+#bStop:active{background:var(--bad);color:#fff}
 .btn{border:1px solid var(--line);background:var(--panel2);color:var(--fg);font:inherit;
      padding:12px 14px;border-radius:11px;font-weight:600}
 .btn:active{background:var(--panel3)}
@@ -260,7 +272,13 @@ details .inner{padding:0 var(--pad) 6px}
     <div id="conn">verbinde&hellip;</div>
   </header>
 
-  <button id="arm" class="big">Freigeben</button>
+  <!-- Freigabe und Nothalt in einer Zeile ganz oben. Der Nothalt stand
+       vorher am Seitenende -- genau dort, wo man ihn nicht findet,
+       wenn es eilt. -->
+  <div class="toprow">
+    <button id="arm" class="big">Freigeben</button>
+    <button class="big" id="bStop">NOTHALT</button>
+  </div>
 
   <div class="card">
     <h2>Was soll er machen?</h2>
@@ -448,7 +466,6 @@ details .inner{padding:0 var(--pad) 6px}
     </div>
   </details>
 
-  <button class="big" id="bStop" style="background:var(--bad);color:#fff">NOTHALT</button>
 </div>
 
 <!-- ============ Namensdialog ============
@@ -539,6 +556,8 @@ var ws=null, armed=false, mode=0, jx=0, jy=0;
 /* view: was die Seite zeigt. 2 = "Selbst fahren", passend zu mode 0. */
 var view=2;
 var curApName="", nameAsked=false, renameRestart=false;
+/* Laeuft gerade ein Fahrprogramm? Kommt aus der Telemetrie (pr). */
+var progRunning=false;
 var tune={kp:0.55,kd:0.08,base:0.55,min:0.35};
 var slots=[], slotSteps=[], activeSlot=0, maxSteps=48;
 var prog=[], runPc=-1;
@@ -701,6 +720,7 @@ function paint(d){
   /* Programmlauf: aktuellen Schritt hervorheben */
   var nowPc = d.pr ? (d.pc>0 ? d.pc-1 : 0) : -1;
   if(nowPc!==runPc){ runPc=nowPc; markStep() }
+  progRunning = !!d.pr;
   E("bRun").textContent = d.pr ? "■ Programm stoppen" : "▶ Programm starten";
   E("bRun").style.background = d.pr ? "var(--bad)" : "var(--ok)";
   E("bRun").style.color      = d.pr ? "#fff" : "#06121f";
@@ -999,8 +1019,10 @@ E("bSave").onclick=function(){
 E("bReload").onclick=function(){ send("L,"+activeSlot) };
 E("bClear").onclick =function(){ prog=[]; paintSteps() };
 E("bRun").onclick   =function(){
-  var running=E("bRun").textContent.indexOf("stoppen")>0;
-  send("B,"+(running?0:1));
+  /* Ein Knopf fuer beides. Der Zustand kommt aus der Telemetrie
+     und nicht aus der eigenen Beschriftung -- sonst schickt der
+     Knopf den falschen Befehl, sobald jemand den Text aendert. */
+  send("B,"+(progRunning?0:1));
 };
 
 /* =================== Freigabe / Betriebsart =================== */

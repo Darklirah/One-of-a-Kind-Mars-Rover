@@ -113,7 +113,7 @@ und **nichts wird geschrieben** — ein kaputtes Programm landet nie im Flash.
 hervorgehoben**, darunter steht *„Schritt 7 von 17 · Durchlauf 2"*.
 
 **9. Stoppen.** Derselbe Knopf, jetzt rot: **■ Programm stoppen**. Oder der
-**NOTHALT** ganz unten — der stoppt das Programm und sperrt zusätzlich die
+**NOTHALT** oben rechts — der stoppt das Programm und sperrt zusätzlich die
 Motoren.
 
 > Zwei Dinge nimmt die Oberfläche einem von selbst ab: **von vorn
