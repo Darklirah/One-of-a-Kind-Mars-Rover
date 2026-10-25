@@ -373,6 +373,12 @@ hinten, fährt also dorthin, und der aufgewirbelte Staub bleibt zurück, zieht n
 rechts weg, steigt dabei und wird dünner und breiter. Sie wird **vor** dem Rover
 aufgetragen — sonst stünde er darin statt davor. Spitze 0,70 auf 3,4 % der Fläche.
 
+In [Doku/11](Doku/11_Gehaeuse-und-Fahrwerk.md) stehen jetzt **beide Fassungen**:
+`gehaeuse_vorn.jpg` mit dem kontrastreicheren Modell, darunter
+`gehaeuse_vorn_weich.jpg` mit der weicheren Beleuchtung aus FreeCAD. Alle
+Montage-Werte sind identisch, nur der Freisteller ist ein anderer — möglich,
+weil das Skript Quelle und Ziel als Argumente nimmt.
+
 Format JPEG statt PNG: als Fotomontage wäre das PNG 2,1 MB groß, die
 JPEG-Fassung mit Qualität 92 und ohne Chroma-Unterabtastung sind 0,6 MB bei
 scharfen CAD-Kanten. **Die vier übrigen Ansichten** (Heck, Seite, oben, unten)

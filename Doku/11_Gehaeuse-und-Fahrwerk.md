@@ -27,6 +27,12 @@ Abstandssensor VL53L0X, links und rechts die beiden Antriebe. Die Platine
 liegt offen in der Bodenschale; die beiden stehenden Module sind der
 Laderegler und der Step-Up-Wandler.
 
+![Dieselbe Ansicht mit weicherer Beleuchtung](bilder/gehaeuse_vorn_weich.jpg)
+
+*Dieselbe Szene mit weicherer Beleuchtung des Modells — alle übrigen Werte der
+Montage sind identisch. Der Rover geht stärker in der Landschaft auf; dafür
+treten Mast und Platine weniger hervor als im Bild darüber.*
+
 ## Von hinten
 
 ![Ansicht von hinten](bilder/gehaeuse_heck.png)
