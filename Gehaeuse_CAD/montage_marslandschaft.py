@@ -8,17 +8,41 @@ ZIEL = (1300, 900)
 W, H = ZIEL
 
 # ---------- Stellschrauben ----------
-GROESSE   = 0.44    # Breite des Rovers als Anteil der Bildbreite (kleiner = weiter hinten)
-BODEN     = 0.80    # Hoehe, auf der er aufsetzt (hoeher im Bild = weiter hinten)
+GROESSE   = 0.37    # Breite des Rovers als Anteil der Bildbreite (kleiner = weiter hinten)
+BODEN     = 0.73    # Hoehe, auf der er aufsetzt (kleinerer Wert = weiter hinten)
+EINSINKEN = 0.105   # wieviel er unter die Aufstandslinie rutscht, Anteil seiner Hoehe
 DUNST     = 0.20    # wieviel Hintergrundfarbe in den Rover gemischt wird (Luftperspektive)
 SATT      = 0.80    # Farbigkeit des Rovers (1 = wie gerendert)
+ABNUTZUNG = 0.60    # Staerke der Gebrauchsspuren (0 = fabrikneu)
 WEICH     = 1.6     # Weichzeichnung der Silhouettenkante in Pixeln
 LICHT     = (-1.0, -1.0)   # Sonnenrichtung in Bildkoordinaten: von oben links
-STAUB     = 0.80    # Staerke der Staubwolke
+STAUB     = 0.92    # Staerke der Staubwolke vor dem Rover
+FAHNE     = 0.85    # Staerke der Staubfahne hinter dem Rover
 SCHATTEN  = 0.70    # Tiefe des Wurfschattens: 0,62 = Kern auf 38 % Helligkeit
 SCH_LANG  = 0.34    # Laenge des Wurfschattens, Anteil der Rover-Hoehe
 
 hg = Image.open(os.path.join(SP, "hintergrund.png")).convert("RGB")
+
+
+def gezogen(k, saat, streckung):
+    """Rauschen, in X gestreckt -- das ergibt vom Wind gezogene Schlieren."""
+    r = np.random.default_rng(saat)
+    klein = r.random((max(2, H // k), max(2, int(W / (k * streckung))))).astype(np.float32)
+    g = Image.fromarray((klein * 255).astype(np.uint8), "L").resize((W, H), Image.BICUBIC)
+    return np.asarray(g, dtype=np.float32) / 255.0
+
+
+def staub_auf(bild, maske):
+    """Staub streut das Licht: er nimmt dem Untergrund die Zeichnung UND hellt ihn auf.
+    Beides zusammen laesst ihn erst als Staub lesen, Aufhellen allein wirkt wie ein
+    Schleier ueber dem Bild."""
+    rgb_b = np.asarray(bild.convert("RGB"), dtype=np.float32) / 255.0
+    weich = np.asarray(bild.convert("RGB").filter(ImageFilter.GaussianBlur(7)),
+                       dtype=np.float32) / 255.0
+    m = maske[..., None]
+    rgb_b = rgb_b * (1 - m * 0.85) + weich * (m * 0.85)
+    rgb_b = rgb_b * (1 - m) + np.array([0.80, 0.655, 0.555], dtype=np.float32) * m
+    return Image.fromarray((np.clip(rgb_b, 0, 1) * 255).astype(np.uint8), "RGB")
 
 # ---------- Rover vorbereiten ----------
 rov = Image.open(os.path.join(SP, "rover_freigestellt.png")).convert("RGBA")
@@ -26,7 +50,11 @@ rov = rov.crop(rov.getchannel("A").getbbox())
 bw = int(W * GROESSE)
 bh = int(rov.size[1] * bw / rov.size[0])
 rov = rov.resize((bw, bh), Image.LANCZOS)
-px, py = (W - bw) // 2, int(H * BODEN) - bh
+px = (W - bw) // 2
+# Ein Modell, das genau auf der Aufstandslinie endet, sieht aus, als schwebe es:
+# echte Fahrzeuge verschwinden mit den Aufstandspunkten im Sand. Also ein Stueck
+# darunter setzen, der Staub am Fuss deckt den Uebergang.
+py = int(H * BODEN) - bh + int(bh * EINSINKEN)
 
 rgb = np.asarray(rov.convert("RGB"), dtype=np.float32) / 255.0
 alpha = np.asarray(rov.getchannel("A"), dtype=np.float32) / 255.0
@@ -41,6 +69,38 @@ hell = 1.0 + richt * 0.24                                          # oben links 
 rgb *= hell[..., None]
 rgb *= 0.90                                                        # Mars bekommt weniger Sonne
 rgb *= np.array([1.075, 0.995, 0.885], dtype=np.float32)           # warmer Grundton
+
+# ---------- Gebrauchsspuren ----------
+# Ein CAD-Render hat makellose Flaechen; ein Geraet, das durch Marsstaub faehrt,
+# nicht. Vier Lagen, alle aus demselben Rauschvorrat:
+def feld(k, saat, sx=1.0, sy=1.0):
+    r = np.random.default_rng(saat)
+    klein = r.random((max(2, int(bh / (k * sy))), max(2, int(bw / (k * sx))))).astype(np.float32)
+    g = Image.fromarray((klein * 255).astype(np.uint8), "L").resize((bw, bh), Image.BICUBIC)
+    return np.asarray(g, dtype=np.float32) / 255.0
+
+tief = yy / bh                                        # 0 oben, 1 unten
+staub = np.array([0.72, 0.56, 0.45], dtype=np.float32)
+
+# 1 Staubfilm -- unten dicker als oben, weil Staub von unten hochgeworfen wird
+film = (0.09 + 0.26 * tief) * (0.62 + 0.38 * feld(9, 101)) * ABNUTZUNG
+rgb = rgb * (1 - film[..., None]) + staub * film[..., None]
+
+# 2 Schlieren -- in Y gezogenes Rauschen, wie herabgelaufener Staub
+schlieren = (feld(7, 202, sx=0.3, sy=3.5) - 0.5) * 0.055 * ABNUTZUNG
+rgb *= (1 + schlieren)[..., None]
+
+# 3 feines Korn
+rgb *= (1 + (feld(2, 303) - 0.5) * 0.05 * ABNUTZUNG)[..., None]
+
+# 4 Schmutz in den Fugen: wo das Bild dunkler ist als seine weichgezeichnete
+#   Fassung, liegt eine Kante oder ein Spalt -- dort setzt sich Dreck ab
+g = rgb.mean(-1)
+gw = np.asarray(Image.fromarray((np.clip(g, 0, 1) * 255).astype(np.uint8), "L")
+                .filter(ImageFilter.GaussianBlur(2.5)), dtype=np.float32) / 255.0
+fugen = np.clip(gw - g, 0, 1) * 0.9
+rgb *= (1 - np.clip(fugen, 0, 0.15) * ABNUTZUNG)[..., None]
+rgb = np.clip(rgb, 0, 1)
 
 grau = (rgb * np.array([0.299, 0.587, 0.114], dtype=np.float32)).sum(-1, keepdims=True)
 rgb = grau * (1.0 - SATT) + rgb * SATT
@@ -90,6 +150,25 @@ bg = bg * (1 - 0.10 * s[..., None]) + kuehl * (0.10 * s[..., None])
 bild = Image.fromarray((np.clip(bg, 0, 1) * 255).astype(np.uint8), "RGB").convert("RGBA")
 print("   Schatten: Kern auf %.0f %% Helligkeit, %.1f %% der Flaeche beruehrt"
       % (100 * (1 - s.max() * SCHATTEN), 100.0 * (s > 0.15).mean()))
+# ---------- Staubfahne hinter dem Rover ----------
+# Der Rover schaut nach links hinten, faehrt also dorthin; aufgewirbelter Staub
+# bleibt zurueck und zieht nach rechts weg, steigt dabei und wird duenner.
+# Sie wird VOR dem Rover aufgetragen, damit er davorsteht und nicht darin.
+Y, X = np.mgrid[0:H, 0:W].astype(np.float32)
+basis = H * BODEN
+nf = gezogen(55, 41, 3.6) * 0.55 + gezogen(26, 47, 2.8) * 0.3 + gezogen(11, 53, 2.2) * 0.15
+nf = (nf - nf.min()) / (nf.max() - nf.min())
+x0 = px + bw * 0.72
+d = np.clip(X - x0, 0, None)
+mitte = basis - bh * 0.10 - 0.20 * d                       # die Fahne steigt
+breite = bh * 0.13 + 0.26 * d                              # und wird breiter
+fahne = np.exp(-d / (bw * 1.05)) * np.exp(-((Y - mitte) ** 2) / (2 * breite ** 2))
+fahne *= (X > x0)
+m_fahne = np.clip((nf - 0.40) / 0.45, 0, 1) ** 1.1 * fahne * FAHNE
+m_fahne = np.clip(m_fahne, 0, 0.72)
+print("   Staubfahne: Spitze %.2f, %.1f %% der Flaeche" % (m_fahne.max(), 100.0 * (m_fahne > 0.15).mean()))
+bild = staub_auf(bild, m_fahne).convert("RGBA")
+
 bild.alpha_composite(rov, (px, py))
 
 # ---------- Staubwolke davor ----------
@@ -99,39 +178,21 @@ def rauschen(form, k, saat):
     g = Image.fromarray((klein * 255).astype(np.uint8), "L").resize((form[1], form[0]), Image.BICUBIC)
     return np.asarray(g, dtype=np.float32) / 255.0
 
-def gezogen(k, saat, streckung):
-    """Rauschen, in X gestreckt -- das ergibt vom Wind gezogene Schlieren."""
-    r = np.random.default_rng(saat)
-    klein = r.random((max(2, H // k), max(2, int(W / (k * streckung))))).astype(np.float32)
-    g = Image.fromarray((klein * 255).astype(np.uint8), "L").resize((W, H), Image.BICUBIC)
-    return np.asarray(g, dtype=np.float32) / 255.0
-
 n = (gezogen(70, 3, 3.2) * 0.5 + gezogen(34, 11, 2.6) * 0.32 + gezogen(14, 23, 2.0) * 0.18)
 n = (n - n.min()) / (n.max() - n.min())
 
-Y, X = np.mgrid[0:H, 0:W].astype(np.float32)
-basis = H * BODEN
-hoehe = np.exp(-np.clip(basis - Y, 0, None) ** 2 / (2 * (bh * 0.30) ** 2))   # nach oben auslaufend
-hoehe *= np.exp(-np.clip(Y - basis, 0, None) ** 2 / (2 * (bh * 0.22) ** 2))  # nach unten auslaufend
+hoehe = np.exp(-np.clip(basis - Y, 0, None) ** 2 / (2 * (bh * 0.22) ** 2))   # nach oben auslaufend
+hoehe *= np.exp(-np.clip(Y - basis, 0, None) ** 2 / (2 * (bh * 0.26) ** 2))  # nach unten auslaufend
 # drei Schwaden statt einer gleichmaessigen Wolke
 seite = np.zeros_like(X)
-for mx, br, st in ((0.14, 0.30, 1.00), (0.55, 0.20, 0.70), (0.95, 0.22, 0.38)):
+for mx, br, st in ((0.16, 0.34, 1.00), (0.58, 0.26, 0.82), (0.98, 0.20, 0.34)):
     seite = np.maximum(seite, st * np.exp(-((X - (px + bw * mx)) ** 2) / (2 * (bw * br) ** 2)))
 maske = np.clip((n - 0.46) / 0.40, 0, 1) ** 1.1 * hoehe * seite * STAUB
 maske = np.clip(maske, 0, 0.78)
 print("   Staubmaske: Spitze %.2f, Flaeche ueber 0.2: %.1f%%"
       % (maske.max(), 100.0 * (maske > 0.2).mean()))
 
-# Staub streut das Licht: er nimmt dem Untergrund die Zeichnung UND hellt ihn auf.
-# Beides zusammen laesst ihn erst als Staub lesen, Aufhellen allein wirkt wie ein Schleier.
-b = np.asarray(bild.convert("RGB"), dtype=np.float32) / 255.0
-weich = np.asarray(bild.convert("RGB").filter(ImageFilter.GaussianBlur(7)),
-                   dtype=np.float32) / 255.0
-m = maske[..., None]
-b = b * (1 - m * 0.85) + weich * (m * 0.85)
-staub_farbe = np.array([0.80, 0.655, 0.555], dtype=np.float32)
-b = b * (1 - m) + staub_farbe * m
-bild = Image.fromarray((np.clip(b, 0, 1) * 255).astype(np.uint8), "RGB")
+bild = staub_auf(bild, maske)
 
 # ---------- Quellenangabe ----------
 text = "Hintergrund: NASA/JPL-Caltech/MSSS \u2014 PIA20840, Murray Buttes, Gale-Krater"

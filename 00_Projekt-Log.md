@@ -355,6 +355,9 @@ der Datei einstellbar:
 | hing in der Luft | Wurfschatten nach rechts unten **plus** schmaler Kontaktschatten direkt unter dem Fahrwerk |
 | Schatten zu schwach | er legte eine dunkle Farbe auf — unter dem Rover liegt im Originalfoto aber schon dunkler Boden, dort geht ein Farbfleck unter. Jetzt **multipliziert** er: Kern auf 30 % der vorhandenen Helligkeit, das wirkt auf hellem wie auf dunklem Untergrund. Dazu in Sonnenrichtung geschert und auf 34 % der Rover-Höhe verlängert, damit er als Wurfschatten statt als Fleck liest |
 | wirkte wie ausgeschnitten | 20 % Hintergrundfarbe eingemischt (Luftperspektive) |
+| schwebte weiterhin | er endete genau auf der Aufstandslinie. Echte Fahrzeuge verschwinden mit den Aufstandspunkten im Sand, also sitzt er jetzt **10,5 % seiner Höhe tiefer**; der Staub am Fuß deckt den Übergang |
+| stand zu weit vorn | auf 37 % der Bildbreite verkleinert, Aufstandslinie von 80 auf 73 % hoch — damit liegt Vordergrund vor ihm |
+| Flächen fabrikneu | vier Lagen Gebrauchsspuren: Staubfilm (unten dicker als oben, weil Staub von unten hochgeworfen wird), in Y gezogene Schlieren, feines Korn, und Schmutz in den Fugen — letzterer gefunden über die Differenz zum weichgezeichneten Bild, dort wo es dunkler ist, sitzt eine Kante. Ein erster Versuch war zu stark: jede CAD-Kante bekam einen schwarzen Rand und die Flächen wurden fleckig wie Tarnfarbe. Faktor von 2,2 auf 0,9 und Deckel von 0,45 auf 0,15 |
 
 Dazu eine **Staubwolke davor**: in X gestrecktes Rauschen aus drei Oktaven ergibt
 windgezogene Schlieren, drei Schwaden statt einer gleichmäßigen Wolke. Die
@@ -363,6 +366,11 @@ ihn weggewaschen. Wichtig
 war, dass Staub nicht nur aufhellt, sondern dem Untergrund auch die **Zeichnung
 nimmt** — Aufhellen allein sieht aus wie ein Schleier über dem Bild. Spitzenwert
 der Maske 0,46, betroffen sind 2,7 % der Fläche.
+
+Dazu eine **Staubfahne hinter dem Rover**, als ob er fährt: er schaut nach links
+hinten, fährt also dorthin, und der aufgewirbelte Staub bleibt zurück, zieht nach
+rechts weg, steigt dabei und wird dünner und breiter. Sie wird **vor** dem Rover
+aufgetragen — sonst stünde er darin statt davor. Spitze 0,70 auf 3,4 % der Fläche.
 
 Format JPEG statt PNG: als Fotomontage wäre das PNG 2,1 MB groß, die
 JPEG-Fassung mit Qualität 92 und ohne Chroma-Unterabtastung sind 0,6 MB bei
