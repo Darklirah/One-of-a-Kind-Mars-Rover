@@ -327,9 +327,25 @@ die Begründung direkt unter der Werkstoffzeile. Und Holz **leitet nicht**:
 die alte Warnung, eine Antenne nicht am Mast entlangzuführen, ist damit
 hinfällig.
 
-Das Bild `Doku/bilder/gehaeuse_vorn.png` ist mit der neuen Geometrie neu
-gerendert — gleiche Kamera wie bisher, isometrisch von vorn links, weißer
-Hintergrund. **Die vier übrigen Ansichten** (Heck, Seite, oben, unten)
+Das Titelbild ist neu gerendert und steht jetzt als
+`Doku/bilder/gehaeuse_vorn.jpg` **in einer echten Marslandschaft**: der Rover
+aus FreeCAD mit transparentem Hintergrund freigestellt (965 483 durchsichtige
+zu 204 517 deckenden Pixeln, keine weichen Kanten) und in einen Ausschnitt von
+**NASA/JPL-Caltech/MSSS, PIA20840** gesetzt — Murray Buttes im Gale-Krater,
+aufgenommen von Curiosity. Die Quelle steht im Bild selbst und in beiden
+Bildunterschriften.
+
+Den Ausschnitt habe ich aus dem 10 000 × 2848 großen Original gesucht, nicht
+geraten: ein Suchlauf über das Panorama bewertet Fenster im Seitenverhältnis
+1300 : 900 danach, wie viel schwarzer Stitching-Rand und wie viel graue Technik
+darin liegt — Curiosity fotografiert sich auf solchen Panoramen selbst mit, und
+das eigene Deck im Bild hätte nur verwirrt. Gewählt: x 5600, y 600, 2167 × 1500,
+mit Horizont im oberen Drittel und freiem Boden davor. Der Schatten ist die
+flachgedrückte Silhouette des Rovers, versetzt und weichgezeichnet.
+
+Format jetzt JPEG statt PNG: als Fotomontage wäre das PNG 2,1 MB groß, die
+JPEG-Fassung mit Qualität 92 und ohne Chroma-Unterabtastung sind 0,6 MB bei
+scharfen CAD-Kanten. **Die vier übrigen Ansichten** (Heck, Seite, oben, unten)
 zeigen noch den alten Stand mit zwei Motorschellen und schwarzem Mast.
 
 Alle drei Druckteile sind gültige Einzelkörper: Bodenschale 27,53 cm³,

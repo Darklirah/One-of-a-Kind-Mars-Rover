@@ -16,7 +16,11 @@ Schritt in [Ich baue meinen Marsrover](Ich_baue_meinen_Marsrover.md).
 
 ## Von vorn
 
-![Ansicht von vorn links](bilder/gehaeuse_vorn.png)
+![Der Rover in der Marslandschaft, von vorn links](bilder/gehaeuse_vorn.jpg)
+
+*Montage: das CAD-Modell freigestellt und in eine echte Marsaufnahme gesetzt.
+Hintergrund NASA/JPL-Caltech/MSSS, PIA20840 — Murray Buttes im Gale-Krater,
+aufgenommen von Curiosity. Die Quelle steht auch im Bild selbst.*
 
 **Was man sieht:** vorn in der Mitte der Mast mit dem Kopf für den
 Abstandssensor VL53L0X, links und rechts die beiden Antriebe. Die Platine

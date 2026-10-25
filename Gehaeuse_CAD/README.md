@@ -10,7 +10,10 @@ den Abstandssensor. Bilder und Erklärung stehen in
 > Prüfungen sind bisher rechnerisch am Modell gemacht. Einige Maße der
 > Zukaufteile sind Katalogwerte, siehe [Annahmen](#annahmen-und-offene-punkte).
 
-![Der Rover von vorn](../Doku/bilder/gehaeuse_vorn.png)
+![Der Rover in der Marslandschaft, von vorn links](../Doku/bilder/gehaeuse_vorn.jpg)
+
+*Montage: CAD-Modell freigestellt, Hintergrund NASA/JPL-Caltech/MSSS, PIA20840
+(Murray Buttes, Gale-Krater).*
 
 ---
 
