@@ -343,7 +343,25 @@ das eigene Deck im Bild hätte nur verwirrt. Gewählt: x 5600, y 600, 2167 × 15
 mit Horizont im oberen Drittel und freiem Boden davor. Der Schatten ist die
 flachgedrückte Silhouette des Rovers, versetzt und weichgezeichnet.
 
-Format jetzt JPEG statt PNG: als Fotomontage wäre das PNG 2,1 MB groß, die
+Der erste Versuch sah noch nach aufgeklebt aus. Was dagegen hilft, steckt jetzt
+in `Gehaeuse_CAD/montage_marslandschaft.py` und ist über Stellschrauben oben in
+der Datei einstellbar:
+
+| Problem | Gegenmittel |
+|---|---|
+| klebte im Vordergrund | kleiner (44 % der Bildbreite) und höher gesetzt (Aufstandslinie bei 80 %) |
+| zu scharfe Silhouette | Alphakante um 1,6 px weichgezeichnet, danach nachgezogen, damit sie nicht aufquillt; Farbkanal um 0,7 px entschärft |
+| Beleuchtung passte nicht | FreeCAD leuchtet aus der Kamera, gleichmäßig. Im Hintergrund steht die Sonne **oben links** — an den Steinen abgelesen: helle Flanke links, Schatten nach rechts unten. Also ein gerichteter Verlauf ±24 %, dazu 10 % dunkler, wärmerer Grundton und 20 % weniger Farbigkeit |
+| hing in der Luft | weicher Wurfschatten nach rechts unten **plus** schmaler Kontaktschatten direkt unter dem Fahrwerk |
+| wirkte wie ausgeschnitten | 20 % Hintergrundfarbe eingemischt (Luftperspektive) |
+
+Dazu eine **Staubwolke davor**: in X gestrecktes Rauschen aus drei Oktaven ergibt
+windgezogene Schlieren, drei Schwaden statt einer gleichmäßigen Wolke. Wichtig
+war, dass Staub nicht nur aufhellt, sondern dem Untergrund auch die **Zeichnung
+nimmt** — Aufhellen allein sieht aus wie ein Schleier über dem Bild. Spitzenwert
+der Maske 0,47, betroffen sind 4 % der Fläche.
+
+Format JPEG statt PNG: als Fotomontage wäre das PNG 2,1 MB groß, die
 JPEG-Fassung mit Qualität 92 und ohne Chroma-Unterabtastung sind 0,6 MB bei
 scharfen CAD-Kanten. **Die vier übrigen Ansichten** (Heck, Seite, oben, unten)
 zeigen noch den alten Stand mit zwei Motorschellen und schwarzem Mast.
