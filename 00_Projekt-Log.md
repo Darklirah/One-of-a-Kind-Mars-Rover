@@ -260,6 +260,75 @@ Gehäuseentwurfs oder der Doku, bis sie am echten Teil beantwortet ist.
 
 ---
 
+## 2026-10-25 — Gehäuse V2: Platinenhalter, Motormount, Mastkopf
+
+Fünf Änderungen am parametrischen Modell, alle am lebenden FreeCAD gebaut und
+nachgemessen.
+
+**Platinenhalter auf die echte Platine.** Die Rastnasen waren für 1,0 mm
+ausgelegt, die gelieferte Platine misst 1,6 mm. Jetzt stehen beide Werte
+getrennt im Skript: `BT = 1.6` ist die reale Dicke, `SPIEL_B = 0.3` das Spiel,
+`KL = 1.9` der Klemmspalt. Das war nötig, weil das Skript von sich aus noch
+einmal 0,1 mm aufschlug — ein erster Anlauf mit `BT = 1.9` ergab deshalb 2,03
+statt der gewollten 1,9. Gemessen sitzt die Nasenunterkante jetzt auf 1,90
+(an der Platinenkante; die 1,93 weiter innen sind die 3°-Schräge), die Nut
+ebenfalls auf 1,90.
+
+Dabei fiel eine fest eingetragene `1.1` im Innenausschnitt der Schale auf. Sie
+war zufällig `BT + 0.1` und wäre beim Dickenwechsel 0,8 mm zu tief stehen
+geblieben — rechnet sich jetzt mit.
+
+**Motormount.** Statt zweier 4-mm-Schellen je Motor eine **10 mm breite**,
+mittig auf dem Motorkörper. Die Bohrung ist von Ø 12,2 auf **Ø 11,90**
+heruntergegangen (`MOT_PASS = -0.05`), bei Ø 12,0 Motor also Klemmsitz statt
+Spiel. Das Maul blieb bei 8,4 mm: die Schelle ist jetzt zweieinhalbmal so
+breit und damit deutlich steifer, ein zusätzlich engeres Maul hätte das
+Einclipsen schwer gemacht.
+
+**Kabelbinder-Öse.** Ein erster Entwurf führte den Binder durch ein Fenster in
+der Bodenplatte — verworfen, weil der Binder dann die Platte mit umfasst und
+sich nicht richtig zuziehen lässt. Jetzt ist es ein **Querkanal mitten durch
+den Schellensockel**, 2,9 mm breit für einen 2,5-mm-Binder, unten von der
+Platte und oben von der Bohrung begrenzt. Der Binder läuft unter dem Motor
+hindurch und oben über das offene Maul: Zuziehen drückt die Schellenarme
+zusammen **und** den Motor in die Bohrung.
+
+Zwischen Plattenoberkante und Motorunterseite sind nur 1,05 mm. Der Kanal
+greift deshalb 0,4 mm in die Bohrung hinein (`KB_LUFT`), dann sind es 1,45 mm;
+der Motor liegt über diese 2,9 mm Breite auf dem Binder auf. Unter die Platte
+konnte die Öse nicht — dort klebt der Bürstenkopf.
+
+**Hohlkehlen am Schellenfuß**, R 2,0 vorn und hinten über die volle
+Sockelbreite. Der scharfe Absatz zwischen Sockel und Platte ist die Kerbe, an
+der die Schelle aufreißt, wenn der Binder zieht. Der Bohrungsschnitt räumt die
+Kehlen jetzt mit frei, sonst hätte die vordere in den Motorkörper gegriffen
+(Kehle bis z 11,8, Motorunterseite 10,85). Kostet 20 mm³ — eine Hohlkehle
+wirkt ohnehin nicht über Masse, sondern dadurch, dass sie die Kerbe wegnimmt.
+
+**Zwei Pegs im Mastkopf** für die Befestigungslöcher des VL53L0X (Ø 3,
+Abstand 19,304). Kegelig Ø 2,9 → 2,2, 2,2 mm lang: das führt beim Aufstecken
+und lässt den kurzen waagerechten Zapfen ohne Stütze drucken.
+
+**Der Mast ist kein CFK-Stab mehr, sondern ein Holz-Schaschlikspieß Ø 3.**
+Geometrisch ändert das nichts, das Loch im Mastfuß ist Ø 3,3. Im Modell heißt
+das Teil jetzt `Mast_Holz`, die Datei `Bauteile/Holzspiess_3x70.step`.
+**Noch offen:** sechs Doku-Stellen nennen weiter CFK — Doku/03 (zweimal,
+inklusive Massebilanz), Doku/04, die Bauanleitung, `Gehaeuse_CAD/README.md`,
+`Hardware/Netzliste.md` und ein älterer Eintrag hier im Log.
+
+Alle drei Druckteile sind gültige Einzelkörper: Bodenschale 27,53 cm³,
+Bürstenträger je 2,47 cm³, Mastkopf 3,54 cm³. STEP und STL neu erzeugt, die
+öffentliche `MarsRover_Gehaeuse_V2_ohne_Bauteile.FCStd` nachgezogen.
+
+**Zwei Fallen für das nächste Mal.** FreeCAD stürzt ab, wenn beide
+Build-Skripte in einem Aufruf laufen — getrennt ausführen und dazwischen
+speichern. Und `build_gehaeuse.py` löscht bei jedem Lauf alles außer der
+Platinenreferenz, also muss `build_bauteile.py` hinterher.
+
+**Die Bauanleitung bleibt zurückgestellt,** bis die Leiterplatte revidiert ist.
+
+---
+
 ## 2026-10-21 — Leiterplattendaten als „in Bearbeitung" gekennzeichnet
 
 Die Befundliste von heute Vormittag stand bisher nur im Log. Wer von außen

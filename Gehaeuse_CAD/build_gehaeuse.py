@@ -10,7 +10,8 @@ import math
 import Part
 
 V = App.Vector
-doc = App.getDocument("MarsRover_Gehaeuse")
+DOC = "MarsRover_Gehaeuse_V2" if "MarsRover_Gehaeuse_V2" in App.listDocuments() else "MarsRover_Gehaeuse"
+doc = App.getDocument(DOC)
 for o in list(doc.Objects):
     if o.Name != "Leiterplatte_Ref":
         doc.removeObject(o.Name)
@@ -37,7 +38,9 @@ def add(name, shape, color, transp=0):
 
 
 # ---------------- Parameter ----------------
-BX, BY, BT = 70.0, 52.0, 1.0      # Platine
+BX, BY, BT = 70.0, 52.0, 1.6      # Platine; 1,6 = reale Dicke der gelieferten Platine
+SPIEL_B = 0.3                     # Spiel ueber der Platine
+KL = BT + SPIEL_B                 # 1,9 = Klemmspalt: Unterkante von Rastnase und Nut
 G = 0.3                           # Spiel Platine / Wand
 ZF = -8.7                         # Unterkante Bodenschale
 FLOOR = 1.2                       # Bodenstaerke
@@ -53,6 +56,14 @@ MAST = (35.0, BY + 6.2)           # Mastfuss vorn mittig, aussen an der Wand
 RTG_TILT = 25.0                   # Neigung der Akkutasche (RTG) nach hinten, Grad
 RTG_DEPTH = 26.0                  # Taschenhoehe; Akku (30 mm) steht 5 mm ueber
 MOT = (12.0, 15.5, 7.0, 5.0)      # Motor: Durchmesser, Koerperlaenge, Unwucht-Durchmesser, Unwucht-Dicke
+MOT_KL = 10.0                     # Breite der Klemmschelle -- EINE breite statt zwei schmaler
+MOT_PASS = -0.05                  # Bohrungsradius = md/2 + MOT_PASS; negativ = Klemmsitz
+KB_BINDER = 2.5                   # Breite des Kabelbinders
+KB_SPALT = KB_BINDER + 0.4        # Breite des Oesenkanals unter der Schelle
+KB_LUFT = 0.4                     # wieviel der Kanal in die Bohrung hineinreicht
+KEHLE = 2.0                       # Radius der Hohlkehlen am Sockelfuss, vorn und hinten
+PEG_L = 2.2                       # Laenge der Pegs im Mastkopf (Modul ist 1,6 dick)
+PEG_ABST = 19.304                 # Lochabstand des VL53L0X-Moduls
 
 XI0, XI1, YI0, YI1 = -G, BX + G, -G, BY + G     # Innenflaechen der Wand
 
@@ -80,7 +91,7 @@ def prism(side, pts, s0, s1):
 
 # ---------------- Bodenschale ----------------
 t = B(-W - G, BX + W + G, -W - G, BY + W + G, ZF, BT)
-t = t.cut(B(XI0, XI1, YI0, YI1, ZF + FLOOR, 1.1))
+t = t.cut(B(XI0, XI1, YI0, YI1, ZF + FLOOR, BT + 0.1))
 t = t.cut(B(XI0, XI1, 43.2, YI1, ZF - 1, ZF + FLOOR + 0.1))        # Sensorfenster vorn
 LEDGES = [('L', 26), ('L', 47), ('R', 20), ('R', 44), ('F', 35), ('B', 36), ('B', 60)]
 for side, s in LEDGES:                                             # Auflagen der Platine
@@ -89,14 +100,14 @@ HOOKS = [('F', 12), ('F', 58)]              # zwei Haken an der vorderen Laengss
 HOOK_ANGLE = 3.0                              # Hakenunterseite 3 Grad geschraegt -> Platine wieder entnehmbar
 NUT = [(18, 40), (53, 61)]                    # Nut an der hinteren Laengsseite (Abschnitte in X)
 for s0, s1 in NUT:
-    t = t.fuse(sbox('B', s0, s1, -W, 0, BT, BT + 1.4))
-    t = t.fuse(prism('B', [(-0.01, BT + 0.15), (0.5, BT + 0.15), (1.0, BT + 0.65), (1.0, BT + 1.4), (-0.01, BT + 1.4)], s0, s1))   # Nut: 0,5 flach, dann 45 Grad
+    t = t.fuse(sbox('B', s0, s1, -W, 0, BT, KL + 1.25))
+    t = t.fuse(prism('B', [(-0.01, KL), (0.5, KL), (1.0, KL + 0.5), (1.0, KL + 1.25), (-0.01, KL + 1.25)], s0, s1))   # Nut: 0,5 flach, dann 45 Grad
 for side, s in HOOKS:
     for d in (-4.6, 3.6):                                          # Schlitze -> Federzunge
         t = t.cut(sbox(side, s + d, s + d + 1.0, -W - 0.2, 0.1, -7.0, BT + 0.2))
     t = t.cut(sbox(side, s - 3.6, s + 3.6, -W - 0.2, -1.2, -7.0, BT + 0.2))   # Zunge auf 1,2 mm duennen
-    t = t.fuse(prism(side, [(-0.2, BT + 0.1), (0.9, BT + 0.1 + 1.1 * math.tan(math.radians(HOOK_ANGLE))), (0.9, BT + 0.5), (-0.2, BT + 1.4)], s - 3, s + 3))
-    t = t.fuse(sbox(side, s - 3, s + 3, -1.2, 0, BT - 0.1, BT + 1.4))          # Zunge bis Hakenoberkante
+    t = t.fuse(prism(side, [(-0.2, KL), (0.9, KL + 1.1 * math.tan(math.radians(HOOK_ANGLE))), (0.9, KL + 0.4), (-0.2, KL + 1.3)], s - 3, s + 3))
+    t = t.fuse(sbox(side, s - 3, s + 3, -1.2, 0, BT - 0.1, KL + 1.3))          # Zunge bis Hakenoberkante
 
 
 def plates(sign):
@@ -183,7 +194,7 @@ for i in range(7):                                                 # Kuehlrippen
 t = t.fuse(rtg_place(pk))
 # Uebergang Tasche -> Gehaeuse: Keil ausgefuellt und mit Radien ausgerundet (steifer, ohne Kanten)
 tanT, sinT, cosT = math.tan(math.radians(RTG_TILT)), math.sin(math.radians(RTG_TILT)), math.cos(math.radians(RTG_TILT))
-yw, zt2 = -W - G, BT + 1.4
+yw, zt2 = -W - G, KL + 1.3
 yf = yw - (zt2 - (ZF + 4.0)) * tanT                                # Taschen-Vorderflaeche auf Hoehe zt2
 w = [V(px0, yw + 0.01, ZF + 4.0), V(px0, yw + 0.01, zt2), V(px0, yf, zt2)]
 t = t.fuse(Part.Face(Part.makePolygon(w + [w[0]])).extrude(V(px1 - px0, 0, 0)))
@@ -211,10 +222,27 @@ def drive(sign, tag):
     md, ml = MOT[0], MOT[1]
     zm = zb + 3.0 + md / 2                                         # Motorachse (liegt laengs, Y)
     ym = 26 - (ml + 2.0 + MOT[3] / 2)                             # Unwuchtmitte liegt ueber der Buerstenmitte (y = 26)
-    for y0 in (ym + 1.5, ym + ml - 5.5):                           # zwei Klemmschellen
-        ring = B(xc - 5, xc + 5, y0, y0 + 4, zb + 2, zm).fuse(CY(xc, zm, md / 2 + 1.4, y0, y0 + 4))
-        ring = ring.cut(CY(xc, zm, md / 2 + 0.1, y0 - 1, y0 + 5)).cut(B(xc - 4.2, xc + 4.2, y0 - 1, y0 + 5, zm + 2.5, zm + 20))
-        c = c.fuse(ring)
+    yk = ym + 0.5                                                  # EINE breite Schelle auf dem Motorkoerper
+    ring = B(xc - 5, xc + 5, yk, yk + MOT_KL, zb + 2, zm).fuse(CY(xc, zm, md / 2 + 1.4, yk, yk + MOT_KL))
+    # Hohlkehlen vorn und hinten am Fuss: der scharfe Absatz zwischen Sockel und Platte ist
+    # die Kerbe, an der die Schelle aufreisst, wenn der Kabelbinder zieht. Die Rundung
+    # verteilt die Last ueber die Platte, statt sie auf eine Linie zu setzen.
+    for ye, sg in ((yk, -1.0), (yk + MOT_KL, 1.0)):
+        ya, yb2 = sorted((ye, ye + sg * KEHLE))
+        kehle = B(xc - 5, xc + 5, ya, yb2, zb + 2, zb + 2 + KEHLE)
+        ring = ring.fuse(kehle.cut(Part.makeCylinder(KEHLE, 11.0, V(xc - 5.5, ye + sg * KEHLE, zb + 2 + KEHLE), V(1, 0, 0))))
+    yo, yu = yk - KEHLE - 0.1, yk + MOT_KL + KEHLE + 0.1          # Bohrung raeumt die Kehlen mit frei
+    ring = ring.cut(CY(xc, zm, md / 2 + MOT_PASS, yo, yu))
+    ring = ring.cut(B(xc - 4.2, xc + 4.2, yo, yu, zm + 2.5, zm + 20))   # Maul oben offen
+    c = c.fuse(ring)
+    # Kabelbinder-Oese UNTER der Schelle: ein Querkanal mitten durch den Sockel, unten von
+    # der Platte begrenzt, oben von der Bohrung. Der Binder laeuft unter dem Motor hindurch
+    # und oben ueber das offene Maul -- Zuziehen drueckt die Schellenarme zusammen und den
+    # Motor in die Bohrung. Die Bodenplatte bleibt dabei ganz, es geht nichts durch sie hindurch.
+    # Der Kanal reicht KB_LUFT in die Bohrung hinein, sonst blieben nur 1,05 mm Hoehe.
+    yb = yk + MOT_KL / 2
+    c = c.cut(B(xc - 8, xc + 8, yb - KB_SPALT / 2, yb + KB_SPALT / 2,
+                zb + 2, zm - md / 2 - MOT_PASS + KB_LUFT))
     for y0, y1, yh in [(PLY[0] - 2.4, PLY[0] + 5, PLY[0] - 2.4), (PLY[1] - 2, PLY[1] + 5.4, PLY[1] + 4.4)]:   # Lagerzapfen mit Kopf
         c = c.fuse(CY(xc, ZP, 2.0, y0, y1)).fuse(CY(xc, ZP, 2.8, yh, yh + 1.0))
     c = c.cut(B(xc - 12, xc + 12, PLY[0] - 6, PLY[1] + 9, zb - 6, zb))   # Zapfen unten abgeflacht -> Traeger liegt plan auf der Druckplatte
@@ -233,7 +261,7 @@ drive(-1, "L")
 drive(1, "R")
 
 # ---------------- Referenzteile ----------------
-add("Mast_CFK_Ref", CZ(mx, my, 1.5, ZF + 1.5, 63), (0.15, 0.15, 0.15))
+add("Mast_Holz_Ref", CZ(mx, my, 1.5, ZF + 1.5, 63), (0.78, 0.62, 0.38))   # Holz-Schaschlikspiess D3
 add("Fahrbahn_Ref", B(-30, BX + 30, -30, BY + 20, ZGROUND - 0.2, ZGROUND), (0.7, 0.35, 0.2), 70)
 
 # ---------------- Mastkopf (druckbar) ----------------
@@ -245,6 +273,11 @@ k = k.cut(B(mx + 4, mx + 11, my + 2.0, my + 5.0, zk - 1, zk + 2.1))   # Kabelaus
 for dx in (-10.5, 10.5):                                             # "Kameraaugen": 45-Grad-Kegel, druckbar ohne Support
     k = k.fuse(Part.makeCone(3.6, 2.4, 1.2, V(mx + dx, my + 6, zk + 7.5), V(0, 1, 0)))
     k = k.cut(Part.makeCylinder(1.6, 3.5, V(mx + dx, my + 4.9, zk + 7.5), V(0, 1, 0)))
+# Zwei Pegs halten das VL53L0X-Modul im Schlitz: sie greifen in seine beiden
+# Befestigungsloecher (D3, Abstand 19,304). Leicht kegelig -- das fuehrt beim
+# Aufstecken und laesst den kurzen waagerechten Zapfen ohne Stuetze drucken.
+for dx in (-PEG_ABST / 2, PEG_ABST / 2):
+    k = k.fuse(Part.makeCone(1.45, 1.1, PEG_L, V(mx + dx, my + 2.0, zk + 9.7), V(0, 1, 0)))
 add("Mastkopf", k.removeSplitter(), (0.92, 0.92, 0.9))
 
 doc.recompute()

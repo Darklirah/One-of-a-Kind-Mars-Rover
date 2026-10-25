@@ -8,11 +8,12 @@ import FreeCAD as App
 import Part
 
 V = App.Vector
-HERE = os.path.dirname(App.getDocument("MarsRover_Gehaeuse").FileName)   # Ordner der FreeCAD-Datei
+DOC = "MarsRover_Gehaeuse_V2" if "MarsRover_Gehaeuse_V2" in App.listDocuments() else "MarsRover_Gehaeuse"
+HERE = os.path.dirname(App.getDocument(DOC).FileName)   # Ordner der FreeCAD-Datei
 OUT = os.path.join(HERE, "Bauteile")
 os.makedirs(OUT, exist_ok=True)
-doc = App.getDocument("MarsRover_Gehaeuse")
-for n in ("Akku_Ref", "Mast_CFK_Ref", "Buerstenkopf_Ref_L", "Buerstenkopf_Ref_R"):
+doc = App.getDocument(DOC)
+for n in ("Akku_Ref", "Mast_CFK_Ref", "Mast_Holz_Ref", "Buerstenkopf_Ref_L", "Buerstenkopf_Ref_R"):
     if doc.getObject(n):
         doc.removeObject(n)
 
@@ -88,9 +89,11 @@ bk = bk.makeFillet(5.0, [e for e in bk.Edges if abs(e.Length - 6) < 0.01])
 bk = bk.fuse(B(-6.5, 6.5, -24, 24, 0, 12.0))
 export("Zahnbuerstenkopf", bk)
 
-# ---- 8  CFK-Rundstab D3 x 70 ----
+# ---- 8  Mast: Holz-Schaschlikspiess D3, auf 70 mm abgelaengt ----
+# Spiesse sind zum Ende hin leicht verjuengt und angespitzt; das stumpfe Ende kommt
+# in den Mastfuss. Hier als glatter Zylinder D3 -- das Loch im Fuss ist D3,3.
 cfk = CZ(0, 0, 1.5, 0, 70)
-export("CFK_Stab_3x70", cfk)
+export("Holzspiess_3x70", cfk)
 
 # ---------------- Einbau ----------------
 RZ, RX, RY = V(0, 0, 1), V(1, 0, 0), V(0, 1, 0)
@@ -105,7 +108,7 @@ ak2.rotate(V(0, 0, 0), V(1, 0, 0), 25.0)
 ak2.translate(V(0, -2.7, -8.7 + 4.0))
 akpl = ak2.Placement
 place("Akku_503035", ak2, (0, 0, 0), color=(0.2, 0.3, 0.8)).Placement = akpl
-place("Mast_CFK", cfk, (35, 58.2, -7.2), color=(0.15, 0.15, 0.15))
+place("Mast_Holz", cfk, (35, 58.2, -7.2), color=(0.78, 0.62, 0.38))
 place("VL53L0X", tof, (35, 58.2 + 2.2, 52 + 2.2), App.Rotation(RZ, 180).multiply(App.Rotation(RX, 90)), (0.5, 0.1, 0.6))   # Loetaugen unten
 place("MPU6050", mpu, (40.41, 10.3, 3.55), App.Rotation(RZ, 180), (0.1, 0.25, 0.7))
 place("TP4056", tp, (2.7, 14.5, 3.55), App.Rotation(RZ, 90).multiply(App.Rotation(RX, 90)), (0.1, 0.25, 0.7))
