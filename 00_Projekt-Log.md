@@ -352,14 +352,17 @@ der Datei einstellbar:
 | klebte im Vordergrund | kleiner (44 % der Bildbreite) und höher gesetzt (Aufstandslinie bei 80 %) |
 | zu scharfe Silhouette | Alphakante um 1,6 px weichgezeichnet, danach nachgezogen, damit sie nicht aufquillt; Farbkanal um 0,7 px entschärft |
 | Beleuchtung passte nicht | FreeCAD leuchtet aus der Kamera, gleichmäßig. Im Hintergrund steht die Sonne **oben links** — an den Steinen abgelesen: helle Flanke links, Schatten nach rechts unten. Also ein gerichteter Verlauf ±24 %, dazu 10 % dunkler, wärmerer Grundton und 20 % weniger Farbigkeit |
-| hing in der Luft | weicher Wurfschatten nach rechts unten **plus** schmaler Kontaktschatten direkt unter dem Fahrwerk |
+| hing in der Luft | Wurfschatten nach rechts unten **plus** schmaler Kontaktschatten direkt unter dem Fahrwerk |
+| Schatten zu schwach | er legte eine dunkle Farbe auf — unter dem Rover liegt im Originalfoto aber schon dunkler Boden, dort geht ein Farbfleck unter. Jetzt **multipliziert** er: Kern auf 30 % der vorhandenen Helligkeit, das wirkt auf hellem wie auf dunklem Untergrund. Dazu in Sonnenrichtung geschert und auf 34 % der Rover-Höhe verlängert, damit er als Wurfschatten statt als Fleck liest |
 | wirkte wie ausgeschnitten | 20 % Hintergrundfarbe eingemischt (Luftperspektive) |
 
 Dazu eine **Staubwolke davor**: in X gestrecktes Rauschen aus drei Oktaven ergibt
-windgezogene Schlieren, drei Schwaden statt einer gleichmäßigen Wolke. Wichtig
+windgezogene Schlieren, drei Schwaden statt einer gleichmäßigen Wolke. Die
+hinterste musste zurückgenommen werden, sie lag genau über dem Schatten und hat
+ihn weggewaschen. Wichtig
 war, dass Staub nicht nur aufhellt, sondern dem Untergrund auch die **Zeichnung
 nimmt** — Aufhellen allein sieht aus wie ein Schleier über dem Bild. Spitzenwert
-der Maske 0,47, betroffen sind 4 % der Fläche.
+der Maske 0,46, betroffen sind 2,7 % der Fläche.
 
 Format JPEG statt PNG: als Fotomontage wäre das PNG 2,1 MB groß, die
 JPEG-Fassung mit Qualität 92 und ohne Chroma-Unterabtastung sind 0,6 MB bei

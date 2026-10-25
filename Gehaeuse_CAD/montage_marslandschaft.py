@@ -15,6 +15,8 @@ SATT      = 0.80    # Farbigkeit des Rovers (1 = wie gerendert)
 WEICH     = 1.6     # Weichzeichnung der Silhouettenkante in Pixeln
 LICHT     = (-1.0, -1.0)   # Sonnenrichtung in Bildkoordinaten: von oben links
 STAUB     = 0.80    # Staerke der Staubwolke
+SCHATTEN  = 0.70    # Tiefe des Wurfschattens: 0,62 = Kern auf 38 % Helligkeit
+SCH_LANG  = 0.34    # Laenge des Wurfschattens, Anteil der Rover-Hoehe
 
 hg = Image.open(os.path.join(SP, "hintergrund.png")).convert("RGB")
 
@@ -57,19 +59,37 @@ a = Image.fromarray((alpha * 255).astype(np.uint8), "L").filter(ImageFilter.Gaus
 a = a.point(lambda v: max(0, min(255, int((v - 40) * 255 / 190))))
 rov.putalpha(a)
 
-# ---------- Schlagschatten nach rechts unten ----------
-sh_h = max(1, int(bh * 0.15))
+# ---------- Schlagschatten ----------
+# Die Sonne steht oben links, der Schatten faellt also nach rechts unten. Er wird
+# flachgedrueckt (Aufsicht auf den Boden), in Sonnenrichtung geschert und etwas
+# verbreitert -- eine bloss gestauchte Silhouette sieht aus wie ein Fleck.
+sh_h = max(1, int(bh * SCH_LANG))
+sh_b = int(bw * 1.14)
+flach = a.resize((sh_b, sh_h), Image.LANCZOS)
+schere = sh_b * 0.55                                   # Versatz der hinteren Kante
+flach = flach.transform((int(sh_b + schere), sh_h), Image.AFFINE,
+                        (1, schere / sh_h, -schere, 0, 1, 0), resample=Image.BICUBIC)
 sch = Image.new("L", ZIEL, 0)
-sch.paste(a.resize((bw, sh_h), Image.LANCZOS), (px + int(bw * 0.07), int(H * BODEN) - sh_h // 2))
-sch = sch.filter(ImageFilter.GaussianBlur(15)).point(lambda v: int(v * 0.52))
+sch.paste(flach, (px - int(bw * 0.03), int(H * BODEN) - sh_h // 2))
+sch = sch.filter(ImageFilter.GaussianBlur(9))
 # Kontaktschatten: schmaler, dunkler, direkt unter dem Fahrwerk
 k_h = max(1, int(bh * 0.055))
 kon = Image.new("L", ZIEL, 0)
 kon.paste(a.crop((0, int(bh * 0.86), bw, bh)).resize((int(bw * 0.92), k_h), Image.LANCZOS),
           (px + int(bw * 0.055), int(H * BODEN) - k_h // 2))
-kon = kon.filter(ImageFilter.GaussianBlur(5)).point(lambda v: int(v * 0.80))
+kon = kon.filter(ImageFilter.GaussianBlur(4))
 sch = Image.fromarray(np.maximum(np.asarray(sch), np.asarray(kon)), "L")
-bild = Image.composite(Image.new("RGB", ZIEL, (30, 18, 12)), hg, sch).convert("RGBA")
+# Der Schatten dunkelt ab, statt eine dunkle Farbe darueberzulegen: unter dem Rover
+# liegt im Originalfoto ohnehin schon dunkler Boden, dort geht ein aufgelegter Fleck
+# unter. Multiplizieren wirkt auf hellem wie auf dunklem Untergrund.
+s = np.asarray(sch, dtype=np.float32) / 255.0
+bg = np.asarray(hg, dtype=np.float32) / 255.0
+bg = bg * (1.0 - s[..., None] * SCHATTEN)
+kuehl = np.array([0.30, 0.21, 0.19], dtype=np.float32)       # Schatten auf Mars bleibt rotbraun
+bg = bg * (1 - 0.10 * s[..., None]) + kuehl * (0.10 * s[..., None])
+bild = Image.fromarray((np.clip(bg, 0, 1) * 255).astype(np.uint8), "RGB").convert("RGBA")
+print("   Schatten: Kern auf %.0f %% Helligkeit, %.1f %% der Flaeche beruehrt"
+      % (100 * (1 - s.max() * SCHATTEN), 100.0 * (s > 0.15).mean()))
 bild.alpha_composite(rov, (px, py))
 
 # ---------- Staubwolke davor ----------
@@ -95,7 +115,7 @@ hoehe = np.exp(-np.clip(basis - Y, 0, None) ** 2 / (2 * (bh * 0.30) ** 2))   # n
 hoehe *= np.exp(-np.clip(Y - basis, 0, None) ** 2 / (2 * (bh * 0.22) ** 2))  # nach unten auslaufend
 # drei Schwaden statt einer gleichmaessigen Wolke
 seite = np.zeros_like(X)
-for mx, br, st in ((0.18, 0.30, 1.00), (0.62, 0.22, 0.85), (0.92, 0.26, 0.70)):
+for mx, br, st in ((0.14, 0.30, 1.00), (0.55, 0.20, 0.70), (0.95, 0.22, 0.38)):
     seite = np.maximum(seite, st * np.exp(-((X - (px + bw * mx)) ** 2) / (2 * (bw * br) ** 2)))
 maske = np.clip((n - 0.46) / 0.40, 0, 1) ** 1.1 * hoehe * seite * STAUB
 maske = np.clip(maske, 0, 0.78)
