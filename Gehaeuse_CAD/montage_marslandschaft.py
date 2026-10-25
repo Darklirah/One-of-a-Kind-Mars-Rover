@@ -4,6 +4,9 @@ import numpy as np
 from PIL import Image, ImageFilter, ImageDraw, ImageFont
 
 SP = sys.argv[1]
+# Aufruf: montage_marslandschaft.py <ordner> [freigestelltes_png] [ausgabe_png]
+QUELLE  = sys.argv[2] if len(sys.argv) > 2 else "rover_freigestellt.png"
+AUSGABE = sys.argv[3] if len(sys.argv) > 3 else "montage2.png"
 ZIEL = (1300, 900)
 W, H = ZIEL
 
@@ -11,6 +14,7 @@ W, H = ZIEL
 GROESSE   = 0.37    # Breite des Rovers als Anteil der Bildbreite (kleiner = weiter hinten)
 BODEN     = 0.73    # Hoehe, auf der er aufsetzt (kleinerer Wert = weiter hinten)
 EINSINKEN = 0.105   # wieviel er unter die Aufstandslinie rutscht, Anteil seiner Hoehe
+VERGRABEN = 0.085   # Breite des Uebergangs, in dem er im Boden verschwindet
 DUNST     = 0.20    # wieviel Hintergrundfarbe in den Rover gemischt wird (Luftperspektive)
 SATT      = 0.80    # Farbigkeit des Rovers (1 = wie gerendert)
 ABNUTZUNG = 0.60    # Staerke der Gebrauchsspuren (0 = fabrikneu)
@@ -45,7 +49,7 @@ def staub_auf(bild, maske):
     return Image.fromarray((np.clip(rgb_b, 0, 1) * 255).astype(np.uint8), "RGB")
 
 # ---------- Rover vorbereiten ----------
-rov = Image.open(os.path.join(SP, "rover_freigestellt.png")).convert("RGBA")
+rov = Image.open(os.path.join(SP, QUELLE)).convert("RGBA")
 rov = rov.crop(rov.getchannel("A").getbbox())
 bw = int(W * GROESSE)
 bh = int(rov.size[1] * bw / rov.size[0])
@@ -54,7 +58,7 @@ px = (W - bw) // 2
 # Ein Modell, das genau auf der Aufstandslinie endet, sieht aus, als schwebe es:
 # echte Fahrzeuge verschwinden mit den Aufstandspunkten im Sand. Also ein Stueck
 # darunter setzen, der Staub am Fuss deckt den Uebergang.
-py = int(H * BODEN) - bh + int(bh * EINSINKEN)
+py = int(H * BODEN) - bh
 
 rgb = np.asarray(rov.convert("RGB"), dtype=np.float32) / 255.0
 alpha = np.asarray(rov.getchannel("A"), dtype=np.float32) / 255.0
@@ -117,6 +121,37 @@ rov = rov.filter(ImageFilter.GaussianBlur(0.7))                    # Kanten nich
 # Silhouette weichzeichnen, aber nicht aufblaehen
 a = Image.fromarray((alpha * 255).astype(np.uint8), "L").filter(ImageFilter.GaussianBlur(WEICH))
 a = a.point(lambda v: max(0, min(255, int((v - 40) * 255 / 190))))
+
+# Unterhalb der Auflagelinie ausblenden. Das ist der eigentliche Grund, warum eine
+# Montage schwebt: das eingesetzte Bild liegt immer VOLLSTAENDIG oben auf, es gibt
+# keinen Boden davor. Erst wenn der Rover nach unten hin verschwindet, steckt er drin.
+#
+# Die Linie darf nicht waagerecht sein: in der isometrischen Ansicht ist die
+# Standebene schraeg. Gesucht ist die Gerade, auf der das Modell wirklich aufliegt --
+# also die untere konvexe Huelle seiner Silhouette, die genau die tiefsten Fuesse
+# beruehrt und dazwischen gerade durchlaeuft.
+fest = alpha > 0.5
+hat = fest.any(axis=0)
+unten = np.where(hat, bh - 1 - np.argmax(fest[::-1], axis=0), -1).astype(np.float64)
+# Die Standebene ist in der Isometrie schraeg. Ihre Neigung steckt in den beiden
+# Auflagepunkten: dem tiefsten Punkt der linken und dem der rechten Haelfte. Eine
+# Gerade durch beide ist die Linie, auf der der Rover wirklich steht.
+def tiefster(von, bis):
+    i = [c for c in range(von, bis) if hat[c]]
+    j = max(i, key=lambda c: unten[c])
+    return float(j), unten[j]
+
+xl, yl = tiefster(0, int(bw * 0.38))
+xr, yr = tiefster(int(bw * 0.62), bw)
+k = (yr - yl) / (xr - xl)
+linie = k * (np.arange(bw, dtype=np.float64) - xl) + yl
+print("   Auflagepunkte: links (%.0f, %.0f), rechts (%.0f, %.0f) -> Neigung %.2f"
+      % (xl, yl, xr, yr, k))
+
+band = max(2.0, bh * VERGRABEN)
+schwelle = linie[None, :] - bh * EINSINKEN
+verlauf = np.clip((schwelle + band - yy) / band, 0.0, 1.0)
+a = Image.fromarray((np.asarray(a, dtype=np.float32) * verlauf).astype(np.uint8), "L")
 rov.putalpha(a)
 
 # ---------- Schlagschatten ----------
@@ -206,5 +241,5 @@ for dx in (-1, 0, 1):
             d.text((tx + dx, ty + dy), text, font=schrift, fill=(0, 0, 0))
 d.text((tx, ty), text, font=schrift, fill=(240, 234, 228))
 
-bild.save(os.path.join(SP, "montage2.png"))
+bild.save(os.path.join(SP, AUSGABE))
 print("Rover %d x %d bei (%d, %d) -- fertig" % (bw, bh, px, py))
