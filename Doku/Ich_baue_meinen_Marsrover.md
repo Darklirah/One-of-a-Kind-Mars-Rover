@@ -37,7 +37,7 @@ zusammensetzen, zum Schluss alles verkabeln.
 - die bedrahteten Bauteile aus der [Stückliste](03_Stueckliste-BOM.md)
 - ESP32 DevKitC V4, die Module MPU-6050, VL53L0X, TP4056 und MT3608
 - 2 Vibrationsmotoren, 2 Zahnbürstenköpfe, Akku 503035
-- CFK-Rundstab Ø 3 mm, 70 mm lang
+- Holz-Schaschlikspieß Ø 3 mm, auf 70 mm abgelängt
 - 4 dünne Litzen, je etwa 9 cm (für den Sensor im Mast)
 - die Druckteile aus [Gehaeuse_CAD](../Gehaeuse_CAD/README.md): 1 Bodenschale,
   2 Bürstenträger, 1 Mastkopf, 4 Tüllen aus TPU
@@ -263,7 +263,7 @@ Der Sensor VL53L0X braucht vier Leitungen: `VIN`, `GND`, `SCL` und `SDA`.
 2. **Sensor in den Mastkopf.** Das Modul von oben in den Schlitz schieben —
    die Lötaugen nach unten, der kleine schwarze Sensor schaut nach vorn
    durch das Fenster. Die Litzen kommen unten aus dem Kabelauslass.
-3. **Mast einstecken.** Den CFK-Stab mit einem Tropfen Kleber in den Mastfuß
+3. **Mast einstecken.** Den Holzspieß mit einem Tropfen Kleber in den Mastfuß
    stecken, dann den Mastkopf oben aufsetzen. Der Kopf schaut geradeaus nach
    vorn, **nicht nach unten** — sonst misst er die Tischplatte.
 4. **Kabel führen.** Die vier Litzen leicht verdrillen und am Mast entlang

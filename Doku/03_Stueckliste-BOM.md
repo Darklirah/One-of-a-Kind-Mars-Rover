@@ -244,11 +244,11 @@ nicht: MPU-6050 auf `0x68`, VL53L0X auf `0x29`.
 |---|---|---|---|---|
 | U6 | **GY-521** (MPU-6050) Breakout | 1 | 2,50 | Lagesensor. Pull-ups sind auf dem Modul. **Flach aufs Chassis**, nahe der Drehachse, möglichst weit weg von den Motoren |
 | U7 | **VL53L0X-Modul**, 25 × 10,67 mm, Lochabstand 19,3 mm | 1 | 3,50 | Gekauft: roboter-bausatz.de RBS17700. Abstandssensor, Laufzeitmessung. Kommt in den Mastkopf |
-| — | Mast: CFK-Rundstab Ø 3 mm, **70 mm** | 1 | 0,80 | 60 mm über der Platine plus 10 mm im Mastfuß. Steif und leicht. Messing- oder Alurohr geht auch, wiegt aber mehr |
+| — | Mast: **Holz-Schaschlikspieß Ø 3 mm**, auf **70 mm** abgelängt | 1 | 0,05 | 60 mm über der Platine plus 10 mm im Mastfuß. Aus der Küche, eine Packung kostet gut einen Euro. Weicher als der früher vorgesehene CFK-Stab — für den Abstandssensor unkritisch (siehe [04](04_PCB-Layout-Empfehlung.md)), dafür leichter und nicht leitend |
 | — | Litze **AWG 28–30** (0,05–0,08 mm², Silikon), 4 Stück je ca. 90 mm | 1 | 0,30 | Dünner als ursprünglich geplant, damit sie am schwingenden Mast nicht bricht und in die Kabelöse passt. Zum Sensor hinauf. **Verdrillt** und mit Schlaufe am Fuß, siehe unten |
 | — | Schaumklebeband für U6 | 1 | — | aus dem Restbestand der Akkubefestigung |
 
-**Zusammen ≈ 7,10 €**, Materialpreis steigt damit von 26,50 € auf **≈ 33,60 €**.
+**Zusammen ≈ 6,35 €**, Materialpreis steigt damit von 26,50 € auf **≈ 32,85 €**.
 
 ### Massezuwachs
 
@@ -256,12 +256,12 @@ nicht: MPU-6050 auf `0x68`, VL53L0X auf `0x29`.
 |---|---|
 | GY-521 (Stiftleisten abgeknipst, flach verlötet) | 1,8 g |
 | GY-530 auf dem Mast | 1,3 g |
-| Mast CFK 3 mm × 60 mm | 0,6 g |
+| Mast Holzspieß Ø 3 mm × 60 mm | 0,3 g |
 | Litze und Klebstoff | 0,8 g |
-| **Summe** | **≈ 4,5 g** |
+| **Summe** | **≈ 4,2 g** |
 
-Damit steigt die Gesamtmasse von ~40 g auf **~45 g** — und davon sitzen 2 g
-oben auf dem Mast. Das verschärft das in
+Damit steigt die Gesamtmasse von ~40 g auf **~44 g** — und davon sitzen gut
+1,5 g oben auf dem Mast. Das verschärft das in
 [02 §4](02_SMD-vs-THT-Wirtschaftlichkeit.md) beschriebene Hauptrisiko.
 Gegenrechnung: die dort genannte Abspeckliste (1,0-mm-PCB, 3-mm-LEDs,
 300-mAh-Zelle) holt ~6,5 g zurück.

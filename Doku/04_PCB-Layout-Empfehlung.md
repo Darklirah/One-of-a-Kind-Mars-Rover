@@ -197,7 +197,7 @@ Drei Regeln, und alle drei sind auf diesem Roboter nicht optional:
 | Masthöhe | ca. 60 mm über der Platine |
 | Position | vorn mittig, zwischen den beiden Liniensensoren |
 | Blickrichtung | **waagerecht nach vorn** |
-| Werkstoff | CFK-Rundstab Ø 3 mm — steif und mit 0,6 g fast masselos |
+| Werkstoff | **Holz-Schaschlikspieß Ø 3 mm** — mit 0,3 g fast masselos. Weicher als der früher vorgesehene CFK-Stab, er peitscht also stärker; warum das hier nichts ausmacht, steht direkt darunter |
 
 **Warum der Mast hier funktioniert, ein Magnetometer dort aber nicht:** Eine
 optische Laufzeitmessung mittelt über ihr Messfenster von 33 ms. Ein

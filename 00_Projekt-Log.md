@@ -208,9 +208,10 @@ Gehäuseentwurfs oder der Doku, bis sie am echten Teil beantwortet ist.
        einen Meter höher.
     4. PETG stört kaum, solange es nicht massiv an der Antenne anliegt.
     Für den Rover: **vorn in der Mitte, Antenne nach vorn über die
-    Vorderkante**, ein Stück seitlich neben dem Mast (CFK leitet und
-    schirmt). Die USB-Buchse liegt dann zur Platinenmitte und muss von oben
-    erreichbar bleiben. Die Reichweite ist kein enger Punkt (reduzierte
+    Vorderkante**, ein Stück seitlich neben dem Mast. (Der Mast ist seit dem
+    25.10.2026 ein Holzspieß und damit elektrisch unauffällig — der
+    frühere Grund, CFK leitet und schirmt, ist weggefallen.) Die USB-Buchse
+    liegt dann zur Platinenmitte und muss von oben erreichbar bleiben. Die Reichweite ist kein enger Punkt (reduzierte
     Sendeleistung, Bedienung aus wenigen Metern); Regel 1 und 2 dürften
     reichen.
   - **Idee: externe Antenne.** Braucht ein Board mit Antennenstecker
@@ -220,8 +221,9 @@ Gehäuseentwurfs oder der Doku, bis sie am echten Teil beantwortet ist.
     Drahtstück 31 mm (λ/4 bei 2,45 GHz) — Stabantenne mit
     U.FL-auf-SMA-Kabel (3–10 g, 5–11 cm). Eine Stabantenne reicht
     elektrisch mehr als aus, ist für dieses Fahrzeug aber unnötig schwer;
-    die Folienantenne am Mastkopf wäre die leichte Lösung. **Nicht direkt
-    am CFK-Stab entlangführen** — dann lieber einen GFK-Stab als Mast.
+    die Folienantenne am Mastkopf wäre die leichte Lösung. Sie darf am Mast
+    entlanglaufen: Holz stört nicht. Mit dem früher vorgesehenen CFK-Stab
+    wäre das verboten gewesen, Kohlefaser leitet.
 
     | Bauform | Größe | Gewicht | Einordnung |
     |---|---|---|---|
@@ -312,9 +314,23 @@ und lässt den kurzen waagerechten Zapfen ohne Stütze drucken.
 **Der Mast ist kein CFK-Stab mehr, sondern ein Holz-Schaschlikspieß Ø 3.**
 Geometrisch ändert das nichts, das Loch im Mastfuß ist Ø 3,3. Im Modell heißt
 das Teil jetzt `Mast_Holz`, die Datei `Bauteile/Holzspiess_3x70.step`.
-**Noch offen:** sechs Doku-Stellen nennen weiter CFK — Doku/03 (zweimal,
-inklusive Massebilanz), Doku/04, die Bauanleitung, `Gehaeuse_CAD/README.md`,
-`Hardware/Netzliste.md` und ein älterer Eintrag hier im Log.
+Die Doku ist nachgezogen: Doku/03 (Stückliste **und** Massebilanz), Doku/04,
+die Bauanleitung, `Gehaeuse_CAD/README.md`, `Hardware/Netzliste.md` und die
+Antennen-Notizen weiter oben in diesem Log. Masse 0,6 → **0,3 g**, Preis
+0,80 → 0,05 €; die Summen sind mitgerechnet (Mast-Zubehör 7,10 → 6,35 €,
+Gesamtmasse ~45 → **~44 g**).
+
+Zwei Dinge ändern sich dadurch inhaltlich, nicht nur im Wortlaut: Holz ist
+**weicher** als Kohlefaser, der Mast peitscht also stärker — für eine
+Laufzeitmessung, die über 33 ms mittelt, unkritisch, und in Doku/04 steht
+die Begründung direkt unter der Werkstoffzeile. Und Holz **leitet nicht**:
+die alte Warnung, eine Antenne nicht am Mast entlangzuführen, ist damit
+hinfällig.
+
+Das Bild `Doku/bilder/gehaeuse_vorn.png` ist mit der neuen Geometrie neu
+gerendert — gleiche Kamera wie bisher, isometrisch von vorn links, weißer
+Hintergrund. **Die vier übrigen Ansichten** (Heck, Seite, oben, unten)
+zeigen noch den alten Stand mit zwei Motorschellen und schwarzem Mast.
 
 Alle drei Druckteile sind gültige Einzelkörper: Bodenschale 27,53 cm³,
 Bürstenträger je 2,47 cm³, Mastkopf 3,54 cm³. STEP und STL neu erzeugt, die

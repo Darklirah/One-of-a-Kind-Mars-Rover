@@ -169,7 +169,7 @@ nacheinander aufgeweckt und umadressiert werden.
 
 | | |
 |---|---|
-| Werkstoff | CFK-Rundstab Ø 3 mm |
+| Werkstoff | Holz-Schaschlikspieß Ø 3 mm |
 | Länge | ca. 60 mm über der Platine |
 | Position | vorn mittig, zwischen den beiden TCRT5000 |
 | Blickrichtung | waagerecht nach vorn, **nicht** zum Boden geneigt |

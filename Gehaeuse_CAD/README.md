@@ -77,9 +77,11 @@ Kurz zu jedem Teil:
   Rasthaken vorn), die Akkutasche in Form des RTG am Heck, den Mastfuß vorn
   und an beiden Seiten das Fahrwerk mit den Gabeln für die Antriebe.
 - **Bürstenträger** — je einer links und rechts. Unten klebt der
-  Zahnbürstenkopf, oben klemmt der Vibrationsmotor in zwei Schellen. Die
-  beiden Zapfen an den Enden stecken in den TPU-Tüllen.
-- **Mastkopf** — sitzt oben auf dem CFK-Stab und hält den VL53L0X.
+  Zahnbürstenkopf, oben klemmt der Vibrationsmotor in einer 10 mm
+  breiten Schelle, gesichert mit einem Kabelbinder durch den Querkanal unter
+  dem Motor. Die beiden Zapfen an den Enden stecken in den TPU-Tüllen.
+- **Mastkopf** — sitzt oben auf dem Holzspieß und hält den VL53L0X. Zwei
+  kegelige Pegs greifen in die Befestigungslöcher des Moduls.
 - **Tüllen** — vier Stück aus weichem TPU. Sie sind die einzige Verbindung
   zwischen Antrieb und Gehäuse und halten die Vibration aus der Platine heraus.
 
@@ -97,7 +99,7 @@ Schicht federn.
 | Datei / Ordner | Inhalt |
 |---|---|
 | `Druckteile/` | Die Druckteile als **STL** (für den Slicer) und **STEP** (zum Weiterkonstruieren) |
-| `Bauteile/` | Einfache Modelle der Zukaufteile als STEP: Motor, MPU-6050, VL53L0X, TP4056, MT3608, Akku, Bürstenkopf, CFK-Stab |
+| `Bauteile/` | Einfache Modelle der Zukaufteile als STEP: Motor, MPU-6050, VL53L0X, TP4056, MT3608, Akku, Bürstenkopf, Holzspieß |
 | `MarsRover_Gehaeuse_V2_ohne_Bauteile.FCStd` | FreeCAD-Datei mit allen Teilen und der **nackten** Platine |
 | `build_gehaeuse.py` | Erzeugt die Druckteile. Alle Maße stehen oben als Parameter |
 | `build_bauteile.py` | Erzeugt die Zukaufteile und setzt sie an ihren Einbauort |
