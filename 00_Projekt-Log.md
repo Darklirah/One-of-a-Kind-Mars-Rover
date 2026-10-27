@@ -262,6 +262,57 @@ Gehäuseentwurfs oder der Doku, bis sie am echten Teil beantwortet ist.
 
 ---
 
+## 2026-10-27 — Freigabe fiel nach dem Anfahren weg (0.5.3)
+
+**Befund des Nutzers:** beim Start des Programms wie bei Handfahrt laufen die
+Motoren kurz, dann ist die Freigabe zurückgesetzt. Erneut freigeben, gleiches
+Spiel.
+
+Es gibt in der Firmware genau **drei** Stellen, die die Freigabe von sich aus
+wegnehmen. Zwei ließen sich am Quelltext ausschließen:
+
+| Stelle | Urteil |
+|---|---|
+| Akkuwächter `g_vbat < VBAT_CUTOFF_V` | scheidet aus — `FEATURE_BATTERY_MONITOR` steht auf 0, der Zweig ist nicht einkompiliert |
+| App schickt `A,0` | scheidet aus — die Oberfläche sendet beim Verbinden nichts, sie übernimmt den Zustand aus der Telemetrie (`d.a`) |
+| `imu.tipped() \|\| imu.lifted()` | **bleibt übrig** |
+
+Der MPU-6050 ist angeschlossen, der Kippschutz kann also auslösen. Und er tut
+genau das, was im Kopf von `Imu.h` seit jeher als Risiko steht: der
+Hochhebe-Erkenner schlägt an, wenn der gefilterte Betrag der Beschleunigung
+länger als 500 ms außerhalb von 0,55 … 1,45 g liegt. Der Tiefpass hat 0,25 s
+Zeitkonstante — zusammen gut eine halbe Sekunde nach dem Anfahren. Das deckt
+sich mit „Motoren laufen kurz".
+
+**Warum das keine Feinjustage der Schwellen wird.** Die Schwellen sind
+geschätzt, nicht gemessen. Sie jetzt zu verschieben hieße, eine Zahl durch
+eine andere geratene Zahl zu ersetzen. Deshalb zwei Dinge in einem Stand:
+
+1. **Der Kippschutz ruht während der Fahrt** (`FEATURE_TILT_GUARD_WHILE_DRIVING
+   0`). Er wird wieder scharf, sobald beide Motoren `TILT_GUARD_SETTLE_MS` =
+   400 ms still stehen. Umgekippt und hochgehoben wird also weiter erkannt —
+   nur nicht mehr auf ein Signal hin, das während des Rüttelns nachweislich
+   nicht belastbar ist. Auf ein unzuverlässiges Signal hin mitten in der Fahrt
+   die Freigabe wegzunehmen ist schlimmer, als in dieser Zeit nicht
+   hinzusehen.
+2. **Die Rohwerte stehen jetzt in der Telemetrie** (`az`, `mg`, `kw`) und
+   unter der Kompassrose im Funktionstest: `az 0,98 g · |a| 1,04 g ·
+   Kippwächter ruht`. Verlässt einer der Werte das Fenster des Wächters,
+   wird die Zeile rot. Damit lässt sich ablesen, was die Vibration wirklich
+   anrichtet, und die Schwellen danach **messen** statt schätzen.
+
+Beim Einbauen eine Namenskollision gefunden: `tg` war in der Telemetrie schon
+das Gyro-Urteil des Funktionstests. Das neue Feld heißt `kw`.
+
+**Noch offen, bewusst nicht mitgeändert:** `Phase::Tilted` hat in `Leds.cpp`
+kein eigenes Blinkmuster — der Fall fällt durch den `switch` und landet im
+Normalbetrieb. Deshalb geben die LEDs beim Auslösen auch keinen Hinweis. Das
+gehört repariert, aber nicht im selben Stand wie die eigentliche Ursache.
+
+Firmware **0.5.3**, RAM 16,2 %, Flash 73,7 % (966 109 Bytes), im Web-Installer.
+
+---
+
 ## 2026-10-25 — Gehäuse V2: Platinenhalter, Motormount, Mastkopf
 
 Fünf Änderungen am parametrischen Modell, alle am lebenden FreeCAD gebaut und

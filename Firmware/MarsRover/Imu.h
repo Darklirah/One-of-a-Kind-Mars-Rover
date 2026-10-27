@@ -52,7 +52,8 @@ public:
   // --- Lage ---
   bool tipped() const { return _tipped; }
   bool lifted() const { return _lifted; }
-  float accelZ() const { return _azLp; }          // in g, stark gefiltert
+  float accelZ()    const { return _azLp; }       // in g, stark gefiltert
+  float magnitude() const { return _magLp; }      // Betrag in g, stark gefiltert
 
 private:
   bool write8(uint8_t reg, uint8_t val);

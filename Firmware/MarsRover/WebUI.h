@@ -168,6 +168,12 @@ h1{font-size:17px;margin:0;font-weight:600;letter-spacing:.2px;flex:1;
 #rose .rs{fill:var(--panel3)}            /* Heck */
 #rose .rc{fill:var(--fg)}
 #roseNeedle{transition:transform .12s linear;transform-origin:0 0}
+/* Rohwerte des Lagesensors -- damit sichtbar wird, was die Vibration
+   aus den Beschleunigungswerten macht. Rot, sobald sie das Fenster des
+   Kippwaechters verlassen. */
+#lage{font-size:12px;color:var(--dim);margin:2px 0 4px;font-variant-numeric:tabular-nums}
+#lage.raus{color:var(--bad);font-weight:700}
+#lage .sp{opacity:.55;font-weight:400}
 #roseTxt{font-size:15px;font-weight:700;color:var(--fg);
          font-variant-numeric:tabular-nums;margin-top:4px}
 
@@ -439,6 +445,7 @@ details .inner{padding:0 var(--pad) 6px}
         <circle class="rc" cx="0" cy="0" r="4.5"></circle>
       </svg>
       <div id="roseTxt">&mdash;</div>
+      <div id="lage">&mdash;</div>
     </div>
 
     <div id="tres"></div>
@@ -727,6 +734,7 @@ function paint(d){
   /* Laeuft der Test, gehoert der Blick auch dorthin. */
   if(d.ts && view!==0){ view=0; paintView() }
   paintRose(d.hd);
+  paintLage(d);
 
   /* Programmlauf: aktuellen Schritt hervorheben */
   var nowPc = d.pr ? (d.pc>0 ? d.pc-1 : 0) : -1;
@@ -1094,6 +1102,14 @@ function buildRose(){
       +'x2="'+(Math.sin(b)*52).toFixed(1)+'" y2="'+(-Math.cos(b)*52).toFixed(1)+'"/>';
   }
   g.innerHTML=s;
+}
+function paintLage(d){
+  var e=E("lage"); if(!e) return;
+  if(d.az===undefined||!d.imu){ e.textContent="kein Lagesensor"; e.className=""; return }
+  var raus = (d.az<0.45) || (d.mg<0.55) || (d.mg>1.45);
+  e.innerHTML = "az "+d.az.toFixed(2)+" g · |a| "+d.mg.toFixed(2)+" g"
+              + "<span class=\"sp\"> · Kippwächter "+(d.kw?"scharf":"ruht")+"</span>";
+  e.className = raus ? "raus" : "";
 }
 function paintRose(hd){
   if(hd===undefined||hd===null){ E("roseTxt").textContent="—"; return }

@@ -90,6 +90,7 @@ static RemoteControl rc;
 // ---------------------------------------------------------------------
 static Mode   g_mode   = Mode::Manual;
 static Phase  g_phase  = Phase::Disarmed;
+static uint32_t g_moveSinceMs = 0;     // letzter Zeitpunkt mit laufendem Motor
 static bool   g_armed  = false;         // nach dem Einschalten immer gesperrt
 static Tuning g_tune;
 
@@ -424,6 +425,18 @@ static void leaveProgramMode() {
   leds.setOverride(false);
 }
 
+// Darf der Kippschutz jetzt zuschlagen? Waehrend der Fahrt sind die
+// Beschleunigungswerte durch die Vibration nicht belastbar; auf ein
+// unzuverlaessiges Signal hin die Freigabe wegzunehmen, ist schlimmer als
+// gar nicht hinzusehen. Siehe FEATURE_TILT_GUARD_WHILE_DRIVING.
+static bool tiltGuardReady() {
+#if FEATURE_TILT_GUARD_WHILE_DRIVING
+  return true;
+#else
+  return (millis() - g_moveSinceMs) > TILT_GUARD_SETTLE_MS;
+#endif
+}
+
 static void applyRequests() {
   RcRequests q = rc.takeRequests();
 
@@ -491,13 +504,13 @@ static void applyRequests() {
 //  Telemetrie
 // =====================================================================
 static void sendTelemetry() {
-  char buf[460];
+  char buf[640];   // 32 Felder, mit Reserve
   int n = snprintf(buf, sizeof(buf),
     "{\"p\":%u,\"m\":%u,\"a\":%u,\"sL\":%.3f,\"sR\":%.3f,\"e\":%.3f,"
     "\"dL\":%u,\"dR\":%u,\"dMax\":%u,\"calOk\":%u,\"hz\":%u,"
     "\"pr\":%u,\"pc\":%u,\"pn\":%u,\"pass\":%u,\"slot\":%u,"
     "\"ts\":%u,\"tp\":%u,\"tv\":%u,\"ti\":%d,\"tg\":%u,\"td\":%u,"
-    "\"imu\":%u,\"hd\":%.1f,\"ic\":%u,"
+    "\"imu\":%u,\"hd\":%.1f,\"ic\":%u,\"az\":%.2f,\"mg\":%.2f,\"kw\":%u,"
     "\"dsp\":%u,\"ds\":%u,\"og\":%u,\"om\":%u",
     (unsigned)g_phase, (unsigned)g_mode, g_armed ? 1u : 0u,
     line.linenessL(), line.linenessR(), line.error(),
@@ -507,6 +520,7 @@ static void sendTelemetry() {
     selftest.running() ? 1u : 0u, selftest.step(), selftest.percent(),
     selftest.info(), selftest.gyroVerdict(), selftest.distVerdict(),
     imu.present() ? 1u : 0u, imu.heading(), imu.calibrated() ? 1u : 0u,
+    imu.accelZ(), imu.magnitude(), tiltGuardReady() ? 1u : 0u,
     dist.present() ? 1u : 0u, dist.valid() ? dist.mm() : 0u,
     g_obsGuard ? 1u : 0u, g_obsGuardMm);
 #if FEATURE_BATTERY_MONITOR
@@ -607,6 +621,9 @@ void loop() {
   imu.update();
   dist.update();
 
+  // Merken, wann zuletzt ein Motor lief -- der Kippschutz braucht das
+  if (motors.dutyL() || motors.dutyR()) g_moveSinceMs = millis();
+
   // ---------------- Zustandsmaschine ----------------
   if (line.calibrating()) {
     halt();
@@ -614,7 +631,7 @@ void loop() {
   }
   // Umgekippt oder hochgehoben: Motoren aus und Freigabe weg. Steht vor
   // allem anderen, damit kein Betriebszustand das uebergehen kann.
-  else if (imu.tipped() || imu.lifted()) {
+  else if ((imu.tipped() || imu.lifted()) && tiltGuardReady()) {
     halt();
     g_armed = false;
     leaveProgramMode();

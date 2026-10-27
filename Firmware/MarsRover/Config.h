@@ -217,6 +217,14 @@ static const float    LIFT_G_LOW       = 0.55f;  // Betrag der Beschleunigung
 static const float    LIFT_G_HIGH      = 1.45f;
 static const uint16_t LIFT_CONFIRM_MS  = 500;
 
+// Kippschutz waehrend der Fahrt. Auf 0, solange die Schwellen oben nicht an der
+// echten Vibration GEMESSEN sind: der Antrieb ist ein Ruettler, und ein
+// Fehlalarm nimmt mitten in der Fahrt die Freigabe weg. Bei 0 wacht der Schutz
+// nur im Stand -- umgekippt oder hochgehoben wird dann weiter erkannt, sobald
+// die Motoren TILT_GUARD_SETTLE_MS lang still sind.
+#define FEATURE_TILT_GUARD_WHILE_DRIVING 0
+static const uint16_t TILT_GUARD_SETTLE_MS = 400;
+
 // ---------------------------------------------------------------------
 //  A B S T A N D S S E N S O R   (VL53L0X auf dem Mast)
 //
