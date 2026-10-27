@@ -127,8 +127,25 @@ void Imu::update() {
     return;
   }
 
+  // ---- Uebersteuerung mitzaehlen ----
+  // Ein anschlagender Kreisel schneidet die Spitzen ab. Liegt die echte
+  // Drehung als Gleichanteil unter der Schwingung, wird von der einen Seite
+  // mehr abgeschnitten als von der anderen -- und genau die Differenz ist die
+  // gesuchte Drehung. Deshalb wird hier gezaehlt statt geraten.
+  _sampN++;
+  if (gz >= 32000 || gz <= -32000) _clipN++;
+
   // ---- Kurs ----
   float dps = (gz - _biasZ) / GYRO_LSB_PER_DPS;
+  const float adps = fabsf(dps);
+  if (adps > _peak) _peak = adps;
+  if (now - _statT0 >= 1000) {
+    _clipPct  = _sampN ? (100.0f * (float)_clipN / (float)_sampN) : 0.0f;
+    _peakHold = _peak;
+    _clipN = _sampN = 0;
+    _peak  = 0.0f;
+    _statT0 = now;
+  }
   if (fabsf(dps) < IMU_RATE_DEADBAND_DPS) dps = 0.0f;   // Rauschen nicht aufintegrieren
   _rate     = dps;
   _heading += dps * dt;

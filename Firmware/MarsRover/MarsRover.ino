@@ -90,6 +90,8 @@ static RemoteControl rc;
 // ---------------------------------------------------------------------
 static Mode   g_mode   = Mode::Manual;
 static Phase  g_phase  = Phase::Disarmed;
+static bool     g_wasMoving    = false;   // lief im letzten Durchlauf ein Motor?
+static uint32_t g_stillSinceMs = 0;       // seit wann steht er still
 static bool   g_armed  = false;         // nach dem Einschalten immer gesperrt
 static Tuning g_tune;
 
@@ -497,7 +499,7 @@ static void sendTelemetry() {
     "\"dL\":%u,\"dR\":%u,\"dMax\":%u,\"calOk\":%u,\"hz\":%u,"
     "\"pr\":%u,\"pc\":%u,\"pn\":%u,\"pass\":%u,\"slot\":%u,"
     "\"ts\":%u,\"tp\":%u,\"tv\":%u,\"ti\":%d,\"tg\":%u,\"td\":%u,"
-    "\"imu\":%u,\"hd\":%.1f,\"ic\":%u,\"az\":%.2f,\"mg\":%.2f,\"hoch\":%u,"
+    "\"imu\":%u,\"hd\":%.1f,\"ic\":%u,\"az\":%.2f,\"mg\":%.2f,\"hoch\":%u,\"gcl\":%.1f,\"gpk\":%.0f,"
     "\"dsp\":%u,\"ds\":%u,\"og\":%u,\"om\":%u",
     (unsigned)g_phase, (unsigned)g_mode, g_armed ? 1u : 0u,
     line.linenessL(), line.linenessR(), line.error(),
@@ -508,6 +510,7 @@ static void sendTelemetry() {
     selftest.info(), selftest.gyroVerdict(), selftest.distVerdict(),
     imu.present() ? 1u : 0u, imu.heading(), imu.calibrated() ? 1u : 0u,
     imu.accelZ(), imu.magnitude(), (imu.tipped() || imu.lifted()) ? 1u : 0u,
+    imu.clipPct(), imu.peakDps(),
     dist.present() ? 1u : 0u, dist.valid() ? dist.mm() : 0u,
     g_obsGuard ? 1u : 0u, g_obsGuardMm);
 #if FEATURE_BATTERY_MONITOR
@@ -607,6 +610,24 @@ void loop() {
 
   imu.update();
   dist.update();
+
+  // Kurs selbsttaetig nullen, sobald der Rover aus dem Stand losfaehrt.
+  // Vorher musste man dafuer von Hand auf den Knopf -- und ohne Nullen zeigt
+  // die Rose den aufgelaufenen Drift der letzten Minuten statt der Drehung,
+  // die man gerade machen will. Jedes Manoever faengt jetzt bei 0 Grad an.
+  // Die Drehbefehle im Programm nullen zusaetzlich selbst, das stoert nicht.
+  {
+    const bool faehrt = (motors.dutyL() || motors.dutyR());
+    if (faehrt) {
+      if (!g_wasMoving && (millis() - g_stillSinceMs) > HEADING_ZERO_STILL_MS) {
+        imu.zeroHeading();
+      }
+      g_wasMoving = true;
+    } else {
+      if (g_wasMoving) g_stillSinceMs = millis();
+      g_wasMoving = false;
+    }
+  }
 
 
   // ---------------- Zustandsmaschine ----------------

@@ -262,6 +262,54 @@ Gehäuseentwurfs oder der Doku, bis sie am echten Teil beantwortet ist.
 
 ---
 
+## 2026-10-27 — Kreisel schlug an, Kurs nullt sich jetzt selbst (0.5.5)
+
+**Befund des Nutzers:** bei laufenden Motoren misst der Lagesensor die Drehung
+viel zu klein — eine echte 90-Grad-Drehung zeigt etwa **17 Grad**. Der Sensor
+hängt zurzeit an Drähten und kann schwingen. Außerdem muss der Kurs immer von
+Hand genullt werden.
+
+**Der Messbereich war zu klein.** `IMU_GYRO_FS` stand auf 1, also **±500 °/s**.
+Ein Sensor, der an Drähten über einem Rüttelantrieb hängt, überschreitet das
+mühelos. Und ein anschlagender Kreisel verliert nicht irgendetwas, sondern
+genau das Gesuchte: liegt die echte Drehung als Gleichanteil unter der
+Schwingung, wird von der einen Seite mehr abgeschnitten als von der anderen,
+und die Differenz der beiden abgeschnittenen Spitzen **ist** die Drehung. Das
+Verhältnis 90 zu 17 passt zu dieser Erklärung.
+
+Bemerkenswert: beim **Beschleunigungssensor** war der Gedanke schon da — der
+steht auf ±8 g, und im Kopf von `Imu.h` steht sogar, warum (*„ein
+übersteuernder MEMS-Beschleunigungssensor erzeugt einen Gleichanteil, der wie
+eine echte Neigung aussieht"*). Beim Kreisel daneben wurde dieselbe Überlegung
+nicht gezogen.
+
+Jetzt **±2000 °/s**. Auflösung kostet das praktisch nichts: 16,4 LSB je °/s,
+und das Rauschen liegt weit darüber.
+
+**Belegt statt geglaubt.** Die Firmware zählt jetzt mit, wie viele Proben am
+Anschlag liegen, und merkt sich die größte Drehrate je Sekunde. Beides steht
+unter der Kompassrose: `Kreisel Spitze 840 °/s`, und falls es weiter
+anschlägt, zusätzlich `ANSCHLAG 2,3 %` in Rot. Damit ist auch zu sehen, ob
+±2000 reicht oder ob die Drähte zuerst weg müssen.
+
+**Kurs nullt sich selbst.** Sobald der Rover aus dem Stand losfährt — beide
+Motoren waren mindestens `HEADING_ZERO_STILL_MS` = 400 ms still —, wird der
+Kurs auf 0 gesetzt. Jedes Manöver fängt also bei null an, statt den Drift der
+letzten Minuten mitzuschleppen. Die Drehbefehle im Programm nullen zusätzlich
+selbst; das stört nicht.
+
+Der **Nullpunkt des Kreisels** (die Bias-Aufnahme über den Knopf) war nie das
+Problem: er liegt in NVS und übersteht den Neustart. Gemeint war das Nullen
+des Kurswinkels, und das ist jetzt automatisch.
+
+**Die Drähte bleiben der eigentliche Mangel.** Doku/03 verlangt den MPU-6050
+flach auf dem Chassis, auf Schaumklebeband, nahe der Drehachse und weg von den
+Motoren. Hängend an Drähten misst er vor allem sich selbst.
+
+Firmware **0.5.5**, im Web-Installer.
+
+---
+
 ## 2026-10-27 — Kippschutz raus, Lenkung trennt die Seiten (0.5.4)
 
 **Rückmeldung zu 0.5.3:** Rücksetzer kommen weiter, aber seltener. Und: beim

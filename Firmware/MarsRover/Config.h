@@ -194,7 +194,14 @@ static const uint32_t I2C_FREQ_HZ  = 400000;
 // 100..200 Hz und wuerde sich ohne dieses Filter ins Nutzsignal falten.
 // Bleibt trotzdem Unruhe im Kurs: auf 5 (10 Hz) heruntergehen.
 static const uint8_t  IMU_DLPF_CFG = 4;
-static const uint8_t  IMU_GYRO_FS  = 1;      // 1 = +-500 deg/s, 65,5 LSB je deg/s
+// 3 = +-2000 deg/s, 16,4 LSB je deg/s. Vorher stand hier 1 (+-500), und genau
+// daran hat sich der Kreisel ueberschlagen: auf einem Ruettelantrieb schwingt
+// der Sensor weit ueber 500 deg/s hinaus. Was oben abgeschnitten wird, fehlt
+// in der Summe -- die Anzeige blieb bei einer 90-Grad-Drehung bei etwa 17 Grad
+// stehen. Beim Beschleunigungssensor war dieselbe Ueberlegung schon beruecksichtigt
+// (+-8 g), beim Kreisel nicht. Aufloesung kostet es praktisch nichts: das
+// Rauschen liegt weit ueber einem LSB.
+static const uint8_t  IMU_GYRO_FS  = 3;      // 3 = +-2000 deg/s, 16,4 LSB je deg/s
 static const uint8_t  IMU_ACCEL_FS = 2;      // 2 = +-8 g, 4096 LSB je g
                                              // bewusst grob: enge Bereiche
                                              // uebersteuern bei Vibration und
@@ -202,6 +209,8 @@ static const uint8_t  IMU_ACCEL_FS = 2;      // 2 = +-8 g, 4096 LSB je g
 static const uint16_t IMU_SAMPLE_MS = 5;     // 200 Hz Abtastung
 static const uint16_t IMU_CAL_MS    = 1200;  // Nullpunktaufnahme im Stillstand
 static const float    IMU_RATE_DEADBAND_DPS = 0.3f;  // gegen Driften im Stand
+// So lange muss er gestanden haben, damit das Losfahren den Kurs neu nullt
+static const uint16_t HEADING_ZERO_STILL_MS = 400;
 
 // Kurs halten bei "geradeaus"
 static const float    HOLD_KP  = 0.020f;     // Lenkanteil je Grad Abweichung

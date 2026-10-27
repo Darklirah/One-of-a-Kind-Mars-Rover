@@ -49,6 +49,10 @@ public:
   bool calibrated()  const { return _calDone; }
   float bias() const { return _biasZ; }
 
+  // --- Uebersteuerung: belegt, ob der Messbereich reicht ---
+  float clipPct()  const { return _clipPct; }   // Anteil anschlagender Proben, %
+  float peakDps()  const { return _peakHold; }  // groesste Drehrate im letzten Fenster
+
   // --- Lage ---
   bool tipped() const { return _tipped; }
   bool lifted() const { return _lifted; }
@@ -74,6 +78,12 @@ private:
   uint32_t _calUntil = 0;
   double   _calSum   = 0.0;
   uint32_t _calN     = 0;
+
+  uint32_t _statT0   = 0;              // Fenster fuer Anschlag und Spitzenwert
+  uint32_t _clipN    = 0, _sampN = 0;
+  float    _peak     = 0.0f;
+  float    _clipPct  = 0.0f;
+  float    _peakHold = 0.0f;
 
   float    _azLp  = 1.0f;              // Tiefpass auf die Z-Beschleunigung
   float    _magLp = 1.0f;              // Tiefpass auf den Betrag

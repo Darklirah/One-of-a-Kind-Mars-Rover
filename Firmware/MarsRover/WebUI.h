@@ -1128,9 +1128,14 @@ function paintHoch(an){
 function paintLage(d){
   var e=E("lage"); if(!e) return;
   if(d.az===undefined||!d.imu){ e.textContent="kein Lagesensor"; e.className=""; return }
-  var raus = (d.az<0.45) || (d.mg<0.55) || (d.mg>1.45);
+  var raus = (d.az<0.45) || (d.mg<0.55) || (d.mg>1.45) || (d.gcl>0.05);
+  var kreisel = "";
+  if(d.gpk!==undefined){
+    kreisel = " · Kreisel Spitze "+d.gpk.toFixed(0)+" °/s"
+            + (d.gcl>0.05 ? " · ANSCHLAG "+d.gcl.toFixed(1)+" %" : "");
+  }
   e.innerHTML = "az "+d.az.toFixed(2)+" g · |a| "+d.mg.toFixed(2)+" g"
-              + "<span class=\"sp\"> · "+(d.hoch?"außerhalb":"im Fenster")+"</span>";
+              + "<span class=\"sp\"> · "+(d.hoch?"außerhalb":"im Fenster")+kreisel+"</span>";
   e.className = raus ? "raus" : "";
 }
 function paintRose(hd){
