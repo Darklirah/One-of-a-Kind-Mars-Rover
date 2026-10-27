@@ -4,6 +4,62 @@ Laufendes Protokoll. Neueste Einträge oben.
 
 ---
 
+## Verbesserungen am Gerät — zuerst dran, bevor weiter getestet wird
+
+Stehendes Verzeichnis. **Beides am 27.10.2026 vom Nutzer festgelegt und als
+erster Punkt der nächsten Sitzung vorgemerkt.** Beide Punkte machen Messungen
+und Fahrversuche unzuverlässig, solange sie offen sind — Nachjustieren an der
+Firmware läuft bis dahin ins Leere.
+
+- [ ] **Der MPU-6050 MUSS fest montiert werden.** Zurzeit hängt er an Drähten
+      und kann schwingen. So misst er vor allem seine eigene Bewegung: bei
+      laufenden Motoren kam eine echte 90-Grad-Drehung als **17 Grad** an,
+      weil der Kreisel am Anschlag lag. Der größere Messbereich (±2000 °/s
+      seit 0.5.5) fängt das auf, macht die Messung aber nur brauchbar, nicht
+      gut.
+
+      **Wie:** flach aufs Chassis, auf **Schaumstoff-Klebeband** (doppelseitig),
+      **nahe der Drehachse** und möglichst weit weg von den Motoren — so steht
+      es in [Doku/03](Doku/03_Stueckliste-BOM.md) und im Kopf von
+      `Firmware/MarsRover/Imu.h`. Stiftleisten **abknipsen** und flach
+      verlöten; gesteckt wackelt das Modul im Vibrationsbetrieb, und genau
+      dieses Wackeln misst der Sensor dann.
+
+      **Prüfen danach:** im Funktionstest unter der Kompassrose steht
+      `Kreisel Spitze … °/s`. Liegt die Spitze bei laufenden Motoren noch
+      nahe 2000 oder erscheint `ANSCHLAG`, ist die Montage weiterhin zu weich.
+
+- [ ] **Biegehilfe für die Bürstenborsten drucken.** Die gekauften
+      Zahnbürstenköpfe haben **gerade Borsten** — damit hat der Rover keine
+      Vorzugsrichtung und läuft seitwärts statt geradeaus (beobachtet:
+      Drift nach links, von Hand kaum steuerbar). Ein Bristlebot fährt in die
+      Richtung, in die die Borsten geneigt sind; die Spitzen müssen also
+      **nach vorn** zeigen, zum Mast hin.
+
+      **Die Lehre:** ein in PETG gedruckter Block mit einer Rampe im
+      Zielwinkel und einer Tasche, in die der Kopf nur in einer Lage passt.
+      Borstenfeld 20–30 s in etwa 90 °C heißes Wasser, in die Lehre, **in der
+      Lage** mit kaltem Wasser abkühlen. PETG hält die 90 °C aus.
+
+      **Warum eine Lehre und nicht freihändig:** beide Köpfe müssen denselben
+      Winkel bekommen, sonst entsteht genau die Unsymmetrie, die wir loswerden
+      wollen. Zielwinkel 15–20°, beim Formen 5° steiler wegen Rückfederung.
+      Maße liegen im Modell: Kopf 50 × 15 × 18 mm, Borsten 12 mm
+      (`Gehaeuse_CAD/build_bauteile.py`, Teil 7).
+
+      **Billiger Vorversuch:** einen Ersatzkopf keilförmig abschneiden — vorn
+      kurz, hinten lang — und mit dem Motor allein auf dem Tisch zusehen,
+      wohin er wandert. Das kostet eine Minute und einen Kopf.
+
+- [ ] **Drehrichtung der Motoren prüfen.** Sie sollen **gegenläufig** laufen,
+      dafür bei **einem** der beiden die zwei Litzen tauschen — siehe
+      [Doku/05](Doku/05_Pinbelegung.md). Im Funktionstest laufen die Motoren
+      einzeln: schieben beide in dieselbe Richtung, drehen sie gleich herum.
+      Zweitrangig gegenüber den Borsten, aber in derselben Sitzung zu
+      erledigen.
+
+---
+
 ## Offene Punkte für den Projektabschluss
 
 Stehendes Verzeichnis, kein Tagebucheintrag. Hier landet, was bewusst
