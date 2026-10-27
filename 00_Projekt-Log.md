@@ -262,6 +262,39 @@ Gehäuseentwurfs oder der Doku, bis sie am echten Teil beantwortet ist.
 
 ---
 
+## 2026-10-27 — Kippschutz raus, Lenkung trennt die Seiten (0.5.4)
+
+**Rückmeldung zu 0.5.3:** Rücksetzer kommen weiter, aber seltener. Und: beim
+Einschlagen nach links oder rechts laufen immer beide Motoren.
+
+**Seltener, nicht weg — und das ist erklärbar.** In 0.5.3 ruhte der Wächter
+nur, solange die Motoren liefen. `_lifted` bleibt aber gesetzt, bis der
+gefilterte Betrag wieder ins Fenster zurückkehrt, und der Tiefpass braucht
+dafür seine 0,25 s. Jede kurze Pause — zwischen zwei Programmschritten, beim
+Loslassen des Joysticks — reichte also: 400 ms nach dem Anhalten war der
+Wächter wieder scharf, das Kennzeichen aber noch gesetzt.
+
+**Jetzt ist er ganz draußen.** Der Kippschutz greift überhaupt nicht mehr in
+die Steuerung ein. Erkannt wird weiter, gemeldet auch: die Oberfläche blendet
+**ganz oben ein blinkendes rotes Feld** ein — „Roboter wurde hochgehoben". Es
+sitzt in der klebenden Kopfleiste über Freigabe und Nothalt, bleibt beim
+Scrollen stehen, und `messeTopH()` zählt seine Höhe mit, damit die
+Programm-Startleiste darunter nicht verrutscht.
+
+Damit ist dieser Stand zugleich der **Test für die Restfälle**: kommt jetzt
+noch ein Rücksetzer, kann es der Kippschutz nicht mehr gewesen sein. Dann
+bleibt nur ein Neustart des ESP32 — also die Stromversorgung.
+
+**Lenkung.** `MANUAL_STEER_AUTHORITY` stand auf 0,60. Bei vollem Einschlag
+blieb die kurveninnere Seite damit auf 40 % — beide Motoren liefen, und auf
+einem Rüttelantrieb reicht dieser Unterschied kaum zum Lenken. Jetzt **1,00**:
+bei vollem Einschlag steht die Innenseite still, bei halbem läuft sie mit
+50 %. Die Rechnung dahinter blieb unverändert, nur der Faktor.
+
+Firmware **0.5.4**, im Web-Installer.
+
+---
+
 ## 2026-10-27 — Freigabe fiel nach dem Anfahren weg (0.5.3)
 
 **Befund des Nutzers:** beim Start des Programms wie bei Handfahrt laufen die

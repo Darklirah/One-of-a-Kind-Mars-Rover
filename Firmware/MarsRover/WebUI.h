@@ -119,6 +119,15 @@ h1{font-size:17px;margin:0;font-weight:600;letter-spacing:.2px;flex:1;
    will. Deckender Hintergrund, damit nichts durchscheint; die negativen
    Seitenraender ziehen die Leiste ueber die Polsterung von .wrap, sonst
    rutscht der Inhalt seitlich daran vorbei. */
+/* --- Hochgehoben: blinkendes Feld ganz oben --- */
+#hoch{display:none;grid-column:1/-1;background:var(--bad);color:#fff;
+      font-weight:700;letter-spacing:.03em;text-align:center;
+      padding:9px 10px;border-radius:10px;
+      animation:hochBlink 1s steps(1,end) infinite}
+#hoch.an{display:block}
+@keyframes hochBlink{50%{background:transparent;color:var(--bad);
+                         box-shadow:inset 0 0 0 2px var(--bad)}}
+@media (prefers-reduced-motion:reduce){#hoch{animation:none}}
 .toprow{display:grid;grid-template-columns:1.35fr 1fr;gap:9px;
         position:sticky;top:0;z-index:30;background:var(--bg);
         margin:0 calc(-1 * var(--pad));
@@ -293,6 +302,10 @@ details .inner{padding:0 var(--pad) 6px}
        vorher am Seitenende -- genau dort, wo man ihn nicht findet,
        wenn es eilt. -->
   <div class="toprow">
+    <!-- Meldung ueber beiden Knoepfen, volle Breite. Sie sitzt IN der
+         klebenden Leiste, damit sie beim Scrollen oben bleibt und
+         messeTopH() ihre Hoehe mitzaehlt. -->
+    <div id="hoch">Roboter wurde hochgehoben</div>
     <button id="arm" class="big">Freigeben</button>
     <button class="big" id="bStop">NOTHALT</button>
   </div>
@@ -735,6 +748,7 @@ function paint(d){
   if(d.ts && view!==0){ view=0; paintView() }
   paintRose(d.hd);
   paintLage(d);
+  paintHoch(!!d.hoch);
 
   /* Programmlauf: aktuellen Schritt hervorheben */
   var nowPc = d.pr ? (d.pc>0 ? d.pc-1 : 0) : -1;
@@ -1103,12 +1117,20 @@ function buildRose(){
   }
   g.innerHTML=s;
 }
+var hochWar=false;
+function paintHoch(an){
+  var e=E("hoch"); if(!e) return;
+  if(an===hochWar) return;              // nur bei Wechsel anfassen
+  hochWar=an;
+  e.classList.toggle("an",an);
+  messeTopH();                          // die Leiste ist jetzt hoeher oder flacher
+}
 function paintLage(d){
   var e=E("lage"); if(!e) return;
   if(d.az===undefined||!d.imu){ e.textContent="kein Lagesensor"; e.className=""; return }
   var raus = (d.az<0.45) || (d.mg<0.55) || (d.mg>1.45);
   e.innerHTML = "az "+d.az.toFixed(2)+" g · |a| "+d.mg.toFixed(2)+" g"
-              + "<span class=\"sp\"> · Kippwächter "+(d.kw?"scharf":"ruht")+"</span>";
+              + "<span class=\"sp\"> · "+(d.hoch?"außerhalb":"im Fenster")+"</span>";
   e.className = raus ? "raus" : "";
 }
 function paintRose(hd){

@@ -93,7 +93,10 @@ static const uint16_t LINE_CAL_MIN_SPAN      = 150;   // ADC-Hub, sonst Kal. ung
 static const float CTRL_KP_DEFAULT        = 0.55f;
 static const float CTRL_KD_DEFAULT        = 0.08f;
 static const float CTRL_BASE_DEFAULT      = 0.55f;  // Grundvibration autonom
-static const float MANUAL_STEER_AUTHORITY = 0.60f;  // Lenkanteil im Handbetrieb
+// 1,0 heisst: bei vollem Einschlag steht die kurveninnere Seite still und
+// nur die aeussere vibriert. Mit 0,60 lief die Innenseite noch mit 40 % mit,
+// und auf einem Ruettelantrieb reicht dieser Unterschied kaum zum Lenken.
+static const float MANUAL_STEER_AUTHORITY = 1.00f;  // Lenkanteil im Handbetrieb
 static const float PIVOT_LEVEL            = 0.70f;  // Drehen auf der Stelle
 
 // Linie verloren -> Suchmuster, dann Nothalt
@@ -217,13 +220,10 @@ static const float    LIFT_G_LOW       = 0.55f;  // Betrag der Beschleunigung
 static const float    LIFT_G_HIGH      = 1.45f;
 static const uint16_t LIFT_CONFIRM_MS  = 500;
 
-// Kippschutz waehrend der Fahrt. Auf 0, solange die Schwellen oben nicht an der
-// echten Vibration GEMESSEN sind: der Antrieb ist ein Ruettler, und ein
-// Fehlalarm nimmt mitten in der Fahrt die Freigabe weg. Bei 0 wacht der Schutz
-// nur im Stand -- umgekippt oder hochgehoben wird dann weiter erkannt, sobald
-// die Motoren TILT_GUARD_SETTLE_MS lang still sind.
-#define FEATURE_TILT_GUARD_WHILE_DRIVING 0
-static const uint16_t TILT_GUARD_SETTLE_MS = 400;
+// Der Kippschutz greift zurzeit GAR NICHT in die Steuerung ein -- er hat auf
+// dem Ruettelantrieb mitten in der Fahrt die Freigabe weggenommen. Erkannt
+// und in der Oberflaeche gemeldet wird weiter. Bevor er zurueckkehrt, werden
+// die Schwellen oben an az und mg aus der Telemetrie gemessen.
 
 // ---------------------------------------------------------------------
 //  A B S T A N D S S E N S O R   (VL53L0X auf dem Mast)
