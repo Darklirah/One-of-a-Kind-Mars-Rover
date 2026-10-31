@@ -29,6 +29,9 @@ Firmware läuft bis dahin ins Leere.
       `Kreisel Spitze … °/s`. Liegt die Spitze bei laufenden Motoren noch
       nahe 2000 oder erscheint `ANSCHLAG`, ist die Montage weiterhin zu weich.
 
+- [x] **Biegehilfe entworfen** (31.10.2026, `Gehaeuse_CAD/build_biegelehre.py`,
+      STL in `Druckteile/Biegelehre_Borsten.stl`) — **noch nicht gedruckt und
+      nicht erprobt.**
 - [ ] **Biegehilfe für die Bürstenborsten drucken.** Die gekauften
       Zahnbürstenköpfe haben **gerade Borsten** — damit hat der Rover keine
       Vorzugsrichtung und läuft seitwärts statt geradeaus (beobachtet:
@@ -315,6 +318,51 @@ Gehäuseentwurfs oder der Doku, bis sie am echten Teil beantwortet ist.
     Pin- und Boot-Pin-Angaben zum XIAO stammen nicht vom Datenblatt und
     sind vor einem Entwurf zu prüfen.
 
+
+---
+
+## 2026-10-31 — Biegelehre für die Bürstenborsten entworfen
+
+Vom Nutzer gefordert: **der Kopf soll sich einschieben lassen und gehalten
+werden, bis er erkaltet ist.** Daraus wurde ein U-Kanal, der den Kopf von
+selbst festhält — ohne Klemme, ohne Schraube.
+
+**Wie sie hält.** Der Schlitz ist genau `Borstenlänge × cos(Winkel)` hoch, bei
+25° also **10,88 mm** statt der vollen 12 mm. Dazu kommt die 6 mm dicke
+Kopfplatte: Boden bis Lippenunterseite sind **16,88 mm**. Schiebt man den Kopf
+hinein, drücken die Borsten die Platte nach oben gegen die beiden Haltelippen
+— die Borsten sind selbst die Feder, die den Kopf an Ort und Stelle hält. Es
+gibt nichts zu klemmen und nichts, das beim Abkühlen nachgibt.
+
+**Wie der Winkel entsteht.** Die Spitzen schleifen beim Einschieben auf der
+Pressfläche und bleiben gegenüber der Platte zurück. Sie legen sich also
+**entgegen der Schubrichtung** um. Darum sitzen drei erhabene Pfeile auf der
+Seitenwand: sie zeigen die **Schubrichtung**, und die spätere Fahrtrichtung des
+Rovers ist ihnen entgegengesetzt. Das steht auch im Kopf des Skripts, weil es
+die Stelle ist, an der man es falsch machen kann.
+
+Geformt wird mit **25°**, Ziel sind 15–20° — Nylon federt zurück.
+
+| Teil | Zweck |
+|---|---|
+| Einführschräge, 14 mm lang | der Schlitz fängt 2 mm höher an und sinkt ab; ohne sie müsste man die Borsten blind einfädeln |
+| Fingerschlitz oben, 10,2 mm | zum Nachschieben und um zu sehen, wie weit der Kopf sitzt |
+| Fenster im Anschlag | zum Herausschieben mit einem Stift, auf Höhe der **Platte** — gegen die Borsten zu drücken würde sie wieder verbiegen |
+| Rille in der Pressfläche, 2 mm | das Wasser läuft zum Eingang heraus; das 13 mm breite Borstenfeld überspannt sie mühelos |
+| Fasen an der Einschuböffnung | der nasse Kopf bleibt sonst an der Kante hängen |
+
+**Nachgemessen am Modell:** Durchdringung zwischen Kopf und Lehre in der
+Endlage **0,000 mm³**; Lippenunterseite 18,68 mm am Eingang, auf 16,88 mm
+abfallend bis y = 14; Fenster im Anschlag offen; Außenmaße 23,4 × 72,0 ×
+24,9 mm, 20,9 cm³.
+
+**Drucken:** Boden nach unten, **PETG** (hält die 90 °C), keine Stützen nötig —
+die Lippen kragen nur 2,6 mm aus. Winkel ändern heißt `WINKEL` im Skript
+setzen, alles andere rechnet sich daraus.
+
+Die FCStd ist diesmal **nicht** von `.gitignore` ausgenommen worden, weil sie
+Fremdmodelle enthielte — sie enthält nur eigene Geometrie und ist deshalb im
+Repo.
 
 ---
 

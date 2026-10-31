@@ -83,4 +83,6 @@ pcb/pcbway_production/
 # mit nackter Platine, dazu Sicherungskopien gar nicht.
 Gehaeuse_CAD/**/*.FCStd
 !Gehaeuse_CAD/MarsRover_Gehaeuse_V2_ohne_Bauteile.FCStd
+# Die Biegelehre enthaelt nur eigene Geometrie, keine Fremdmodelle
+!Gehaeuse_CAD/MarsRover_Biegelehre.FCStd
 *.FCBak
