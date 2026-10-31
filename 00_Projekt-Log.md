@@ -4,6 +4,44 @@ Laufendes Protokoll. Neueste Einträge oben.
 
 ---
 
+## Vorgehen: erst geradeaus, dann Steuerung (Nutzer, 31.10.2026)
+
+**Der Rover muss zuerst ohne jeden Steuermechanismus stabil geradeaus fahren.
+Erst danach kommt die Steuerung Stück für Stück zurück.**
+
+Der Grund steckt in der Fehlersuche der letzten Tage: wenn das Fahrwerk nicht
+von sich aus geradeaus läuft, misst und regelt man gegen eine Grundstörung an,
+und jeder Messwert hat zwei mögliche Ursachen. Die Seitendrift kam von geraden
+Borsten, nicht vom Regler. Die 17 statt 90 Grad kamen vom anschlagenden
+Kreisel, nicht von der Mechanik. Solange beides zugleich offen ist, beweist
+kein Versuch irgendetwas.
+
+**Stufe 0 — nackter Geradeauslauf.** Handbetrieb, Joystick gerade nach vorn,
+kein Einschlag. Beide Motoren laufen dann gleich. Er muss über mehrere Meter
+seine Spur halten, ohne dass jemand nachhilft.
+
+Dafür sind diese Dinge zu erledigen, in dieser Reihenfolge:
+
+1. **Borsten neigen**, beide Köpfe gleich, Spitzen nach vorn — Lehre liegt
+   fertig vor. Ohne Neigung gibt es keine Vorzugsrichtung, und alles Weitere
+   ist sinnlos.
+2. **Motoren gegenläufig**, bei einem die Litzen tauschen. Hebt die seitlichen
+   Kraftanteile der beiden Unwuchten gegeneinander auf.
+3. **Symmetrie prüfen:** sitzen beide Köpfe gleich, liegt der Schwerpunkt
+   mittig, laufen beide Motoren gleich schnell.
+
+**Was im Handbetrieb trotzdem noch eingreift:** der **Hindernis-Stopp**. Er
+steht per Vorgabe auf *ein* (`g_obsGuard = true`) und hält an, sobald der
+Abstandssensor etwas näher als die eingestellte Schwelle sieht. Für Stufe 0 in
+der App abschalten, sonst sucht man den Fehler an der falschen Stelle. Der
+Kippschutz greift seit 0.5.4 ohnehin nicht mehr ein.
+
+**Stufe 1 und danach** — erst wenn Stufe 0 steht: Trimm für die restliche
+Unsymmetrie, dann Lagesensor (dafür muss er fest montiert sein), dann
+Linienfolger, dann Fahrprogramme.
+
+---
+
 ## Verbesserungen am Gerät — zuerst dran, bevor weiter getestet wird
 
 Stehendes Verzeichnis. **Beides am 27.10.2026 vom Nutzer festgelegt und als
